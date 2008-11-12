@@ -1,0 +1,88 @@
+#!/usr/bin/perl 
+#
+# Overall documentation script for the rvanal radial
+# velocity analysis routines.
+
+(@ARGV == 1) or die "usage: perl docgen.pl <html directory>\n";
+
+$html = shift;
+
+require "document.pl";
+
+$time = localtime;
+
+# Command classes. Individual files require pointers
+# to these to get into them.
+
+%classes = (
+	    'Programs'   => 'Executable programs.',
+	    );
+
+# now generate individual command documentation.
+
+foreach $file ('weekday.cc', 'gap.cc', 'tcorr.cc', 'interp.cc'){
+    document("../src/$file",$html,"html","html","");
+}
+
+# generate overall index file
+
+open(INDEX, ">$html/index.html") or die "Could not open index file\n";
+print INDEX <<END1;
+<html>
+<head>
+<title>Basic subroutines and classes, Version ZzZzZ</title>
+<link rel=stylesheet href="style.css" type="text/css">
+</head>
+<body>
+<h1>Basic subroutines and classes, Version ZzZzZ</h1>
+<p>
+This is the main page for documentation on generally useful
+subroutines and classes written in C++. These are used by all my other C++
+software and will be installed automatically if you install any of the
+other stuff. Look here if you are interested in a class for command
+line input, stellar positions, etc. 
+
+<p>
+<table>
+<tr><td><a href="gap.html">gap</a></td><td>Works out how often one expects to see a gap of a given size in a number of
+values selected from a uniform distribution.</td></tr>
+
+<tr><td><a href="interp.html">interp</a></td><td>Interpolates irregularly-spaced two-column data onto a regular step.</td></tr>
+
+<tr><td><a href="tcorr.html">tcorr</a></td><td>Computation of one-off time corrections (helio- and barycentric).</td></tr>
+
+<tr><td><a href="weekday.html">weekday</a></td><td>Computes day of week for a given date.</td></tr>
+
+<tr><td><a href="api/html/index.html">API</a></td><td>Details of the library of functions that form the
+bulk of this software.</td></tr>
+
+<tr><td><a href="Changes.html">Changes</a></td><td>List of changes made to the software.</td></tr>
+
+</table>
+
+<h2>Installation</h2>
+
+<p>
+To install, download the <tr><td><a href="http://deneb.astro.warwick.ac.uk/phsaap/software/subs.tar.gz">gzipped tar file</a>
+</td>,gunzip and tar xvf it. A new directory will be created. Change directory into it and read the README file. Get in touch
+with me if you have problems.
+
+<p><hr>
+<address>Page generated $time</address>
+</body></html>
+END1
+close(INDEX);
+
+
+exit;
+
+
+
+
+
+
+
+
+
+
+

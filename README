@@ -1,0 +1,11 @@
+
+'subs' contains generally useful functions and classes. These will be
+compiled into a library during installaion. Thus, for example, it includes 
+random number generators, classes for times, dates, stellar positions and 
+ephemerides and for program inputs, amongst other things. 
+
+subs is a library package rather than a set of programs, but does come with
+one program, 'weekday' which returns the day of the week corresponding to a 
+date.
+
+TRM 19/03/2003
