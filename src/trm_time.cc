@@ -189,7 +189,7 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
     // that slaGmst should take UT1 not UT but the error is only
     // about 1 second at most and no part of the Earth travels 
     // far in 1 second. 
-    double last  = slaGmst(td) + tel.longituder() + slaEqeqx(td);
+    double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
     double pv[6];
     
     // this routine from slalib gives the telescope position and velocity relative 
@@ -234,7 +234,7 @@ Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
     // that slaGmst should take UT1 not UT but the error is only
     // about 1 second at most and no part of the Earth travels 
     // far in 1 second. 
-    double last  = slaGmst(td) + tel.longituder() + slaEqeqx(td);
+    double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
     double pv[6];
     
     // this routine from slalib gives the telescope position and velocity relative 
@@ -275,7 +275,7 @@ void Subs::Time::earth(const Telescope& tel, Vec3& ph, Vec3& vh, Vec3& pb, Vec3&
     // that slaGmst should take UT1 not UT but the error is only
     // about 1 second at most and no part of the Earth travels 
     // far in 1 second. 
-    double last  = slaGmst(td) + tel.longituder() + slaEqeqx(td);
+    double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
     double pv[6];
     
     // this routine from slalib gives the telescope position and velocity relative 
