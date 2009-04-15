@@ -137,6 +137,9 @@ namespace Subs {
     //! Defines a particular instance of an xyz<X,Y,Z> object suited to radial velocity work
     typedef xyz<double,float,float> rv;
 
+    //! Defines a particular instance of an xyz<X,Y,Z> object suited for more accurate work
+    typedef xyz<double,double,float> ddat;
+
     template <class X, class Y>
     struct xy;
 
@@ -547,11 +550,13 @@ namespace Subs {
 		  Buffer2D<float>& v, Buffer1D<float>& w);
 
     //! Singular value decomposition fitting
+    double svdfit(const Buffer1D<ddat>& data, Buffer1D<double>& a, const Buffer2D<double>& vect, 
+		  Buffer2D<double>& u, Buffer2D<double>& v, Buffer1D<double>& w);
+
+    //! Singular value decomposition fitting
     double svdfit(const Buffer1D<rv>& data, Buffer1D<float>& a,
-		  const Buffer1D<double>& cosine, 
-		  const Buffer1D<double>& sine, 
-		  Buffer2D<float>& u, Buffer2D<float>& v, 
-		  Buffer1D<float>& w);
+		  const Buffer1D<double>& cosine, const Buffer1D<double>& sine, 
+		  Buffer2D<float>& u, Buffer2D<float>& v, Buffer1D<float>& w);
 
     //! Evaluates incomplete gamma function
     void  gser(double &gamser, double a, double x, double &gln);
