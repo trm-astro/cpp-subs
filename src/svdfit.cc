@@ -22,6 +22,13 @@
 double Subs::svdfit(const Buffer1D<rv>& data, Buffer1D<float>& a, const Buffer2D<float>& vect, Buffer2D<float>& u,
 		    Buffer2D<float>& v, Buffer1D<float>& w){
     
+    if(a.size() != vect.get_nx())
+	throw Subs_Error("svdfit[float]: number of coefficients = " + Subs::str(a.size()) + 
+			 " in parameter vector does not match number in function array = " + Subs::str(vect.get_nx()));
+    if(data.size() != vect.get_ny())
+	throw Subs_Error("svdfit[float]: number of data = " + Subs::str(data.size()) + 
+			 " does not match number in function array = " + Subs::str(vect.get_ny()));
+
     size_t ndata = data.size();
     size_t nc    = a.size();
     size_t ndat = 0;
@@ -93,6 +100,13 @@ double Subs::svdfit(const Buffer1D<rv>& data, Buffer1D<float>& a, const Buffer2D
 double Subs::svdfit(const Buffer1D<ddat>& data, Buffer1D<double>& a, const Buffer2D<double>& vect, 
 		    Buffer2D<double>& u, Buffer2D<double>& v, Buffer1D<double>& w){
     
+    if(a.size() != vect.get_nx())
+	throw Subs_Error("svdfit[double]: number of coefficients = " + Subs::str(a.size()) + 
+			 " in parameter vector does not match number in function array = " + Subs::str(vect.get_nx()));
+    if(data.size() != vect.get_ny())
+	throw Subs_Error("svdfit[double]: number of data = " + Subs::str(data.size()) + 
+			 " does not match number in function array = " + Subs::str(vect.get_ny()));
+
     size_t ndata = data.size();
     size_t nc    = a.size();
     size_t ndat = 0;

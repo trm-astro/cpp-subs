@@ -660,9 +660,9 @@ namespace Subs {
 
     //! Makes a string from a numerical value
     template <class T>
-    std::string str(const T& con){
+	std::string str(const T& con, int prec=15){
 	std::ostringstream ss;
-	ss.precision(15);
+	ss.precision(prec);
 	if(!(ss << con))
 	    throw Subs_Error("Subs::str: conversion error. Something must be very odd.");
 	return ss.str();

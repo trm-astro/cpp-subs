@@ -7,7 +7,7 @@ AM_CONFIG_HEADER(config.h)
 
 dnl automake stuff
 
-AM_INIT_AUTOMAKE(subs, 1.4.37)
+AM_INIT_AUTOMAKE(subs, 1.4.38)
 
 AC_PROG_MAKE_SET
 
