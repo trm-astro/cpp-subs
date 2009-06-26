@@ -13,5 +13,5 @@ cppdir=`g++ -print-search-dirs 2>&1 | egrep '^install' | sed -e 's/install: *//'
 
 #echo "-lcpgplot -lpgplot -L/usr/X11R6/lib -lX11 -lpng -lz -L$cppdir -L$fordir"
 
-echo "-lcpgplot -lpgplot -L/usr/X11R6/lib -lX11 -lpng -lz"
+echo "-lcpgplot -lpgplot -L/usr/X11R6/lib -lX11 -lpng -lz -lgfortran"
 

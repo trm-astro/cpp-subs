@@ -1,13 +1,14 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([src/gauss.cc])
+dnl Initialise
+AC_INIT([subs], [1.4.38])
+
+AC_CONFIG_SRCDIR([src/gauss.cc])
+
+AM_INIT_AUTOMAKE
 
 dnl Avoid all the -D stuff
-AM_CONFIG_HEADER(config.h)
-
-dnl automake stuff
-
-AM_INIT_AUTOMAKE(subs, 1.4.38)
+AC_CONFIG_HEADERS([config.h])
 
 AC_PROG_MAKE_SET
 
@@ -18,6 +19,9 @@ PGPLOT_LIBS=`./pgplot_libs`
 dnl Compiler checks
 AC_PROG_CXX
 AC_PROG_CC
+
+dnl keep correct libtool macros in tree
+AC_CONFIG_MACRO_DIR([m4])
 
 dnl Initialise libtool
 AC_PROG_LIBTOOL
@@ -46,4 +50,6 @@ AC_PROG_INSTALL
 
 dnl The Makefiles to create
 
-AC_OUTPUT([Makefile src/Makefile doc/Makefile include/Makefile]) 
+AC_CONFIG_FILES([Makefile src/Makefile doc/Makefile include/Makefile]) 
+
+AC_OUTPUT

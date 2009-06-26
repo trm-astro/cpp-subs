@@ -119,7 +119,8 @@ namespace Subs {
     //! Returns median (scrambles element order!)
     X median();
 
-
+    //! Returns sum
+    X sum() const;
 
     //! Returns mean
     X mean() const;
@@ -279,6 +280,19 @@ namespace Subs {
       sum /= this->size();
     }
     return sum;
+  }
+
+  /** This function computes the sum. It returns zero if there are no elements
+   * 
+   */
+  template <class X>
+  X Array1D<X>::sum() const {
+      X sum = 0;
+      if(this->size()){
+	  for(int i=0; i<this->size(); i++)
+	      sum += this->buff[i];
+      }
+      return sum;
   }
 
   /** This function computes the length as the square root of the sum of squares
