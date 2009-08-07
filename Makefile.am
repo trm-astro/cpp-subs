@@ -2,8 +2,6 @@
 
 SUBDIRS = src include doc
 
-EXTRA_DIST = pgplot_libs
-
 # WEB_SERVE and WEB_PATH must be defined before running this.
 export: dist
 	scp $(PACKAGE)-$(VERSION).tar.gz $(WEB_SERVE):$(WEB_PATH)/software/.
