@@ -1,5 +1,7 @@
 
 'subs' is a library of general utility software used by many of my other
-packages. IT requires third-party software, but no other of my packages.
+packages. It requires third-party software, but no other of my packages.
 
 Installation order: subs
+
+See www.astro.warwick.ac.uk/people/marsh/software for further info.
