@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 dnl Initialise
-AC_INIT([subs], [1.4.39])
+AC_INIT([subs], [1.4.40])
 
 AC_CONFIG_SRCDIR([src/gauss.cc])
 
