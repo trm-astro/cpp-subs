@@ -16,7 +16,7 @@ test_SOURCES    = test.cc
 
 INCLUDES = -I../include -I../.
 
-LDADD = libsubs.la @PGPLOT_LIBS@
+LDADD = libsubs.la
 
 DATE = $(shell date)
 
