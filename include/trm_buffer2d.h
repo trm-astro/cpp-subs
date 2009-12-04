@@ -123,7 +123,7 @@ namespace Subs {
       nx_ = nx;
       ny_ = ny;
       if(nx < 1 || ny < 1)
-	throw Buffer2D_Error("Subs::Buffer2D<>::alloc(int, int): either nx or ny < 1");
+	  throw Buffer2D_Error("Subs::Buffer2D<>::alloc(int, int): nx,ny = " + Subs::str(nx) + ", " + Subs::str(ny));
       
       if((buff = new(std::nothrow) X* [ny]) == NULL){
 	buff = NULL;
