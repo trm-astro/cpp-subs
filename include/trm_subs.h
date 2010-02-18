@@ -1459,8 +1459,11 @@ namespace Subs {
     //! Planck function Bnu.
     double planck(double wave, double temp);
 
-    //! Logarithmic derivative of Planck function Bnu.
+    //! Logarithmic derivative of Planck function Bnu wrt wavelength
     double dplanck(double wave, double temp);
+
+    //! Logarithmic derivative of Planck function Bnu wrt T
+    double dlpdlt(double wave, double temp);
 
     //! Abstract class for Runge-Kutta integration
     /** This class is the base class for usage by the Runge-Kutta integration routines

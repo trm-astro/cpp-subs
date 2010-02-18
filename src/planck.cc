@@ -35,3 +35,17 @@ double Subs::dplanck(double wave, double temp){
     return efac/(1.-exp(-efac)) - 3.;
 }
 
+/** Computes the logarithmic derivative of the Planck function 
+ * Bnu wrt T (i.e. d ln(Bnu) / d ln(T)) as a function of wavelength and temperature
+ * \param wave wavelength in nanometres
+ * \param temp temperature in K
+ */
+
+double Subs::dlpdlt(double wave, double temp){
+    
+    const double FAC2 = 1.e9*Constants::H*Constants::C/Constants::K;
+    
+    double efac = FAC2/(wave*temp);
+    return efac/(1.-exp(-efac));
+}
+
