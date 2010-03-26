@@ -459,7 +459,7 @@ void Subs::Husint::print(std::ostream& s) const {
 
 void Subs::Husint::write(std::ofstream& s) const {
     write_string(s,comment);
-    s.write((char*)&value,sizeof(UINT4));
+    s.write((char*)&value,sizeof(UINT2));
     if(!s) throw Hitem_Error("Subs::Husint::write(std::ofstream&): failed to write item");
 }
 
@@ -470,14 +470,14 @@ void Subs::Husint::write_ascii(std::ofstream& s) const {
 
 void Subs::Husint::read(std::ifstream& s, bool swap_bytes) {
     read_string(s,comment,swap_bytes);
-    s.read((char*)&value,sizeof(UINT4));
+    s.read((char*)&value,sizeof(UINT2));
     if(!s) throw Hitem_Error("Subs::Husint::read(std::ifstream&): failed to read item");
     if(swap_bytes) value = Subs::byte_swap(value);
 }
 
 void Subs::Husint::skip(std::ifstream& s, bool swap_bytes) {
     skip_string(s,swap_bytes);
-    s.ignore(sizeof(UINT4));
+    s.ignore(sizeof(UINT2));
     if(!s) throw Hitem_Error("Subs::Husint::skip(std::ifstream&): failed to skip item");
 }
 
