@@ -31,16 +31,16 @@ namespace Subs {
     typedef unsigned char UCHAR;
 
     //! 2-byte signed integer
-    typedef short int INT2;
+    typedef int16_t INT2;
 
     //! 2-byte unsigned integer
-    typedef unsigned short int UINT2;
+    typedef uint16_t UINT2;
 
     //! 4-byte signed integer
-    typedef int INT4;
+    typedef int32_t INT4;
 
     //! 4-byte unsigned integer
-    typedef unsigned int UINT4;
+    typedef uint32_t UINT4;
 
     //! 4-byte floating point number
     typedef float REAL4;
