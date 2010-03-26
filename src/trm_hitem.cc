@@ -448,6 +448,63 @@ void Subs::Huint::set_value(const std::string &sval){
 	throw Hitem_Error("void Subs::Hitem::set_value(const std::string&): failed to translate \"" + sval + "\" into an unsigned int");
 }
 
+// unsigned short int
+
+void Subs::Husint::print(std::ostream& s) const {
+    s.fill(' ');
+    s.width(value_width);
+    s.setf(std::ios::left, std::ios::adjustfield);
+    s << value;
+}
+
+void Subs::Husint::write(std::ofstream& s) const {
+    write_string(s,comment);
+    s.write((char*)&value,sizeof(UINT4));
+    if(!s) throw Hitem_Error("Subs::Husint::write(std::ofstream&): failed to write item");
+}
+
+void Subs::Husint::write_ascii(std::ofstream& s) const {
+    s << "UI " << value << " " << comment << std::endl;
+    if(!s) throw Hitem_Error("Subs::Husint::write_ascii(std::ofstream&): failed to write item");
+}
+
+void Subs::Husint::read(std::ifstream& s, bool swap_bytes) {
+    read_string(s,comment,swap_bytes);
+    s.read((char*)&value,sizeof(UINT4));
+    if(!s) throw Hitem_Error("Subs::Husint::read(std::ifstream&): failed to read item");
+    if(swap_bytes) value = Subs::byte_swap(value);
+}
+
+void Subs::Husint::skip(std::ifstream& s, bool swap_bytes) {
+    skip_string(s,swap_bytes);
+    s.ignore(sizeof(UINT4));
+    if(!s) throw Hitem_Error("Subs::Husint::skip(std::ifstream&): failed to skip item");
+}
+
+void Subs::Husint::get_value(std::string &sval) const {
+    std::ostringstream ostr;
+    ostr << value;
+    if(!ostr)
+	throw Hitem_Error("void Subs::Husint::get_value(std::string&) const: error translating an unsigned short int into a string.");
+    sval = ostr.str();
+}
+
+std::string Subs::Husint::get_string() const {
+  
+    std::ostringstream ostr;
+    ostr << value;
+    if(!ostr)
+	throw Hitem_Error("void Subs::Husint::get_string() const: error translating an unsigned short int into a string.");
+    return ostr.str();
+}
+
+void Subs::Husint::set_value(const std::string &sval){
+    std::istringstream istr(sval);
+    istr >> value;
+    if(!istr)
+	throw Hitem_Error("void Subs::Hitem::set_value(const std::string&): failed to translate \"" + sval + "\" into an unsigned short int");
+}
+
 // long int
 
 void Subs::Hlint::print(std::ostream& s) const {
@@ -1092,7 +1149,7 @@ void Subs::Huchar::set_value(const std::string &sval){
  * code. If you create another supported Hitem type, you need to update this
  * routine. Supported codes are 'D' = double, 'C' = char, 'I' = int, 'UI' = unsigned
  * int, 'LI@ = long int, 'ULI' = unsigned long int, 'F' = float, 'S' = string, 'B' = bool, 
- * 'POS' = position, 'TEL' = telescope. The Hitem must occupy a line by itself.
+ * 'POS' = position, 'TEL' = telescope, 'USI' = unsigned short int.  The Hitem must occupy a line by itself.
  * \param istr the input file stream
  */
 
@@ -1139,6 +1196,12 @@ Subs::Hitem* Subs::Hitem::read_ascii_item(std::ifstream& istr){
 	istr >> value;
 	getline(istr, comment);
 	return new Hulint(value, comment);
+
+    }else if(stype == "USI"){
+	UINT2 value;
+	istr >> value;
+	getline(istr, comment);
+	return new Husint(value, comment);
 	
     }else if(stype == "F"){
 	float value;
@@ -1288,6 +1351,9 @@ Subs::Hitem* Subs::Hitem::read_item(std::ifstream& istr, bool swap_bytes){
 	case Hitem::HUCHAR:
 	    return new Huchar(istr, swap_bytes);
 
+	case Hitem::HUSINT:
+	    return new Husint(istr, swap_bytes);
+
 	default:
 	    throw 
 		Hitem_Error("Subs::Hitem* Subs::Hitem::read_item(std::ifstream&, bool): unrecognised Subs::Hitem::HITEM_TYPE type = " + Subs::str(otype));
@@ -1372,6 +1438,10 @@ void Subs::Hitem::skip_item(std::ifstream& istr, bool swap_bytes){
 
 	case Hitem::HUCHAR:
 	    Huchar::skip(istr, swap_bytes);
+	    return;
+
+	case Hitem::HUSINT:
+	    Husint::skip(istr, swap_bytes);
 	    return;
 
 	default:

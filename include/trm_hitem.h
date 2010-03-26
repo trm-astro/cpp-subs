@@ -43,7 +43,8 @@ namespace Subs {
 	    HPOSITION  = 12, 
 	    HDVECTOR   = 13, 
 	    HUCHAR     = 14, 
-	    HTELESCOPE = 15
+	    HTELESCOPE = 15,
+	    HUSINT     = 16
 	};
 	
 	//! Printing mode
@@ -1290,6 +1291,66 @@ namespace Subs {
     
     };
 
+    //! Storage of unsigned short ints
+  
+    class Husint : public Hitem {
+    
+    public:
+    
+	//! Default constructor
+	Husint() : Hitem(), value(0) {};
+
+	//! Constructor from a value plus a comment
+	Husint(unsigned short int ival, const std::string& com="") : Hitem(com), value(ival) {};
+
+	//! Constructor from file input
+	Husint(std::ifstream& istr, bool swap_bytes){read(istr, swap_bytes);}
+
+	//! Destructor
+	~Husint(){};
+    
+	void   get_value(unsigned int &ival) const  {ival = value;};
+	void   get_value(double &dval) const {dval = double(value);};
+	void   get_value(float &fval) const {fval = float(value);};
+	unsigned int get_uint() const {return value;};
+	double get_double() const {return double(value);};
+	float  get_float() const {return float(value);};
+
+	void get_value(std::string& sval) const;
+	std::string get_string() const;
+	void set_value(const std::string& sval);
+    
+	//! Returns name to use when referring to this type
+	std::string type() const {return "unsigned short int";}
+
+	//! Type code for use in disk I/O
+	HITEM_TYPE type_code() const {return HUSINT;}
+
+	//! For tests of whether an Hitem is a directory or not
+	bool is_a_dir() const  {return false;}
+    
+	void   set_value(const unsigned int &ival){value = ival;};
+    
+	void   print(std::ostream& s) const;
+
+	void   write(std::ofstream& ostr) const;
+
+	//! ASCII output
+	void   write_ascii(std::ofstream& ostr) const;
+
+	void   read(std::ifstream& istr, bool swap_bytes);
+
+	static void skip(std::ifstream& istr, bool swap_bytes);
+
+	//! Copy an unsigned integer header item and return a pointer to it.
+	Hitem* copy() const {return new Husint(value,comment);}
+
+    
+    private:
+    
+	UINT2 value;
+    
+    };
 };
 
 
