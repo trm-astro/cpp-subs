@@ -44,7 +44,9 @@ namespace Subs {
 	    HDVECTOR   = 13, 
 	    HUCHAR     = 14, 
 	    HTELESCOPE = 15,
-	    HUSINT     = 16
+	    HUSINT     = 16,
+	    HIVECTOR   = 17, 
+	    HFVECTOR   = 18, 
 	};
 	
 	//! Printing mode
@@ -180,6 +182,12 @@ namespace Subs {
 	
 	//! Get value as a vector of doubles
 	virtual const std::vector<double>& get_dvector() const;
+
+	//! Get value as a vector of integers
+	virtual const std::vector<int>& get_ivector() const;
+
+	//! Get value as a vector of floats
+	virtual const std::vector<float>& get_fvector() const;
 	
 	//! Set value from a char
 	virtual void set_value(const char &cval);
@@ -1351,6 +1359,127 @@ namespace Subs {
 	UINT2 value;
     
     };
+
+
+    //! Storage of vectors of integers
+  
+    class Hivector : public Hitem {
+    
+    public:
+    
+	//! Default constructor
+	Hivector() : Hitem(), value() {} 
+
+	//! Constructor from a value plus a comment
+	Hivector(const std::vector<int>& val, const std::string& com = "") : Hitem(com), value(val) {}
+
+	//! Constructor from file input
+	Hivector(std::ifstream& istr, bool swap_bytes){read(istr, swap_bytes);}
+
+	//! Destructor
+	~Hivector(){}
+    
+	void get_value(std::vector<int>& val) const {val = value;}
+
+	const std::vector<int>& get_ivector() const {return value;}
+
+	void  get_value(std::string &sval) const;
+
+	std::string get_string() const;
+
+	void  set_value(const std::string &sval);
+
+	//! For tests of whether an Hitem is a directory or not
+	bool is_a_dir() const {return false;}
+
+	//! Type code for use in disk I/O
+	HITEM_TYPE type_code() const {return HIVECTOR;}
+
+	//! Returns name to use when referring to this type
+	std::string type() const {return "ivector";}
+    
+	void  set_value(const std::vector<int>& val){value = val;}
+    
+	void  print(std::ostream& s) const;
+
+	void  write(std::ofstream& ostr) const;
+
+	//! ASCII output
+	void   write_ascii(std::ofstream& ostr) const;
+
+	void  read(std::ifstream& istr, bool swap_bytes);
+
+	static void skip(std::ifstream& istr, bool swap_bytes);
+    
+	//! Copy a vector of integers header item and return a pointer to it.
+	Hitem* copy() const {return new Hivector(value,comment);}
+
+    private:
+    
+	std::vector<int> value;
+
+    };
+
+
+    //! Storage of vectors of floats
+  
+    class Hfvector : public Hitem {
+    
+    public:
+    
+	//! Default constructor
+	Hfvector() : Hitem(), value() {} 
+
+	//! Constructor from a value plus a comment
+	Hfvector(const std::vector<float>& val, const std::string& com = "") : Hitem(com), value(val) {}
+
+	//! Constructor from file input
+	Hfvector(std::ifstream& istr, bool swap_bytes){read(istr, swap_bytes);}
+
+	//! Destructor
+	~Hfvector(){}
+    
+	void get_value(std::vector<float>& val) const {val = value;}
+
+	const std::vector<float>& get_fvector() const {return value;}
+
+	void  get_value(std::string &sval) const;
+
+	std::string get_string() const;
+
+	void  set_value(const std::string &sval);
+
+	//! For tests of whether an Hitem is a directory or not
+	bool is_a_dir() const {return false;}
+
+	//! Type code for use in disk I/O
+	HITEM_TYPE type_code() const {return HFVECTOR;}
+
+	//! Returns name to use when referring to this type
+	std::string type() const {return "fvector";}
+    
+	void  set_value(const std::vector<float>& val){value = val;}
+    
+	void  print(std::ostream& s) const;
+
+	void  write(std::ofstream& ostr) const;
+
+	//! ASCII output
+	void   write_ascii(std::ofstream& ostr) const;
+
+	void  read(std::ifstream& istr, bool swap_bytes);
+
+	static void skip(std::ifstream& istr, bool swap_bytes);
+    
+	//! Copy a vector of float header item and return a pointer to it.
+	Hitem* copy() const {return new Hfvector(value,comment);}
+
+    private:
+    
+	std::vector<float> value;
+
+    };
+
 };
 
 

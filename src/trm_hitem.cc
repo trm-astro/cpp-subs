@@ -147,6 +147,14 @@ const std::vector<double>& Subs::Hitem::get_dvector() const {
     throw Hitem_Error("Cannot retrieve a std::vector<double> from " + type() + "-type header items");
 }
 
+const std::vector<int>& Subs::Hitem::get_ivector() const {
+    throw Hitem_Error("Cannot retrieve a std::vector<int> from " + type() + "-type header items");
+}
+
+const std::vector<float>& Subs::Hitem::get_fvector() const {
+    throw Hitem_Error("Cannot retrieve a std::vector<float> from " + type() + "-type header items");
+}
+
 void Subs::Hitem::set_value(const char &cval){
     throw Hitem_Error("Cannot store a char in " + type() +  "-type header items.");
 }
@@ -1041,7 +1049,7 @@ void Subs::Hdvector::read(std::ifstream& s, bool swap_bytes) {
 	if(swap_bytes) d = Subs::byte_swap(d);
 	value[i] = d;
     }
-    if(!s) throw Hitem_Error("Subs::Hdvector::read(std::ifstream&): failed to read item");
+    if(!s) throw Hitem_Error("Subs::Hdvector::read(std::ifstream&, bool): failed to read item");
 }
 
 void Subs::Hdvector::skip(std::ifstream& s, bool swap_bytes) {
@@ -1049,10 +1057,8 @@ void Subs::Hdvector::skip(std::ifstream& s, bool swap_bytes) {
     UINT4 n;
     s.read((char*)&n,sizeof(UINT4));
     if(swap_bytes) n = Subs::byte_swap(n);
-
-    for(std::vector<double>::size_type i=0; i<n; i++)
-	s.ignore(sizeof(REAL8));
-    if(!s) throw Hitem_Error("Subs::Hdvector::skip(std::ifstream&): failed to skip item");
+    s.ignore(n*sizeof(REAL8));
+    if(!s) throw Hitem_Error("Subs::Hdvector::skip(std::ifstream&, bool): failed to skip item");
 }
 
 void  Subs::Hdvector::get_value(std::string &sval) const {
@@ -1142,6 +1148,183 @@ void Subs::Huchar::set_value(const std::string &sval){
 	throw Hitem_Error(std::string("void Subs::Hitem::set_value(const std::string&): failed to translate \"") + sval + 
 			  std::string("\" into an unsigned char"));
 }
+
+// vector<int>
+void Subs::Hivector::print(std::ostream& s) const {
+    s << std::setfill(' ');
+    for(size_t i=0; i<value.size(); i++)
+	s << value[i] << " ";
+}
+
+void Subs::Hivector::write(std::ofstream& s) const {
+    write_string(s,comment);
+    UINT4 n = UINT4(value.size());
+    s.write((char*)&n, sizeof(UINT4));
+    INT4 j;
+    for(size_t i=0; i<value.size(); i++){
+	j = value[i];
+	s.write((char*)&j, sizeof(INT4));
+    }
+    if(!s) throw Hitem_Error("Subs::Hivector::write(std::ofstream&): failed to write item");
+}
+ 
+void Subs::Hivector::write_ascii(std::ofstream& s) const {
+    s << "IV " << value.size();
+    for(size_t i=0; i<value.size(); i++){
+	s << " " << value[i];
+    }
+    s << " " << comment << std::endl;
+    if(!s) throw Hitem_Error("Subs::Hivector::write_ascii(std::ofstream&): failed to write item");
+}
+
+void Subs::Hivector::read(std::ifstream& s, bool swap_bytes) {
+    read_string(s,comment,swap_bytes);
+    UINT4 n;
+    s.read((char*)&n,sizeof(UINT4));
+    if(swap_bytes) n = Subs::byte_swap(n);
+    value.resize(n);
+    INT4 j;
+    for(size_t i=0; i<value.size(); i++){
+	s.read((char*)&j, sizeof(INT4));
+	if(swap_bytes) j = Subs::byte_swap(j);
+	value[i] = j;
+    }
+    if(!s) throw Hitem_Error("Subs::Hivector::read(std::ifstream&, bool): failed to read item");
+}
+
+void Subs::Hivector::skip(std::ifstream& s, bool swap_bytes) {
+    skip_string(s, swap_bytes);
+    UINT4 n;
+    s.read((char*)&n, sizeof(UINT4));
+    if(swap_bytes) n = Subs::byte_swap(n);
+    s.ignore(n*sizeof(INT4));
+    if(!s) throw Hitem_Error("Subs::Hivector::skip(std::ifstream&): failed to skip item");
+}
+
+void  Subs::Hivector::get_value(std::string &sval) const {
+    std::ostringstream ostr;
+    for(std::vector<int>::size_type i=0; i<value.size(); i++){
+	ostr << value[i] << " ";
+	if(!ostr)
+	    throw Hitem_Error("void Subs::Hivector::get_value(std::string&) const: error translating an ivector into a string.");
+    }
+    sval = ostr.str();
+}
+
+std::string Subs::Hivector::get_string() const {
+    std::ostringstream ostr;
+    for(std::vector<int>::size_type i=0; i<value.size(); i++){
+	ostr << value[i] << " ";
+	if(!ostr)
+	    throw Hitem_Error("void Subs::Hivector::get_value(std::string&) const: error translating an ivector into a string.");
+    }
+    return ostr.str();
+}
+
+void Subs::Hivector::set_value(const std::string &sval){
+    // Blank added to avoid apparent bug in istringstream
+    std::istringstream istr(sval + " ");
+    std::vector<int> temp;
+    int j;
+    while(!istr.eof()){
+	istr >> j;
+	if(istr.good()){
+	    temp.push_back(j);
+	}else if(!istr.eof()){
+	    throw Hitem_Error("void Subs::Hivector::set_value(std::string&) const: error translating a std::string into an ivector.");
+	}
+    }
+    value = temp;
+}
+
+// vector<float>
+void Subs::Hfvector::print(std::ostream& s) const {
+    s << std::setfill(' ');
+    for(size_t i=0; i<value.size(); i++)
+	s << value[i] << " ";
+}
+
+void Subs::Hfvector::write(std::ofstream& s) const {
+    write_string(s,comment);
+    UINT4 n = UINT4(value.size());
+    s.write((char*)&n, sizeof(UINT4));
+    REAL4 f;
+    for(size_t i=0; i<value.size(); i++){
+	f = value[i];
+	s.write((char*)&f, sizeof(REAL4));
+    }
+    if(!s) throw Hitem_Error("Subs::Hfvector::write(std::ofstream&): failed to write item");
+}
+ 
+void Subs::Hfvector::write_ascii(std::ofstream& s) const {
+    s << "FV " << value.size();
+    for(size_t i=0; i<value.size(); i++){
+	s << " " << value[i];
+    }
+    s << " " << comment << std::endl;
+    if(!s) throw Hitem_Error("Subs::Hfvector::write_ascii(std::ofstream&): failed to write item");
+}
+
+void Subs::Hfvector::read(std::ifstream& s, bool swap_bytes) {
+    read_string(s,comment,swap_bytes);
+    UINT4 n;
+    s.read((char*)&n,sizeof(UINT4));
+    if(swap_bytes) n = Subs::byte_swap(n);
+    value.resize(n);
+    REAL4 f;
+    for(size_t i=0; i<value.size(); i++){
+	s.read((char*)&f, sizeof(REAL4));
+	if(swap_bytes) f = Subs::byte_swap(f);
+	value[i] = f;
+    }
+    if(!s) throw Hitem_Error("Subs::Hfvector::read(std::ifstream&, bool): failed to read item");
+}
+
+void Subs::Hfvector::skip(std::ifstream& s, bool swap_bytes) {
+    skip_string(s, swap_bytes);
+    UINT4 n;
+    s.read((char*)&n,sizeof(UINT4));
+    if(swap_bytes) n = Subs::byte_swap(n);
+    s.ignore(n*sizeof(REAL4));
+    if(!s) throw Hitem_Error("Subs::Hfvector::skip(std::ifstream&, bool): failed to skip item");
+}
+
+void  Subs::Hfvector::get_value(std::string &sval) const {
+    std::ostringstream ostr;
+    for(std::vector<float>::size_type i=0; i<value.size(); i++){
+	ostr << value[i] << " ";
+	if(!ostr)
+	    throw Hitem_Error("void Subs::Hfvector::get_value(std::string&) const: error translating a fvector into a string.");
+    }
+    sval = ostr.str();
+}
+
+std::string Subs::Hfvector::get_string() const {
+    std::ostringstream ostr;
+    for(std::vector<float>::size_type i=0; i<value.size(); i++){
+	ostr << value[i] << " ";
+	if(!ostr)
+	    throw Hitem_Error("void Subs::Hfvector::get_value(std::string&) const: error translating a fvector into a string.");
+    }
+    return ostr.str();
+}
+
+void Subs::Hfvector::set_value(const std::string &sval){
+    // Blank added to avoid apparent bug in istringstream
+    std::istringstream istr(sval + " ");
+    std::vector<float> temp;
+    float f;
+    while(!istr.eof()){
+	istr >> f;
+	if(istr.good()){
+	    temp.push_back(f);
+	}else if(!istr.eof()){
+	    throw Hitem_Error("void Subs::Hfvector::set_value(std::string&) const: error translating a std::string into a fvector.");
+	}
+    }
+    value = temp;
+}
+
 
 /**
  * Reads an Hitem of any type from an ASCII file. This routine reads an initial code
@@ -1276,6 +1459,30 @@ Subs::Hitem* Subs::Hitem::read_ascii_item(std::ifstream& istr){
 	}
 	getline(istr, comment);
 	return new Hdvector(value, comment);
+
+    }else if(stype == "IV"){
+	std::vector<int> value;
+	int nvec;
+	istr >> nvec;
+	int ival;
+	for(int i=0; i<nvec; i++){
+	    istr >> ival;
+	    if(!istr) value.push_back(ival);
+	}
+	getline(istr, comment);
+	return new Hivector(value, comment);
+
+    }else if(stype == "FV"){
+	std::vector<float> value;
+	int nvec;
+	istr >> nvec;
+	float fval;
+	for(int i=0; i<nvec; i++){
+	    istr >> fval;
+	    if(!istr) value.push_back(fval);
+	}
+	getline(istr, comment);
+	return new Hfvector(value, comment);
 	
     }else if(stype == "UC"){
 	unsigned char value;
@@ -1347,6 +1554,12 @@ Subs::Hitem* Subs::Hitem::read_item(std::ifstream& istr, bool swap_bytes){
 
 	case Hitem::HDVECTOR:
 	    return new Hdvector(istr, swap_bytes);
+
+	case Hitem::HIVECTOR:
+	    return new Hivector(istr, swap_bytes);
+
+	case Hitem::HFVECTOR:
+	    return new Hfvector(istr, swap_bytes);
 
 	case Hitem::HUCHAR:
 	    return new Huchar(istr, swap_bytes);
@@ -1434,6 +1647,14 @@ void Subs::Hitem::skip_item(std::ifstream& istr, bool swap_bytes){
 
 	case Hitem::HDVECTOR:
 	    Hdvector::skip(istr, swap_bytes);
+	    return;
+
+	case Hitem::HIVECTOR:
+	    Hivector::skip(istr, swap_bytes);
+	    return;
+
+	case Hitem::HFVECTOR:
+	    Hfvector::skip(istr, swap_bytes);
 	    return;
 
 	case Hitem::HUCHAR:
