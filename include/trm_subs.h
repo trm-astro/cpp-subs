@@ -310,6 +310,11 @@ namespace Subs {
     //! Put a program to sleep
     void sleep(double seconds);
 
+    //! Convert to radians
+    inline double deg2rad(double deg){
+      return M_PI*deg/180.;
+    }
+	
     //! Simpson's rule integration routine
     float qsimp(float (*func)(float x), float a, float b);
 

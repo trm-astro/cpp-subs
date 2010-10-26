@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
 
 	std::string spos, stel, stim;
 
-	input.get_value("position", spos, "13:01:34.45 +00:34:45.3", "position of source (RA Dec Epoch)");
+	input.get_value("position", spos, "13:01:34.45 +00:34:45.3", "position of source (RA Dec)");
 	Subs::Position position(spos);
 	input.get_value("telescope", stel, "WHT", "telescope");
 	Subs::Telescope telescope(stel);
