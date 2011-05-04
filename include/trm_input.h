@@ -221,10 +221,16 @@ namespace Subs {
     //! Gets the local and global default file names
     void get_default_files(const char* ENV_DIR, const char* DEF_DIR, const std::string& command, std::string& global, std::string& local);
 
-    //! Support function to get over problem of too low a precision for doubles
+    //! Support function to get over problem of too low a precision for doubles and floats
     template <class T>    
     void print_value(const T& value, std::ostream& ostr){
 	ostr << value;
+    }
+
+    //! Specialisation for floats
+    template <> 
+    inline void print_value<float>(const float& value, std::ostream& ostr){
+	ostr << std::setprecision(7) << value << std::setprecision(0);
     }
 
     //! Specialisation for doubles
