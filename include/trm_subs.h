@@ -237,13 +237,19 @@ namespace Subs {
     }
 
     //! Compute sqrt(a*a+b*b) avoiding under/over flows 
-    template <class X>
-    inline
-    X pythag(const X& a, const X& b){
-	X absa, absb, temp;
-	absa = fabs(a);
-	absb = fabs(b);
-	return (absa > absb ? absa*sqrt(1.+(temp=absb/absa)*temp) : (absb == 0. ? 0. : absb*sqrt(1.+(temp=absa/absb)*temp)));
+    template <class X> X pythag(const X& a, const X& b){
+      X absa, absb, temp;
+      absa = fabs(a);
+      absb = fabs(b);
+      if(absa > absb){
+	temp = absb / absa;
+	return absa*sqrt(1.+temp*temp);
+      }else if(absb == 0.){
+	return 0.;
+      }else{
+	temp = absa / absb;
+	return absb*sqrt(1.+temp*temp);
+      }
     }
 
     //! Structure for return of useful observing info.
