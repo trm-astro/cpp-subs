@@ -1,5 +1,9 @@
 #include "trm_subs.h"
 
+namespace Subs {
+    void psdes(UINT4& lword, UINT4& rword);
+}
+
 /** Random number generator 'ran1' from Numerical Recipes
  * \param seed seed integer, -ve to initialise.
  * \return uniform random number between 0 and 1
@@ -162,8 +166,6 @@ double Subs::ran3(INT4& seed){
 
 double Subs::ran4(INT4& seed){
 
-  void psdes(UINT4& lword, UINT4& rword);
-
   static long idums = 0;
   UINT4 rword, lword;
 
@@ -188,22 +190,23 @@ double Subs::ran4(INT4& seed){
 
 }
 
-//void psdes(UINT4& lword, UINT4& rword);
+namespace Subs {
 
-void psdes(Subs::UINT4& lword, Subs::UINT4& rword){
-  unsigned long i, ia, ib, iswap, itmph=0, itmpl=0;
-  const Subs::UINT4 NITER = 4;
-  static Subs::UINT4 c1[NITER] = {
-    0xbaa96887L, 0x1e17d32cL, 0x03bcdc3cL, 0x0f33d1b2L};
-  static Subs::UINT4 c2[NITER] = {
-    0x4b0f3b58L, 0xe874f0c3L, 0x6955c5a6L, 0x55a7ca46L};
-
-  for(i=0;i<NITER;i++){
-    ia     = (iswap = rword) ^ c1[i];
-    itmpl  = ia & 0xffff;
-    itmph  = ia >> 16;
-    ib     = itmpl*itmpl + ~(itmph*itmph);
-    rword  = lword ^ (((ia = (ib >> 16) | ((ib & 0xffff) << 16)) ^ c2[i]) + itmpl*itmph);
-    lword  = iswap;
-  }
+    void psdes(Subs::UINT4& lword, Subs::UINT4& rword){
+	unsigned long i, ia, ib, iswap, itmph=0, itmpl=0;
+	const Subs::UINT4 NITER = 4;
+	static Subs::UINT4 c1[NITER] = {
+	    0xbaa96887L, 0x1e17d32cL, 0x03bcdc3cL, 0x0f33d1b2L};
+	static Subs::UINT4 c2[NITER] = {
+	    0x4b0f3b58L, 0xe874f0c3L, 0x6955c5a6L, 0x55a7ca46L};
+	
+	for(i=0;i<NITER;i++){
+	    ia     = (iswap = rword) ^ c1[i];
+	    itmpl  = ia & 0xffff;
+	    itmph  = ia >> 16;
+	    ib     = itmpl*itmpl + ~(itmph*itmph);
+	    rword  = lword ^ (((ia = (ib >> 16) | ((ib & 0xffff) << 16)) ^ c2[i]) + itmpl*itmph);
+	    lword  = iswap;
+	}
+    }   
 }

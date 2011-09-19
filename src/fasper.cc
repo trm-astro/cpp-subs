@@ -2,6 +2,11 @@
 #include <cfloat>
 #include "trm_subs.h"
 
+namespace Subs {
+    double dmod(double a, double b);
+    void spread(double y, double *yy, int n, double x, int m);
+}
+
 /** Press & Rybicki's fast method for Lomb-Scargle periodogram adapted to handle
  * uncertainties.
  * \param x X data
@@ -14,11 +19,8 @@
  * \param pgram returned periodogram
  */
 void Subs::fasper(double *x, float *y, float *e,  int n, double ofac, double hifac, Subs::Buffer1D<double>& freq, Subs::Buffer1D<double>& pgram){
-  
-  void spread(double y, double *yy, int n, double x, int m);
-  double dmod(double a, double b);
-  const int MACC = 4;
 
+  const int MACC = 4;
   const int nfreq  = int(0.5*ofac*hifac*n);
   const int nfreqt = int(ofac*hifac*n*MACC);
   int nf     = 64;
@@ -95,8 +97,6 @@ void Subs::fasper(double *x, float *y, float *e,  int n, double ofac, double hif
  */
 void Subs::fasper(double *x, float *y, float *e, int n, double fmax, int nfreq, Subs::Buffer1D<double>& freq, Subs::Buffer1D<double>& pgram){
   
-  void spread(double y, double *yy, int n, double x, int m);
-  double dmod(double a, double b);
   // Compute valid X range
   double xmin = DBL_MAX, xmax = -DBL_MAX;
   for(int i=0; i<n; i++){
@@ -181,9 +181,6 @@ void Subs::fasper(double *x, float *y, float *e, int n, double fmax, int nfreq, 
  */
 void Subs::famp(double *x, float *y, float *e,  int n, double fmax, int nfreq, Subs::Buffer1D<double>& freq, Subs::Buffer1D<double>& amps){
   
-  void spread(double y, double *yy, int n, double x, int m);
-  double dmod(double a, double b);
-
   // Compute valid X range
   double xmin = DBL_MAX, xmax = -DBL_MAX;
   for(int i=0; i<n; i++){
@@ -255,34 +252,38 @@ void Subs::famp(double *x, float *y, float *e,  int n, double fmax, int nfreq, S
   amps.set_npix(nfreq);
 }
 
-void spread(double y, double *yy, int n, double x, int m){
-     
-  const int NFAC[] = {1,1,2,6,24,120,720,5040,40320,362880};
-  
-  if(m >= 9)
-    throw Subs::Subs_Error("factorial table too small in spread inside Subs::fasper");
-
-  int ix = int(x);
-
-  if(x == double(ix)) 
-    yy[ix] += y;
-  else{
-    int ilo  = std::min(std::max(int(x-0.5*m),0),int(n-m));
-    int ihi  = ilo + m - 1;
-    int nden = NFAC[m-1];
-    double fac  = x - ilo;
-    for(int j=ilo+1; j<=ihi; j++) fac *= (x-j);
-    yy[ihi] += y*fac/(nden*(x-ihi));
-    for(int j=ihi-1; j>=ilo; j--){
-      nden = (nden/(j+1-ilo))*(j-ihi);
-      yy[j] += y*fac/(nden*(x-j));
+namespace Subs {
+    void spread(double y, double *yy, int n, double x, int m){
+	
+	const int NFAC[] = {1,1,2,6,24,120,720,5040,40320,362880};
+	
+	if(m >= 9)
+	    throw Subs::Subs_Error("factorial table too small in spread inside Subs::fasper");
+	
+	int ix = int(x);
+	
+	if(x == double(ix)) 
+	    yy[ix] += y;
+	else{
+	    int ilo  = std::min(std::max(int(x-0.5*m),0),int(n-m));
+	    int ihi  = ilo + m - 1;
+	    int nden = NFAC[m-1];
+	    double fac  = x - ilo;
+	    for(int j=ilo+1; j<=ihi; j++) fac *= (x-j);
+	    yy[ihi] += y*fac/(nden*(x-ihi));
+	    for(int j=ihi-1; j>=ilo; j--){
+		nden = (nden/(j+1-ilo))*(j-ihi);
+		yy[j] += y*fac/(nden*(x-j));
+	    }
+	}
     }
-  }
+    
+    /** Removes b from a until a is less than b
+     */
+    
+    double dmod(double a, double b){
+	while(a >= b) a -= b;
+	return a;
+    }
 }
 
-/** Removes b from a until a is less than b
- */
-double dmod(double a, double b){
-  while(a >= b) a -= b;
-  return a;
-}

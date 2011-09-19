@@ -1,6 +1,13 @@
 #include "trm_subs.h"
 #include "trm_array1d.h"
 
+namespace Subs {
+  double amoeba_try(std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum, 
+		    Afunc& func, int ihi, double fac);
+
+  void amoeba_get_psum(const std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum);
+}
+
 /** Simplex minimisation routine. Start from N+1 cornered object where N is number
  * of variables.
  * \param params n+1 pairs, each with an Subs::Array1D defining the corner and the function value at that corner
@@ -12,10 +19,6 @@ xe on minimum. On exit all corners should have values within fraction ftol of ea
  */
 void Subs::amoeba(std::vector<std::pair<Subs::Array1D<double>, double> >& params, double ftol, int nmax, Afunc& func, int& nfunc){
     
-  double amoeba_try(std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum, Afunc& func, int ihi, double fac);
-
-  void amoeba_get_psum(const std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum);
-
   const double TINY = 1.e-10;
   
   for(size_t i=0; i<params.size(); i++)
@@ -80,35 +83,39 @@ void Subs::amoeba(std::vector<std::pair<Subs::Array1D<double>, double> >& params
   }
 }
 
-//! Helper routine for amoeba
-void amoeba_get_psum(const std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum){
-  for(int j=0; j<psum.size(); j++){
-    double sum = 0.;
-    for(size_t i=0; i<params.size(); i++)
-      sum += params[i].first[j];
-    psum[j] = sum;
-  }
-}
+namespace Subs {
 
-//! Helper routine for amoeba
-double amoeba_try(std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum, Subs::Afunc& func, int ihi, double fac){
-  int ndim = params[0].first.size();
-  Subs::Array1D<double> ptry(ndim);
-  double fac1 = (1.-fac)/ndim;
-  double fac2 = fac1-fac;
-  for(int j=0; j<ndim; j++)
-    ptry[j] = psum[j]*fac1-params[ihi].first[j]*fac2;
-  double ytry = func(ptry);
-  if(ytry < params[ihi].second){
-    params[ihi].second = ytry;
-    for(int j=0; j<ndim; j++){
-      psum[j] += ptry[j] - params[ihi].first[j];
-      params[ihi].first[j] = ptry[j];
+    //! Helper routine for amoeba
+    void amoeba_get_psum(const std::vector<std::pair<Subs::Array1D<double>, double> >& params, 
+			 Subs::Array1D<double>& psum){
+	for(int j=0; j<psum.size(); j++){
+	    double sum = 0.;
+	    for(size_t i=0; i<params.size(); i++)
+		sum += params[i].first[j];
+	    psum[j] = sum;
+	}
     }
-  }
-  return ytry;
+
+    //! Helper routine for amoeba
+    double amoeba_try(std::vector<std::pair<Subs::Array1D<double>, double> >& params, 
+		      Subs::Array1D<double>& psum, Subs::Afunc& func, int ihi, double fac){
+	int ndim = params[0].first.size();
+	Subs::Array1D<double> ptry(ndim);
+	double fac1 = (1.-fac)/ndim;
+	double fac2 = fac1-fac;
+	for(int j=0; j<ndim; j++)
+	    ptry[j] = psum[j]*fac1-params[ihi].first[j]*fac2;
+	double ytry = func(ptry);
+	if(ytry < params[ihi].second){
+	    params[ihi].second = ytry;
+	    for(int j=0; j<ndim; j++){
+		psum[j] += ptry[j] - params[ihi].first[j];
+		params[ihi].first[j] = ptry[j];
+	    }
+	}
+	return ytry;
+    }
 }
-
-
+    
 
 

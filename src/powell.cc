@@ -2,6 +2,11 @@
 #include "trm_format.h"
 #include "trm_array1d.h"
 
+namespace Subs {
+    void linmin(Subs::Array1D<double>& p, Subs::Array1D<double>& d, const Subs::Array1D<double>& scale, 
+		Subs::Afunc& func, double& fret);
+}
+
 /** Implementation of Powell's method of function minimisation.
  * 
  * \param p    initial position, set to the best point found on output
@@ -18,8 +23,6 @@
  */
 
 void Subs::powell(Array1D<double>& p, Buffer1D<Array1D<double> >& xi, const Array1D<double>& scale, double ftol, int itmax, int& iter, double& fret, Afunc& func){
-
-  void linmin(Array1D<double>& p, Array1D<double>& d, const Array1D<double>& scale, Subs::Afunc& func, double& fret);
 
   const double TINY = 1.e-25;
 
@@ -69,16 +72,19 @@ void Subs::powell(Array1D<double>& p, Buffer1D<Array1D<double> >& xi, const Arra
   }    
 }
 
-// this minimises along a line
+namespace Subs {
+    // this minimises along a line
 
-void linmin(Subs::Array1D<double>& p, Subs::Array1D<double>& d, const Subs::Array1D<double>& scale, Subs::Afunc& func, double& fret){
+    void linmin(Subs::Array1D<double>& p, Subs::Array1D<double>& d, const Subs::Array1D<double>& scale, Subs::Afunc& func, double& fret){
   
-  Subs::Safunc oned(func, p, d, scale);
-  double ax = 0., bx = 1., cx, fa, fb, fc;
-  Subs::mnbrak(ax, bx, cx, fa, fb, fc, oned);
-  double xmin;
-  fret = brent(bx, ax, cx, oned, 1.e-6, xmin);
-  d *= xmin;
-  p += scale*d;
-
+	Subs::Safunc oned(func, p, d, scale);
+	double ax = 0., bx = 1., cx, fa, fb, fc;
+	Subs::mnbrak(ax, bx, cx, fa, fb, fc, oned);
+	double xmin;
+	fret = brent(bx, ax, cx, oned, 1.e-6, xmin);
+	d *= xmin;
+	p += scale*d;
+	
+    }
+   
 }
