@@ -1459,7 +1459,7 @@ void Formula::derivative(const Fnode* form_node, Fnode* derv_node, const std::st
 	    tnode->value    =  1.;
 	    tnode->ninput   = -1;
 
-	    // Second term is (da2*(ln(a1)*pow(a1,a2))
+	    // Second term is da2*(ln(a1)*pow(a1,a2))
 	    tnode = derv_node->input[1] = new Fnode;
 	    tnode->opvarnum = "*";
 	    tnode->ninput   =  2;
