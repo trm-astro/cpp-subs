@@ -13,9 +13,12 @@
  * \param func the function object whose minimum is to be bracketted.
  */
 
+namespace Subs {
+  void shift(double& a, double& b, double& c, double d);
+}
+
 void Subs::mnbrak(double& ax, double& bx, double& cx, double& fa, double& fb, double& fc, Sfunc& func){
 
-  void shift(double& a, double& b, double& c, double d);
   double ulim, ux, r, q, fu;
 
   const double GOLD   = 1.618034;
@@ -77,8 +80,10 @@ void Subs::mnbrak(double& ax, double& bx, double& cx, double& fa, double& fb, do
   }
 }
 
-void shift(double& a, double& b, double& c, double d){
-  a = b;
-  b = c;
-  c = d;
+namespace Subs {
+  void shift(double& a, double& b, double& c, double d){
+    a = b;
+    b = c;
+    c = d;
+  }
 }
