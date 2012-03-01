@@ -623,6 +623,28 @@ namespace Subs {
 	       double htot, int nstep, double yout[], 
 	       void (*derivs)(double, double[], double[]));
 
+    //! Abstract class for bssetp function object
+    class Bsfunc {
+
+    public:
+
+	//! The function call
+	/** Evaluates derivatives dydt given current time t and coordinates y
+	 * use function object to store other parameters needed
+	 */
+      virtual double operator()(double t, double y[], double dydt[]) const = 0;
+      virtual ~Bsfunc(){}
+    };
+
+    void bsstep(double y[], double dydx[], int nv, double &xx, 
+		double htry, double eps, double yscal[], 
+		double &hdid, double &hnext, const Bsfunc& derivs);
+
+    //! Modified mid-point routine
+    void  mmid(double y[], double dydx[], int nvar, double xs, 
+	       double htot, int nstep, double yout[], 
+	       const Bsfunc& derivs);
+
     //! Polynomial extrapolation routine
     void  pzextr(int iest, double xest, double yest[], double yz[], 
 		 double dy[], int nv);
