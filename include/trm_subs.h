@@ -632,7 +632,7 @@ namespace Subs {
 	/** Evaluates derivatives dydt given current time t and coordinates y
 	 * use function object to store other parameters needed
 	 */
-      virtual double operator()(double t, double y[], double dydt[]) const = 0;
+      virtual void operator()(double t, double y[], double dydt[]) const = 0;
       virtual ~Bsfunc(){}
     };
 
@@ -688,6 +688,9 @@ namespace Subs {
 
     //! Astronomical extinction (Cardelli et al 1989)
     double extinct(double lambda, double ratio);
+
+    //! Voigt function
+    double voigt(double a, double v, double eps);
 
     //! Converts an integer to a char*
     void strint(const unsigned int num, const unsigned int nd, char* intstr);
