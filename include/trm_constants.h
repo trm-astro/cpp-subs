@@ -22,6 +22,9 @@ namespace Constants {
   //! Boltzmann's constant, MKS
   const double K     = 1.3806e-23;  
 
+  //! Charge on the electron (magnitude, C)
+  const double E     = 1.602176565e-19;
+
   //! Mass of the electron, kg
   const double ME    = 9.10956e-31; 
 
