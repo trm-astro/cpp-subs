@@ -18,7 +18,7 @@ private:
  * Computes Voigt function following method of Zaghloul & Ali 2012
  */
 
-double voigt(double a, double v, double eps) {
+double Subs::voigt(double a, double v, double eps) {
     
     const int IMAX = 10000;
 
