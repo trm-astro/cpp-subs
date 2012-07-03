@@ -1,5 +1,5 @@
 #ifndef TRM_FORMAT
-#define TRM_FORAMT
+#define TRM_FORMAT
 
 #include <iostream>
 #include <iomanip>
