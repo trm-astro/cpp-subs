@@ -613,17 +613,17 @@ namespace Subs {
     void famp(double *x, float *y, float *e,  int n, double fmax, int nfreq, Subs::Buffer1D<double>& freq, Subs::Buffer1D<double>& amps);
 
     //! Burlirsch-Stoer routine
-    void  bsstep(double y[], double dydx[], int nv, double& xx, 
-		 double htry, double eps, double yscal[], double &hdid, 
-		 double &hnext, 
-		 void (*derivs)(double, double [], double []));
+    bool bsstep(double y[], double dydx[], int nv, double& xx, 
+		double htry, double eps, double yscal[], double &hdid, 
+		double &hnext, 
+		void (*derivs)(double, double [], double []));
 
     //! Modified mid-point routine
     void  mmid(double y[], double dydx[], int nvar, double xs, 
 	       double htot, int nstep, double yout[], 
 	       void (*derivs)(double, double[], double[]));
 
-    //! Abstract class for bssetp function object
+    //! Abstract class for bsstep function object
     class Bsfunc {
 
     public:
@@ -636,7 +636,7 @@ namespace Subs {
       virtual ~Bsfunc(){}
     };
 
-    void bsstep(double y[], double dydx[], int nv, double &xx, 
+    bool bsstep(double y[], double dydx[], int nv, double &xx, 
 		double htry, double eps, double yscal[], 
 		double &hdid, double &hnext, const Bsfunc& derivs);
 
