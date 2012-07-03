@@ -15,19 +15,19 @@ double **d, *x;
  * order ordinary differential equations, usually by defining extra
  * variables. 
  *
- * \param y    nv y values
- * \param dydx nv derivatives
- * \param nv   number of equations
- * \param xx   value of x
- * \param htry ??
- * \param eps  ??
+ * \param y     nv y values
+ * \param dydx  nv derivatives
+ * \param nv    number of equations
+ * \param xx    value of x
+ * \param htry  stepsize to try
+ * \param eps   accuracy
  * \param yscal scaling factors
- * \param hdid  ??
- * \param hnext ??
+ * \param hdid  stepsize actually completed
+ * \param hnext next suggested stepsize
  * \param derivs computes derivatives
  */
 
-void Subs::bsstep(double y[], double dydx[], int nv, double &xx, 
+bool Subs::bsstep(double y[], double dydx[], int nv, double &xx, 
 		  double htry, double eps, double yscal[], 
 		  double &hdid, double &hnext, 
 		  void (*derivs)(double, double [], double [])){
@@ -89,7 +89,7 @@ void Subs::bsstep(double y[], double dydx[], int nv, double &xx,
 		for(i=0;i<nv;i++)
 		    delete[] d[i];
 		delete[] d;
-		throw Subs::Subs_Error("bsstep error: step size underflow");
+		return true;
 	    }
       
 	    mmid(ysav,dydx,nv,xx,h,nseq[k],yseq,derivs);
@@ -154,6 +154,7 @@ void Subs::bsstep(double y[], double dydx[], int nv, double &xx,
     for(i=0;i<nv;i++)
 	delete[] d[i];
     delete[] d;
+    return false;
 }
 
 
@@ -164,7 +165,7 @@ void Subs::bsstep(double y[], double dydx[], int nv, double &xx,
  * be inherited from Bsfunc
  */
 
-void Subs::bsstep(double y[], double dydx[], int nv, double &xx, 
+bool Subs::bsstep(double y[], double dydx[], int nv, double &xx, 
 		  double htry, double eps, double yscal[], 
 		  double &hdid, double &hnext, const Bsfunc& derivs){
 
@@ -225,7 +226,7 @@ void Subs::bsstep(double y[], double dydx[], int nv, double &xx,
 		for(i=0;i<nv;i++)
 		    delete[] d[i];
 		delete[] d;
-		throw Subs::Subs_Error("bsstep error: step size underflow");
+		return true;
 	    }
       
 	    mmid(ysav,dydx,nv,xx,h,nseq[k],yseq,derivs);
@@ -290,6 +291,7 @@ void Subs::bsstep(double y[], double dydx[], int nv, double &xx,
     for(i=0;i<nv;i++)
 	delete[] d[i];
     delete[] d;
+    return false;
 }
 
 
