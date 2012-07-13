@@ -46,6 +46,12 @@ namespace Constants {
   //! Solar mass, kg    
   const float  MSUN  = 1.989e30;
 
+  //! Gravitational parameter of the Sun, SI (m^3 s^-2)
+  const double GMSUN  = 1.32712442099e20;
+
+  //! Gravitational parameter of the Sun, AU^3 YR^-2
+  const double GMSUNA  = 39.476927033270655;
+
   //! Absolute visual magnitude of the Sun
   const float  MVSUN = 4.75;       
 
@@ -58,11 +64,11 @@ namespace Constants {
   //! Effective temperature of the Sun, Kelvin
   const float  TSUN  = 5700.;  
   
-  //! Length of year in seconds
-  const double YEAR  = 3.1556925e7;
-
   //! Number of seconds in a day
   const float  DAY   = 86400.;
+
+  //! Length of Julian year in seconds 
+  const double YEAR  = 365.25*DAY;
 
   //! Integer number of seconds in a day
   const int    IDAY  = 86400;
