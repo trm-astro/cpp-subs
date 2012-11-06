@@ -612,7 +612,7 @@ namespace Subs {
     //! Amplitude spectrum, Press & Rybicki-type method
     void famp(double *x, float *y, float *e,  int n, double fmax, int nfreq, Subs::Buffer1D<double>& freq, Subs::Buffer1D<double>& amps);
 
-    //! Burlirsch-Stoer routine
+    //! Burlisch-Stoer routine
     bool bsstep(double y[], double dydx[], int nv, double& xx, 
 		double htry, double eps, double yscal[], double &hdid, 
 		double &hnext, 
@@ -644,6 +644,14 @@ namespace Subs {
     void  mmid(double y[], double dydx[], int nvar, double xs, 
 	       double htot, int nstep, double yout[], 
 	       const Bsfunc& derivs);
+
+    // Alternative for mmid for conservative 2nd order equations
+    bool bsstepst(double y[], double dydx[], int nv, double &xx, 
+		  double htry, double eps, double yscal[], 
+		  double &hdid, double &hnext, const Bsfunc& derivs);
+
+    void stoerm(double y[], double d2y[], int nvar, double xs, double htot,
+		int nstep, double yout[], const Bsfunc& derivs);
 
     //! Polynomial extrapolation routine
     void  pzextr(int iest, double xest, double yest[], double yz[], 

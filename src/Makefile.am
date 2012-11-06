@@ -33,7 +33,7 @@ trm_input.cc string_funcs.cc centroid.cc bsstep.cc mmid.cc pzextr.cc gcf.cc lud.
 sigma_reject.cc what_colour.cc planck.cc fft.cc llsqr.cc fasper.cc trm_complex.cc trm_plot.cc trm_formula.cc \
 trm_fraction.cc trm_units.cc trm_format.cc trm_poly.cc rebin.cc amoeba.cc genetic.cc rtsafe.cc brent.cc dbrent.cc \
 mnbrak.cc powell.cc safunc.cc poisson.cc extinct.cc byte_swap.cc endian.cc boxcar.cc numdiff.cc factln.cc runge_kutta.cc \
-voigt.cc
+voigt.cc stoerm.cc
 
 libsubs_la_LDFLAGS = -version-info 1:0:0
 
