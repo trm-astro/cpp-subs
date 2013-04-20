@@ -52,6 +52,12 @@ namespace Constants {
   //! Gravitational parameter of the Sun, AU^3 YR^-2
   const double GMSUNA  = 39.476927033270655;
 
+  //! Gauss' gravitational constant sqrt(G*MSUN), AU^(3/2) day^-1
+  const double KGAUSS = 0.01720209895;     
+
+  //! G*MSUN, AU^3 day^-2 (Gauss**2)
+  const double GMGAUSS = KGAUSS*KGAUSS;     
+
   //! Absolute visual magnitude of the Sun
   const float  MVSUN = 4.75;       
 
