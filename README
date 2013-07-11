@@ -1,7 +1,11 @@
 
 'subs' is a library of general utility software used by many of my other
-packages. It requires third-party software, but no other of my packages.
+packages. 
 
-Installation order: subs
+Installation: subs is at the base level of my C++ packages and is the first
+you should install. It requires third-party packages called 'pcre' (Perl
+Compatible Regular Expressions), 'slalib' (C version) and 'pgplot'. Make sure
+these are in place first. Pat Wallace allows me to send an obfusticated
+version of slalib, but you will need to ask me.
 
-See www.astro.warwick.ac.uk/people/marsh/software for further info.
+Tom
