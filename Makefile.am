@@ -7,11 +7,7 @@ SUBDIRS = src include doc
 # WEB_SERVE and WEB_PATH must be defined before running this.
 export: dist
 	scp $(PACKAGE)-$(VERSION).tar.gz $(WEB_SERVE):$(WEB_PATH)/software/.
-	ssh $(WEB_SERVE) "cd $(WEB_PATH)/software ; \rm -f $(PACKAGE).tar.gz ; ln -s $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE).tar.gz; \rm -fr $(PACKAGE); mkdir $(PACKAGE)"
 	scp -r doc/html $(WEB_SERVE):$(WEB_PATH)/software/$(PACKAGE)/.
-	ssh $(WEB_SERVE) "cd $(WEB_PATH)/software; sed -e 's%<\!-- subs version --><td>.*</td>%<\!-- subs version --><td>$(VERSION)</td>%' index.html > junk.html; mv junk.html index.html"
-	ssh $(WEB_SERVE) "cd $(WEB_PATH)/software; sed -e 's%<\!-- subs date --><td>.*</td>%<\!-- subs date --><td>$(DATE)</td>%' index.html > junk.html; mv junk.html index.html"
-
 
 ## File of aliases
 
