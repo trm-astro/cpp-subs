@@ -8,7 +8,7 @@ import os
 
 names = ('weekday','gap','tcorr')
 
-src  = '../src/'
+src  = '../../src/'
 dest = '_store'
 
 fnames = [(os.path.join(src, name + '.cc'), \
