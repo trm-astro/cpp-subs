@@ -1,19 +1,15 @@
 /*
 
-!!begin
-!!title  subs: day of week program
-!!author T.R.Marsh
-!!descr  Returns day of the week equivalent to a date
-!!index  weekday
-!!root   weekday
-!!class  Programs
-!!css    style.css
-!!head1  Day of week program
+!!sphinx
 
-!!emph{weekday} returns the day of the week for a given date.
-e.g. weekday "17 Nov 1961"
+weekday -- returns day of the week
+==================================
 
-!!end
+*weekday* returns the day of the week for a given date, e.g.::
+
+  weekday "25 Dec 2000"
+
+!!sphinx
 
 */
 

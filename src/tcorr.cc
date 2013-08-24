@@ -1,45 +1,33 @@
 /*
+!!sphinx
 
-!!begin
-!!title  subs: time corrections
-!!author T.R.Marsh
-!!revised 1 Jan 2008
-!!descr  Returns everything to do with times
-!!index  tcorr
-!!root   tcorr
-!!class  Programs
-!!css    style.css
-!!head1  Time corrections program
+tcorr -- returns everything to do with times
+============================================
 
-!!emph{tcorr} gives all sorts of stuff to do with times for use
-on astronomical sources. You give it a source position, telescope
-and time and it will return the following the MJD, heliocentric MJD
-and barycentric MJD on each of the following timescales UTC, TT, TDB.
-The DE405 ephemeris is used.
+*tcorr* gives all sorts of stuff to do with times for use on astronomical
+sources. You give it a source position, telescope and time and it will return
+the following the MJD, heliocentric MJD and barycentric MJD on each of the
+following timescales UTC, TT, TDB.  The DE405 ephemeris is used.
 
-!!head2 Arguments
+Arguments:
 
-!!table
-!!arg{position}{Object position, ICRS so just RA and Dec only}
-!!arg{telescope}{Name of telescope}
-!!arg{time}{UT date/time}
-!!table
 
-!!head2 Accuracy
+ *position*  : 
+    object position, ICRS so just RA and Dec only
+
+ *telescope* : 
+    name of telescope
+
+ *time*      : 
+    UT date/time
+
+Accuracy
+^^^^^^^^
 
 Tests against tempo2 (accurate pulsar timing code) show maximum
 deviations of about 100 microsec in the TDB time calculated by this program.
-Here are the results of 1000 random positions and times (1990 to 2040)
-in units of microsec
-<pre>
-Mean difference     =    -4.4
-RMS difference      =    36.6
-Minimum difference  =  -106.2
-Maximum difference  =    80.5
-10 - 90%-ile range =  -52.2 to  43.4
-</pre>
 
-!!end
+!!sphinx
 
 */
 

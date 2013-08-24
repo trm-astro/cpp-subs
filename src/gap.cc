@@ -1,28 +1,22 @@
 /*
 
-!!begin
-!!title  subs: gap
-!!author T.R.Marsh
-!!descr  Works out how often one expects to see a gap of a given size in a uniform distribution
-!!index  gap
-!!root   gap
-!!class  Programs
-!!css    style.css
-!!head1  Gap program
+!!sphinx
 
-This carries out Monte Carlo runs to work out how often one expects to see a gap of 
-a given size in a uniform distribution
+gap -- computes gap probability
+===============================
 
-!!head2 Arguments
+This carries out Monte Carlo runs to work out how often one expects to see a
+gap of a given size in a uniform distribution
 
-!!table
-!!arg{width}{Width of gap, 0.00001 to 0.99999}
-!!arg{npoints}{Number of values, 2 or more}
-!!arg{nmonte}{Number of MC trials}
-!!arg{seed}{Seed integer}
-!!table
+Arguments:
 
-!!end
+
+ width : width of gap, 0.00001 to 0.99999
+ npoints : number of values, 2 or more
+ nmonte : number of MC trials
+ seed : seed integer
+
+!!sphinx
 
 */
 
