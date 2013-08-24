@@ -1,8 +1,0 @@
-
-Build the documentation using
-
- python genrst.py
-
-to create the rst files, followed by
-
- make html
