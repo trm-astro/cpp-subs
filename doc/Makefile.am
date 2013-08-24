@@ -1,16 +1,13 @@
 ## Process this file with automake to generate Makefile.in
 ##
 
-EXTRA_DIST = docgen.in document.pl Changes.html Doxyfile.in style.css
+EXTRA_DIST = docgen.in document.pl style.css
 
 install-data-local: 
 	$(INSTALL) -d html
 	sed -e 's%ZzZzZ%$(VERSION)%' docgen.in > docgen.pl
 	perl docgen.pl  html
 	cp style.css    html/.
-	cp Changes.html html/.
-	sed -e 's%^PROJECT_NUMBER\s*=.*%PROJECT_NUMBER = $(VERSION)%' Doxyfile.in > Doxyfile
-	doxygen Doxyfile || :
 	chmod 0755 html
 	@for file in `find html | sed -e 's% %\\\%'`; do \
 	nfile=`echo $$file | sed -e 's%\\\%\\ %'`; \
