@@ -4,9 +4,8 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src include doc
 
-# WEB_SERVE and WEB_PATH must be defined before running this.
-export: dist
-	scp $(PACKAGE)-$(VERSION).tar.gz $(WEB_SERVE):$(WEB_PATH)/software/.
+# copy over web pages
+export:
 	scp -r doc/html $(WEB_SERVE):$(WEB_PATH)/software/$(PACKAGE)/.
 
 ## File of aliases
