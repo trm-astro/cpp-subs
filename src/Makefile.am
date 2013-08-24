@@ -6,12 +6,11 @@
 
 progdir = @bindir@/@PACKAGE@
 
-prog_PROGRAMS   = weekday tcorr gap interp test
+prog_PROGRAMS   = weekday tcorr gap test
 
 weekday_SOURCES = weekday.cc
 tcorr_SOURCES   = tcorr.cc
 gap_SOURCES     = gap.cc
-interp_SOURCES  = interp.cc 
 test_SOURCES    = test.cc 
 
 INCLUDES = -I../include -I../.
