@@ -13,7 +13,7 @@
 // double eb[nfreq]   -- uncertainties on sine amplitudes (returned)
 
 #include <math.h>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 void Subs::sincos(double *x, float *y, float *e, long unsigned int ndata, 
 		 double *freq, long unsigned int nfreq, double *a, double *b,

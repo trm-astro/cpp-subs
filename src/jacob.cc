@@ -1,7 +1,7 @@
 #include <cmath>
 #include <iostream>
-#include "trm_subs.h"
-#include "trm_buffer2d.h"
+#include "trm/subs.h"
+#include "trm/buffer2d.h"
 
 namespace Jacobi{
 

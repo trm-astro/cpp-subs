@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /* Boxcar filter routine (Stu Littlefair)
  * \param data the data to be filtered

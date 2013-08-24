@@ -1,5 +1,5 @@
 #include <ctime>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Function to put a program to sleep for a bit
  * \param seconds the time to pause in seconds.

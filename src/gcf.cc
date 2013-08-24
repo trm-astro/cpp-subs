@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <string>
 #include <cmath>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * gcf returns incomplete gamma function Q(a,x) evaluated by its

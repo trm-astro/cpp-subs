@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <string>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * gammq returns incomplete gamma function Q(a,x)

@@ -3,8 +3,8 @@
 
 #include <string> 
 #include <ctime> 
-#include "trm_date.h"
-#include "trm_subs.h"
+#include "trm/date.h"
+#include "trm/subs.h"
 
 namespace Subs {
 

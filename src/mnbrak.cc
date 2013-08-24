@@ -1,5 +1,5 @@
 #include <cmath>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Routine for bracketting the minimum of a function. Starts
  * from two points then carries on in a downhill direction until it

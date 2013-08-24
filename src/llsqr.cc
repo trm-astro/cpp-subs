@@ -1,5 +1,5 @@
-#include "trm_subs.h"
-#include "trm_buffer2d.h"
+#include "trm/subs.h"
+#include "trm/buffer2d.h"
 
 /** llsqr carries out a general linear least squares
  * fit. It uses the normal equations approach and thus is senstive to degeneracy

@@ -1,5 +1,5 @@
-#include "trm_subs.h"
-#include "trm_constants.h"
+#include "trm/subs.h"
+#include "trm/constants.h"
 
 /** Computes the Planck function Bnu = (2 h \nu^3/c^2)/(exp(h \nu/kT) - 1)
  *  as a function of wavelength and temperature. Output units are W/m**2/Hz/sr.

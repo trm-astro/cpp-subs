@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Returns extinction in magnitudes as a function of wavelength scaled
  * to the extinction in magnitudes at V according to Cardelli, Clayton &

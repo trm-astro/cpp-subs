@@ -1,6 +1,6 @@
 #include <iostream>
-#include "trm_subs.h"
-#include "trm_constants.h"
+#include "trm/subs.h"
+#include "trm/constants.h"
 #include "cpgplot.h"
 
 int main(){

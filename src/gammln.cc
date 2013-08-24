@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cmath>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * gammln returns the natural logarithm of gamma(x)

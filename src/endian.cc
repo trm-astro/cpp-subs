@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Determines whether current machine is little endian or not.
  * Needed in order to read various binary files on either type of

@@ -44,12 +44,12 @@ Maximum difference  =    80.5
 */
 
 #include <iomanip>
-#include "trm_subs.h"
-#include "trm_input.h"
-#include "trm_format.h"
-#include "trm_time.h"
-#include "trm_position.h"
-#include "trm_telescope.h"
+#include "trm/subs.h"
+#include "trm/input.h"
+#include "trm/format.h"
+#include "trm/time.h"
+#include "trm/position.h"
+#include "trm/telescope.h"
 
 int main(int argc, char* argv[]) {
 

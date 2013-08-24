@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 namespace Subs {
     void rkck(double &x, double y[], double dydx[], int n, double h, double yout[], double yerr[], RKfunc& derivs);

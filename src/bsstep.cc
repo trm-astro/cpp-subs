@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 // These are declared extern in pzextr
 

@@ -1,5 +1,5 @@
-#include "trm_subs.h"
-#include "trm_array1d.h"
+#include "trm/subs.h"
+#include "trm/array1d.h"
 
 namespace Subs {
   double amoeba_try(std::vector<std::pair<Subs::Array1D<double>, double> >& params, Subs::Array1D<double>& psum, 

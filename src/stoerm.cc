@@ -5,7 +5,7 @@ conservative equations. Replaces mmid used by more general method.
 
 */
 #include <cstdlib>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 void Subs::stoerm(double y[], double d2y[], int nvar, double xs, double htot,
                   int nstep, double yout[], const Bsfunc& derivs){

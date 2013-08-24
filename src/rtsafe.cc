@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * rtsafe is a Numerical Recipes-based routine to find roots

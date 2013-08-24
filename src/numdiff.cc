@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /* Numerical differentiation (Stu Littlefair). Takes centred differences for all but the end points. 
  * i.e. derivative of point n = (y[n+1]-y[n-1])/(x[n+1]-x[n-1]). The end points are 

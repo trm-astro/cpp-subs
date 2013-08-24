@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Carries out sigma clipping. There are two possible methods: one in which pixels are rejected one
  * at a time, worst first, with the mean and rms recomputed after each rejection, or all pixels out of 

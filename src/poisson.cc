@@ -1,6 +1,6 @@
 #include <cmath>
-#include "trm_constants.h"
-#include "trm_subs.h"
+#include "trm/constants.h"
+#include "trm/subs.h"
 
 /** Generate numbers distributed as Poisson random numbers
  * of mean mu using the rejection method. I have verified

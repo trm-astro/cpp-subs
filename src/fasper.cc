@@ -1,6 +1,6 @@
 #include <cmath>
 #include <cfloat>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 namespace Subs {
     double dmod(double a, double b);

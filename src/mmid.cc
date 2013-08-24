@@ -30,7 +30,7 @@ int nstep, double yout[], void (*derivs)(double, double[], double[]));
 */
 
 #include <cstdlib>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 void Subs::mmid(double y[], double dydx[], int nvar, double xs, double htot, 
 		int nstep, double yout[], 

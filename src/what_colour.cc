@@ -1,5 +1,5 @@
 #include <string>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Translates a string such as "red" or "black" into an equivalent 
  * enum that can be used to set the colours in the PGPLOT routine

@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <string>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * gammp returns incomplete gamma function P(a,x)

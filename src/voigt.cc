@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 class Zaghloul {
     // function object to compute integrand of zaghloul equation 4

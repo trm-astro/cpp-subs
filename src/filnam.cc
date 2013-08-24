@@ -1,5 +1,5 @@
 #include <string>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Returns a filename with the supplied extension added if
  * it is not already present. Accounts for any extra

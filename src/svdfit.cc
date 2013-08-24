@@ -1,6 +1,6 @@
 #include <string>
-#include "trm_subs.h"
-#include "trm_buffer2d.h"
+#include "trm/subs.h"
+#include "trm/buffer2d.h"
 
 /** svdfit uses singular value decomposition to solve linear
  * least squares problems. This is much safer than the "normal" equation

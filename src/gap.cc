@@ -28,8 +28,8 @@ a given size in a uniform distribution
 
 #include <climits>
 #include <string>
-#include "trm_subs.h"
-#include "trm_input.h"
+#include "trm/subs.h"
+#include "trm/input.h"
 
 int main(int argc, char* argv[]){
   try{

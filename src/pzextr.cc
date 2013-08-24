@@ -1,5 +1,5 @@
 #include <cstdlib>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 extern double **d, *x; // Defined in bsstep
 

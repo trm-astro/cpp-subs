@@ -1,5 +1,5 @@
 #include <string>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Carries out a byte-swap on an integer as needed when translating between 
  * big- and little-endian machines. 

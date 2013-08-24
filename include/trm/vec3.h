@@ -2,7 +2,7 @@
 #define TRM_VEC3_H
 
 #include <iostream>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 namespace Subs{
 

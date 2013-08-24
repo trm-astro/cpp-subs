@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** brent implements NR 1D function minimisation method. Be careful! The order of
  * the arguments has been swaaped from the NR version and it is important to

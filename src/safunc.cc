@@ -1,5 +1,5 @@
-#include "trm_subs.h"
-#include "trm_array1d.h"
+#include "trm/subs.h"
+#include "trm/array1d.h"
 
 /** Default constructor
  * \param func the multi-D function

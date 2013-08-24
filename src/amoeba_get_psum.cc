@@ -1,5 +1,5 @@
 #include <vector>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 void Subs::amoeba_get_psum(const std::vector<std::pair<std::vector<double>, double> >& params, std::vector<double>& psum){
   for(int j=0; j<psum.size(); j++){

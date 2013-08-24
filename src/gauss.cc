@@ -1,5 +1,5 @@
 #include <math.h>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Generates gaussian random deviates, mean 0, rms 1
  * Uses ran1 as the generator.

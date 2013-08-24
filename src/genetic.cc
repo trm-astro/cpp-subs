@@ -1,6 +1,6 @@
 #include <cstdio>
-#include "trm_subs.h"
-#include "trm_array1d.h"
+#include "trm/subs.h"
+#include "trm/array1d.h"
 
 // Note that most routines here need to know the precise number format.
 // At the moment this is of the form +14.7e which gives a number of the form

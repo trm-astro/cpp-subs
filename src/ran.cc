@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 namespace Subs {
     void psdes(UINT4& lword, UINT4& rword);

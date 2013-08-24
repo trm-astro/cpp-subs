@@ -18,8 +18,8 @@ e.g. weekday "17 Nov 1961"
 */
 
 #include <string>
-#include "trm_subs.h"
-#include "trm_date.h"
+#include "trm/subs.h"
+#include "trm/date.h"
 
 int main(int argc, char* argv[]){
   try{

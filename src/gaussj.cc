@@ -1,8 +1,8 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-#include "trm_subs.h"
-#include "trm_buffer2d.h"
+#include "trm/subs.h"
+#include "trm/buffer2d.h"
 
 /**
  * The routine implements Gauss-Jordan elimination to solve linear equations of form

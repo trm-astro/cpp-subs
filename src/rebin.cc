@@ -1,5 +1,5 @@
-#include "trm_subs.h"
-#include "trm_poly.h"
+#include "trm/subs.h"
+#include "trm/poly.h"
 
 /** General purpose rebin function, equivalent to F77 function of same name with
  * a few modifications.

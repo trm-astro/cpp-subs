@@ -1,7 +1,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /* Given a bracketted minimum, this routine refines the minimum, making use of derivatives. 
  * It comes from NR, with the added option of a quick bail out. ax to cx must bracket a 

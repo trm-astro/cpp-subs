@@ -3,8 +3,8 @@
 
 #include <string>
 #include <math.h>
-#include "trm_constants.h"
-#include "trm_subs.h"
+#include "trm/constants.h"
+#include "trm/subs.h"
 
 namespace Subs {
 

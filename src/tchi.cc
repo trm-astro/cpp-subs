@@ -1,5 +1,5 @@
 #include <cmath>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * tchi returns a number above which there is a 10**lfprob of 

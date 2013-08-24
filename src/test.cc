@@ -1,5 +1,5 @@
-#include "trm_header.h"
-#include "trm_input.h"
+#include "trm/header.h"
+#include "trm/input.h"
 
 int main(int argc, char* argv[]){
    

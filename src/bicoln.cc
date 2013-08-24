@@ -1,6 +1,6 @@
 #include <cstdlib>
 #include <cmath>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /**
  * factln returns the natural logarithm of factorial n (ln(n!)).

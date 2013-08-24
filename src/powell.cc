@@ -1,6 +1,6 @@
-#include "trm_subs.h"
-#include "trm_format.h"
-#include "trm_array1d.h"
+#include "trm/subs.h"
+#include "trm/format.h"
+#include "trm/array1d.h"
 
 namespace Subs {
     void linmin(Subs::Array1D<double>& p, Subs::Array1D<double>& d, const Subs::Array1D<double>& scale, 

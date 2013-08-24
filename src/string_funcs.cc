@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Makes an integer such as '12' into a string
  * of the form '012', with the number of digits

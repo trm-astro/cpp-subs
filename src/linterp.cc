@@ -1,4 +1,4 @@
-#include "trm_subs.h"
+#include "trm/subs.h"
 
 /** Workhorse to carry out linear interpolation. Given two (x,y) points,
  * this routine computes the x value equivalent to an arbitrary y value for a line that runs through
