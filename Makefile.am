@@ -1,12 +1,10 @@
 ## Process this file with automake to generate Makefile.in
 
+EXTRA_DIST = bootstrap
+
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = src include doc
-
-# copy over web pages
-export:
-	scp -r doc/html $(WEB_SERVE):$(WEB_PATH)/software/$(PACKAGE)/.
+SUBDIRS = src include
 
 ## File of aliases
 
@@ -28,7 +26,6 @@ $(ALIASES):
 	@echo 'alias tcorr     $(progdir)/tcorr'       >> $(ALIASES)
 	@echo 'alias weekday   $(progdir)/weekday'     >> $(ALIASES)
 	@echo 'alias gap       $(progdir)/gap'         >> $(ALIASES)
-	@echo 'alias interp    $(progdir)/interp'      >> $(ALIASES)
 	@echo ' ' >> $(ALIASES)
 	@echo 'echo " "' >> $(ALIASES)
 	@echo 'echo "Welcome to $(PACKAGE) version $(VERSION), built $(DATE)."' >> $(ALIASES)
@@ -38,3 +35,5 @@ $(ALIASES):
 	@echo 'echo "Point a browser at ${prefix}/html/$(PACKAGE)/index.html for help."' >> $(ALIASES)
 	@echo 'echo " "' >> $(ALIASES)
 
+clean-local:
+	-rm -f $(ALIASES)
