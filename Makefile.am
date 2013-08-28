@@ -6,6 +6,10 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = src include
 
+export: dist
+	scp $(PACKAGE)-$(VERSION).tar.gz $(WEB_SERVE):$(WEB_PATH)/software/.
+	ssh $(WEB_SERVE) "cd $(WEB_PATH)/software ; ln -sf $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE).tar.gz"
+
 ## File of aliases
 
 ALIASES = Subs
