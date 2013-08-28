@@ -19,12 +19,14 @@ LDADD = libsubs.la
 
 DATE = $(shell date)
 
-install-data-hook:
-	echo "This is $(PACKAGE)-$(VERSION), built on $(DATE)" > $(progdir)/VERSION
+#install-data-hook:
+#	echo "This is $(PACKAGE)-$(VERSION), built on $(DATE)" > $(progdir)/VERSION
 
 ## Library
 
 lib_LTLIBRARIES = libsubs.la
+
+#libsubs_la_SOURCES = gauss.cc
 
 libsubs_la_SOURCES = gauss.cc ran.cc ephem.cc gammln.cc gammp.cc gammq.cc \
 gser.cc hitem.cc header.cc date.cc time.cc position.cc star.cc binary.cc \
