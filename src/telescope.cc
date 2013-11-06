@@ -76,6 +76,9 @@ void Subs::Telescope::set(const std::string& name){
   }else if(Subs::toupper(name) == "JODRELL"){
     *this = Telescope("Jodrell", "Jodrell Bank",02,18,25.7,'W',53,14,10.5,'N',77.);
 
+  }else if(Subs::toupper(name) == "TNT"){
+      *this = Telescope("TNT", "Doi Inthanon",98,28,00.0,'E',18,34,00.0,'N',2457.);
+
   }else{
     throw Telescope_Error("Name: \"" + name + 
 			  "\" unrecognised in Telescope::set(const std::string&).\n\n"
@@ -91,6 +94,7 @@ void Subs::Telescope::set(const std::string& name){
 			  " 9) Calar Alto\n"
 			  "10) Wroclaw\n"
 			  "11) Jodrell\n"
+			  "12) TNT\n"
 			  );
   }
 }  
