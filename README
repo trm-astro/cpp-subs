@@ -8,10 +8,5 @@ Compatible Regular Expressions), 'slalib' (C version) and 'pgplot'. Make sure
 these are in place first. Pat Wallace allows me to send an obfusticated
 version of slalib, but you will need to ask me for it.
 
-If you download subs from github you will need first to configure it by 
-running './bootstrap' then follow the instructions in INSTALL. The 
-bootstrap step should not be necesssary if you start from the .tar.gz 
-file.
-
-
-Tom
+If installing for first time, run './bootstrap' then follow the instructions
+in INSTALL. 
