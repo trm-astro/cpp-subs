@@ -1,6 +1,9 @@
 # Makefile for Sphinx documentation
 #
 
+# TRM extras that get made
+RSTS = _store/weekday_cc.rst _store/gap_cc.rst _store/tcorr_cc.rst
+
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
@@ -176,12 +179,9 @@ pseudoxml:
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
-# TRM subs specific extras
-
+# TRM extras
 install-html:
 	rsync -avu --delete $(BUILDDIR)/html/ $(WEB_SERVE):$(WEB_PATH)/software/subs/.
-
-RSTS = _store/weekday_cc.rst _store/gap_cc.rst _store/tcorr_cc.rst
 
 _store/%_cc.rst: ../src/%.cc
 	python genrst.py $< $@
