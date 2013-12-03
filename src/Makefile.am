@@ -19,8 +19,8 @@ LDADD = libsubs.la
 
 DATE = $(shell date)
 
-#install-data-hook:
-#	echo "This is $(PACKAGE)-$(VERSION), built on $(DATE)" > $(progdir)/VERSION
+install-data-hook:
+	echo "This is $(PACKAGE)-$(VERSION), built on $(DATE)" > $(progdir)/VERSION
 
 ## Library
 
