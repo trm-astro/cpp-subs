@@ -27,14 +27,11 @@ AC_LANG_CPLUSPLUS
 AC_REQUIRE_CPP
 
 dnl Checks for libraries.
-
 AC_CHECK_LIB([csla], [main], [], AC_MSG_ERROR(cannot link to the sla C library))
-
 AC_CHECK_LIB([pcrecpp], [main], [], AC_MSG_ERROR(cannot link to the pcre C++ library))
 
 dnl Checks for ANSI C header files.
 AC_CHECK_HEADERS([stdlib.h float.h math.h sstream string fstream iostream], [], AC_MSG_ERROR(missing header; please fix))
-
 AC_CHECK_HEADERS([pcrecpp.h slalib.h], [], AC_MSG_ERROR(missing header; please fix))
 
 dnl PGPLOT has its own macro 'cos its a pain
