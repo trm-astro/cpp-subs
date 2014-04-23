@@ -316,23 +316,28 @@ namespace Subs {
     //! Put a program to sleep
     void sleep(double seconds);
 
-    //! Convert to radians
+    //! Convert degrees to radians
     inline double deg2rad(double deg){
       return M_PI*deg/180.;
     }
-	
+
+    //! Convert radians to degrees
+    inline double rad2deg(double rad){
+      return 180.*rad/M_PI;
+    }
+
     //! Simpson's rule integration routine
     float qsimp(float (*func)(float x), float a, float b);
 
     //! Singular value decomposition
     /**
      * svdcmp performs singular value decomposition.
-     * Given an M x N matrix A this routine computes its 
-     * singular value decomposition A = U.W.V^t. The matrix U 
-     * replaces A on output. The diagonal matrix W is returned 
-     * as a vector and the matrix V is returned in the last argument (not 
+     * Given an M x N matrix A this routine computes its
+     * singular value decomposition A = U.W.V^t. The matrix U
+     * replaces A on output. The diagonal matrix W is returned
+     * as a vector and the matrix V is returned in the last argument (not
      * the transpose).
-     * \param a M x N matrix A. Declare e.g. a(M,N). M might be the number of data point and N the 
+     * \param a M x N matrix A. Declare e.g. a(M,N). M might be the number of data point and N the
      * number of polynomials for example. Returns with elements of the matrix U.
      * \param w N element vector of diagonal elements of centre matrix W
      * \param v N by N elements of matrix V
