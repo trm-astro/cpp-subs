@@ -9,58 +9,58 @@
 #include "trm/telescope.h"
 
 Subs::Time::Time(int day_, Date::Month month_, int year_, double hour) : Date(day_,month_,year_) {
-    
+
     if(hour < 0. || hour >= 24.)
-	throw Time_Error("Subs::Time::Time(int, Date::Month, int, double): hour out of range");
-    
+        throw Time_Error("Subs::Time::Time(int, Date::Month, int, double): hour out of range");
+
     hour_  = hour;
 }
 
 Subs::Time::Time(int day_, int month_, int year_, double hour) : Date(day_,month_,year_) {
-    
+
     if(hour < 0. || hour >= 24.)
-	throw Time_Error("Subs::Time::Time(int, int, int, double): hour out of range");
-    
+        throw Time_Error("Subs::Time::Time(int, int, int, double): hour out of range");
+
     hour_  = hour;
 }
 
 Subs::Time::Time(int day_, Date::Month month_, int year_, int hour, int min, double sec) : Date(day_,month_,year_) {
-    
+
     try{
-	valid_time(hour,min,sec); 
+        valid_time(hour,min,sec);
     }
     catch(const Time_Error& msg){
-	throw Time_Error(std::string("Subs::Time::Time(int, Date::Month, int, int, int, double):\n") + msg);
+        throw Time_Error(std::string("Subs::Time::Time(int, Date::Month, int, int, int, double):\n") + msg);
     }
-    
+
     hour_  = hour + min/60. + sec/3600.;
 }
 
 Subs::Time::Time(int day_, int month_, int year_, int hour, int min, double sec) : Date(day_,month_,year_) {
-    
+
     try{
-	valid_time(hour,min,sec); 
+        valid_time(hour,min,sec);
     }
     catch(const Time_Error& msg){
-	throw Time_Error(std::string("Subs::Time::Time(int, int, int, int, int, double):\n") + msg);
+        throw Time_Error(std::string("Subs::Time::Time(int, int, int, int, int, double):\n") + msg);
     }
-    
+
     hour_  = hour + min/60. + sec/3600.;
 }
 
 Subs::Time::Time(const std::string& time){
     try{
-	set(time);
+        set(time);
     }
     catch(const Time_Error& msg){
-	throw Time_Error(std::string("Subs::Time::Time(const std::string&):\n") + msg);
+        throw Time_Error(std::string("Subs::Time::Time(const std::string&):\n") + msg);
     }
 }
 
 Subs::Time::Time(const Date& date, double hour) : Date(date) {
-    
+
     if(hour < 0. || hour >= 24.)
-	throw Time_Error("Subs::Time::Time(Date, double, float): hour out of range");
+        throw Time_Error("Subs::Time::Time(Date, double, float): hour out of range");
     hour_  = hour;
 }
 
@@ -70,24 +70,24 @@ Subs::Time::Time(double mjd){
 
 Subs::Time::HMS Subs::Time::hms() const{
     HMS t;
-    t.hour  = (short int)(floor(hour_));  
+    t.hour  = (short int)(floor(hour_));
     t.min   = (short int)(floor(60.*(hour_-t.hour)));
     t.sec   = (short int)(floor(60.*(60.*(hour_-t.hour)-t.min)));
     t.fsec  = 60.*(60.*(hour_-t.hour)-t.min)-t.sec;
-    
+
     // avoid irritating round off problem without compromising the time too much
     if(t.fsec > 0.9999999){
-	t.sec++;
-	t.fsec = 0.f;
-	if(t.sec == 60){
-	    t.min++;
-	    t.sec = 0;
-	    if(t.min == 60){
-		t.hour++;
-		t.min = 0;
-		if(t.hour == 24) t.hour = 0;
-	    }
-	}
+        t.sec++;
+        t.fsec = 0.f;
+        if(t.sec == 60){
+            t.min++;
+            t.sec = 0;
+            if(t.min == 60){
+                t.hour++;
+                t.min = 0;
+                if(t.hour == 24) t.hour = 0;
+            }
+        }
     }
     return t;
 }
@@ -316,35 +316,35 @@ void Subs::Time::earth(const Telescope& tel, Vec3& ph, Vec3& vh, Vec3& pb, Vec3&
 }
 
 std::string Subs::Time::str() const {
-  std::ostringstream ost;
-  HMS t = hms();
-  ost << Date::str() << ", " 
-      << std::setw(2) << std::setfill('0') << t.hour << ":" 
-      << std::setw(2) << std::setfill('0') << t.min  << ":" 
-      << std::setw(2) << std::setfill('0') << t.sec  << "." 
-      << std::setw(3) << std::setfill('0') << int(floor(1000.*t.fsec+0.5))
-      << std::setfill(' ');
-  return ost.str();
+    std::ostringstream ost;
+    HMS t = hms();
+    ost << Date::str() << ", " 
+        << std::setw(2) << std::setfill('0') << t.hour << ":" 
+        << std::setw(2) << std::setfill('0') << t.min  << ":" 
+        << std::setw(2) << std::setfill('0') << t.sec  << "." 
+        << std::setw(3) << std::setfill('0') << int(floor(1000.*t.fsec+0.5))
+        << std::setfill(' ');
+    return ost.str();
 }
 
 void Subs::Time::set_hour(double hour){
   
-  if(hour < 0. || hour >= 24.)
-    throw Time_Error("Subs::Time::set_hour(double): hours out of range");
+    if(hour < 0. || hour >= 24.)
+        throw Time_Error("Subs::Time::set_hour(double): hours out of range");
 
-  hour_ = hour;
+    hour_ = hour;
 }
 
 void Subs::Time::set(int day_, Date::Month month_, int year_, int hour, int min, double sec){
   
-  Date::set(day_,month_,year_);
-  try{
-    valid_time(hour,min,sec);
-  }
-  catch(const Time_Error& msg){
-    throw Time_Error(std::string("void Subs::Time::set(int, Date::Month month_, int, int, int, double): ") + msg);
-  }
-  hour_  = hour + min/60. + sec/3600.;
+    Date::set(day_,month_,year_);
+    try{
+        valid_time(hour,min,sec);
+    }
+    catch(const Time_Error& msg){
+        throw Time_Error(std::string("void Subs::Time::set(int, Date::Month month_, int, int, int, double): ") + msg);
+    }
+    hour_  = hour + min/60. + sec/3600.;
 }
 
 /** Sets a time from individual components.
@@ -357,14 +357,14 @@ void Subs::Time::set(int day_, Date::Month month_, int year_, int hour, int min,
  */
 void Subs::Time::set(int day_, int month_, int year_, int hour, int min, double sec){
   
-  Date::set(day_,month_,year_);
-  try{
-    valid_time(hour,min,sec);
-  }
-  catch(const Time_Error& msg){
-    throw Time_Error(std::string("void Subs::Time::set(int, int, int, int, int, double): ") + msg);
-  }
-  hour_  = hour + min/60. + sec/3600.;
+    Date::set(day_,month_,year_);
+    try{
+        valid_time(hour,min,sec);
+    }
+    catch(const Time_Error& msg){
+        throw Time_Error(std::string("void Subs::Time::set(int, int, int, int, int, double): ") + msg);
+    }
+    hour_  = hour + min/60. + sec/3600.;
 }
 
 /** Sets a time from a string of the form "Date, 13:04:56.345" where
@@ -372,46 +372,46 @@ void Subs::Time::set(int day_, int month_, int year_, int hour, int min, double 
  * \param time the string containing the time.
  */
 void Subs::Time::set(const std::string& time){
-  Date::set(time);
-  std::istringstream ist(time.substr(11));
-  char c;
-  int hour_s, mn;
-  double sc;
-  ist >> c >> hour_s >> c >> mn >> c >> sc;
-  if(!ist) throw Time_Error("Subs::Time::set(const std::string&, float): error reading in time = " + time);
-  valid_time(hour_s,mn,sc); 
+    Date::set(time);
+    std::istringstream ist(time.substr(11));
+    char c;
+    int hour_s, mn;
+    double sc;
+    ist >> c >> hour_s >> c >> mn >> c >> sc;
+    if(!ist) throw Time_Error("Subs::Time::set(const std::string&, float): error reading in time = " + time);
+    valid_time(hour_s,mn,sc); 
 
-  hour_  = hour_s + mn/60. + sc/3600.;
+    hour_  = hour_s + mn/60. + sc/3600.;
 }
 
 void Subs::Time::set(double mjd){
-  int imjd = int(floor(mjd));
-  Date::set(imjd);
+    int imjd = int(floor(mjd));
+    Date::set(imjd);
 
-  hour_ = 24.*(mjd-imjd);
+    hour_ = 24.*(mjd-imjd);
 }
 
 void Subs::Time::set(const Date& date, double hour){
-  *this  = date;
-  hour_  = hour;
+    *this  = date;
+    hour_  = hour;
 }
 
 // set to UTC
 
 void Subs::Time::set(){
-  time_t t;
-  time(&t);
-  tm* gt = gmtime(&t);
-  Date::set(short(gt->tm_mday),Month(gt->tm_mon+1),1900+gt->tm_year);
-  hour_  = gt->tm_hour+gt->tm_min/60.+gt->tm_sec/3600.;
+    time_t t;
+    time(&t);
+    tm* gt = gmtime(&t);
+    Date::set(short(gt->tm_mday),Month(gt->tm_mon+1),1900+gt->tm_year);
+    hour_  = gt->tm_hour+gt->tm_min/60.+gt->tm_sec/3600.;
 }
 
 void Subs::Time::add_hour(double hour){
-  set(mjd() + hour/24.);
+    set(mjd() + hour/24.);
 }
 
 void Subs::Time::add_second(double second){
-  set(mjd() + second/24./3600.);
+    set(mjd() + second/24./3600.);
 }
 
 /** Returns Greenwich Mean Sidereal Time (GMST) in radians.
@@ -426,44 +426,44 @@ double Subs::Time::GMST() const {
 /** Converts from GMT to GST */
 
 void Subs::Time::GMTtoGST(){
-  Date tdate(1,Jan,year());
-  int mjs  = tdate.mjd();
-  int days = Date::mjd() - mjs; 
+    Date tdate(1,Jan,year());
+    int mjs  = tdate.mjd();
+    int days = Date::mjd() - mjs; 
 
-  double t = (mjs - 15019.5)/36525.;
-  double r = 6.6460656 + (0.00002581*t+2400.051262)*t;
-  double b = 24.-(r-24.*(year()-1900));
+    double t = (mjs - 15019.5)/36525.;
+    double r = 6.6460656 + (0.00002581*t+2400.051262)*t;
+    double b = 24.-(r-24.*(year()-1900));
 
-  double t0 = 0.0657098*days-b;
-  t0 += 1.002738*hour();
-  t0  = t0 > 24. ? t0 - 24. : t0;
-  t0  = t0 < 0.  ? t0 + 24. : t0;
-  set_hour(t0);
+    double t0 = 0.0657098*days-b;
+    t0 += 1.002738*hour();
+    t0  = t0 > 24. ? t0 - 24. : t0;
+    t0  = t0 < 0.  ? t0 + 24. : t0;
+    set_hour(t0);
 }
 
 void Subs::Time::read(std::ifstream& s, bool swap_bytes){
-  Date::read(s, swap_bytes);
+    Date::read(s, swap_bytes);
 
-  double h;
-  s.read((char*)&h,sizeof(double));
-  if(!s) throw Time_Error("void Subs::Time::read(std::ifstream&): error reading hour of day");
-  if(swap_bytes) h = Subs::byte_swap(h);
-  if(h < 0. || h >= 24.) 
-    throw Time_Error("hour out of range in Subs::Time::read(std::ifstream&)");
+    double h;
+    s.read((char*)&h,sizeof(double));
+    if(!s) throw Time_Error("void Subs::Time::read(std::ifstream&): error reading hour of day");
+    if(swap_bytes) h = Subs::byte_swap(h);
+    if(h < 0. || h >= 24.) 
+        throw Time_Error("hour out of range in Subs::Time::read(std::ifstream&)");
 
-  hour_ = h;
+    hour_ = h;
 }
 
 void Subs::Time::write(std::ofstream& s) const {
-  Date::write(s);
-  s.write((char*)&hour_,sizeof(double));
-  if(!s) throw Time_Error("void Subs::Time::write(std::ofstream&) const: error writing hour of day");
+    Date::write(s);
+    s.write((char*)&hour_,sizeof(double));
+    if(!s) throw Time_Error("void Subs::Time::write(std::ofstream&) const: error writing hour of day");
 }
 
 void Subs::Time::skip(std::ifstream& s){
-  Date::skip(s);
-  s.ignore(sizeof(double));
-  if(!s) throw Time_Error("void Subs::Time::skip(std::ifstream&): error skipping hour of day");
+    Date::skip(s);
+    s.ignore(sizeof(double));
+    if(!s) throw Time_Error("void Subs::Time::skip(std::ifstream&): error skipping hour of day");
 }
 
 /** Inputs a zero padded time e.g. "17 Nov 1961, 01:03:04.02"
@@ -471,31 +471,31 @@ void Subs::Time::skip(std::ifstream& s){
  */
 std::istream& Subs::operator>>(std::istream& ist, Subs::Time& time){
 
-  if(!ist) return ist;
+    if(!ist) return ist;
 
-  Date date;
-  ist >> date;
-  if(!ist) return ist;
+    Date date;
+    ist >> date;
+    if(!ist) return ist;
 
-  char c;
-  std::string hms;
-  int hour_s, mn;
-  double sc;
+    char c;
+    std::string hms;
+    int hour_s, mn;
+    double sc;
 
-  ist >> c >> hour_s >> c >> mn >> c >> sc;  
-  if(!ist) return ist;
+    ist >> c >> hour_s >> c >> mn >> c >> sc;  
+    if(!ist) return ist;
 
-  try{
-    Time::valid_time(hour_s,mn,sc);
-  }
-  catch(...){
-    ist.setstate(std::ios::failbit);
+    try{
+        Time::valid_time(hour_s,mn,sc);
+    }
+    catch(...){
+        ist.setstate(std::ios::failbit);
+        return ist;
+    }
+
+    double hour  = hour_s + mn/60. + sc/3600.;
+    time.set(date, hour);
     return ist;
-  }
-
-  double hour  = hour_s + mn/60. + sc/3600.;
-  time.set(date, hour);
-  return ist;
 }
 
 /** Outputs a time with zero padding e.g. 01:03:04.02
@@ -503,87 +503,87 @@ std::istream& Subs::operator>>(std::istream& ist, Subs::Time& time){
  */
 std::ostream& Subs::operator<<(std::ostream& ost, const Time& time){
 
-  if(!ost) return ost;
+    if(!ost) return ost;
 
-  Subs::Time::HMS t = time.hms();
-  ost.setf(std::ios::right);
-  ost << (Date&)time << ", "
-      << std::setw(2) << std::setfill('0') << t.hour << ":" 
-      << std::setw(2) << std::setfill('0') << t.min  << ":" 
-      << std::setw(2) << std::setfill('0') << t.sec  << "." 
-      << std::setw(5) << std::setfill('0') << int(floor(100000.*t.fsec))
-      << std::setfill(' ');
-  if(!ost)
-    throw Time::Time_Error("ostream& Subs::operator<<(std::ostream&, Subs::Time&): error output");
+    Subs::Time::HMS t = time.hms();
+    ost.setf(std::ios::right);
+    ost << (Date&)time << ", "
+        << std::setw(2) << std::setfill('0') << t.hour << ":" 
+        << std::setw(2) << std::setfill('0') << t.min  << ":" 
+        << std::setw(2) << std::setfill('0') << t.sec  << "." 
+        << std::setw(5) << std::setfill('0') << int(floor(100000.*t.fsec))
+        << std::setfill(' ');
+    if(!ost)
+        throw Time::Time_Error("ostream& Subs::operator<<(std::ostream&, Subs::Time&): error output");
 
-  return ost;
+    return ost;
 }
 
 // defines allowable times
 
 void Subs::Time::valid_time(int hour, int minute, double second){
-  if(hour < 0 || hour > 23) 
-    throw Time_Error("void Subs::Time::valid_time(int, int, double): hour = " + Subs::str(hour) + " is out of allowable range 0 to 23");
+    if(hour < 0 || hour > 23) 
+        throw Time_Error("void Subs::Time::valid_time(int, int, double): hour = " + Subs::str(hour) + " is out of allowable range 0 to 23");
 
-  if(minute < 0 || minute > 59)
-    throw Time_Error("void Subs::Time::valid_time(int, int, double): minute = " + Subs::str(minute) + " is out of allowable range 0 to 59");
+    if(minute < 0 || minute > 59)
+        throw Time_Error("void Subs::Time::valid_time(int, int, double): minute = " + Subs::str(minute) + " is out of allowable range 0 to 59");
   
-  if(second < 0. || second >= 60.)
-    throw Time_Error("void Subs::Time::valid_time(int, int, double): second = " + Subs::str(second) + " is out of allowable range 0. to <60.");
+    if(second < 0. || second >= 60.)
+        throw Time_Error("void Subs::Time::valid_time(int, int, double): second = " + Subs::str(second) + " is out of allowable range 0. to <60.");
 }
 
 bool Subs::operator>(const Time& t1, const Time& t2){
-  const Date &d1 = t1, &d2 = t2;
-  if(d1 > d2){
-    return true;
-  }else if(d1 == d2){
-    return (t1.hour_ > t2.hour_);
-  }else{
-    return false;
-  }
+    const Date &d1 = t1, &d2 = t2;
+    if(d1 > d2){
+        return true;
+    }else if(d1 == d2){
+        return (t1.hour_ > t2.hour_);
+    }else{
+        return false;
+    }
 }
 
 bool Subs::operator<(const Time& t1, const Time& t2){
-  const Date &d1 = t1, &d2 = t2;
-  if(d1 < d2){
-    return true;
-  }else if(d1 == d2){
-    return (t1.hour_ < t2.hour_);
-  }else{
-    return false;
-  }
+    const Date &d1 = t1, &d2 = t2;
+    if(d1 < d2){
+        return true;
+    }else if(d1 == d2){
+        return (t1.hour_ < t2.hour_);
+    }else{
+        return false;
+    }
 }
 
 bool Subs::operator>=(const Time& t1, const Time& t2){
-  const Date &d1 = t1, &d2 = t2;
-  if(d1 > d2){
-    return true;
-  }else if(d1 == d2){
-    return (t1.hour_ >= t2.hour_);
-  }else{
-    return false;
-  }
+    const Date &d1 = t1, &d2 = t2;
+    if(d1 > d2){
+        return true;
+    }else if(d1 == d2){
+        return (t1.hour_ >= t2.hour_);
+    }else{
+        return false;
+    }
 }
 
 bool Subs::operator<=(const Time& t1, const Time& t2){
-  const Date &d1 = t1, &d2 = t2;
-  if(d1 < d2){
-    return true;
-  }else if(d1 == d2){
-    return (t1.hour_ <= t2.hour_);
-  }else{
-    return false;
-  }
+    const Date &d1 = t1, &d2 = t2;
+    if(d1 < d2){
+        return true;
+    }else if(d1 == d2){
+        return (t1.hour_ <= t2.hour_);
+    }else{
+        return false;
+    }
 }
 
 bool Subs::operator==(const Time& t1, const Time& t2){
-  const Date &d1 = t1, &d2 = t2;
-  return (d1 == d2 && t1.hour_ == t2.hour_);
+    const Date &d1 = t1, &d2 = t2;
+    return (d1 == d2 && t1.hour_ == t2.hour_);
 }
 
 double Subs::operator-(const Time& t1, const Time& t2){
-  const Date &d1 = t1, &d2 = t2;
-  return (86400.*(d1-d2) + 3600.*(t1.hour_ - t2.hour_));
+    const Date &d1 = t1, &d2 = t2;
+    return (86400.*(d1-d2) + 3600.*(t1.hour_ - t2.hour_));
 }
 
 

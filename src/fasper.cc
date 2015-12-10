@@ -262,7 +262,7 @@ namespace Subs {
 	
         int ix = int(x);
 	
-        if(x == double(ix)) 
+        if(x == double(ix))
             yy[ix] += y;
         else{
             int ilo  = std::min(std::max(int(x-0.5*m),0),int(n-m));
