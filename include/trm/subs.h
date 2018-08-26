@@ -1601,44 +1601,44 @@ namespace Subs {
 	
 	filt[0] = tptr[nact/2];
 	for(int i=1; i<np; i++){
-	    int jnew1 = std::max(i-width/2, 0);    
-	    int jnew2 = std::min(i+width/2, np-1);
+      int jnew1 = std::max(i-width/2, 0);    
+      int jnew2 = std::min(i+width/2, np-1);
 	    
-	    // Update key index: if start has changed, delete first point
-	    if(jnew1 == jstart + 1){
+      // Update key index: if start has changed, delete first point
+      if(jnew1 == jstart + 1){
 		nact--;
 		for(size_t j=0, jadd=0; j<nact; j++){
-		    if(iptr[j] == 0) jadd = 1;
-		    size_t jn = j + jadd;
-		    iptr[j] = iptr[jn] - 1;
-		    tptr[j] = tptr[jn];
+          if(iptr[j] == 0) jadd = 1;
+          size_t jn = j + jadd;
+          iptr[j] = iptr[jn] - 1;
+          tptr[j] = tptr[jn];
 		}
-	    }
-	    
-	    if(jnew2 == jstop + 1){
+      }
+      
+      if(jnew2 == jstop + 1){
 		T test = data[jnew2];
 		int jtest   = locate(tptr, nact, test);
 		if(jtest == int(nact)){
-		    iptr[nact] = nact;
-		    tptr[nact] = test;
+          iptr[nact] = nact;
+          tptr[nact] = test;
 		}else{
-		    for(int j=nact; j>jtest; j--){
+          for(int j=nact; j>jtest; j--){
 			iptr[j] = iptr[j-1];
 			tptr[j] = tptr[j-1];
-		    }
-		    tptr[jtest] = test;
-		    iptr[jtest] = nact;
+          }
+          tptr[jtest] = test;
+          iptr[jtest] = nact;
 		}
 		nact++;
-	    }
-	    filt[i] = tptr[nact/2];
-	    jstart = jnew1;
-	    jstop  = jnew2;
+      }
+      filt[i] = tptr[nact/2];
+      jstart = jnew1;
+      jstop  = jnew2;
 	}
 	delete[] iptr;
 	delete[] tptr;
     }
-    
+
     //! Returns a double from a string
     double string_to_double(const std::string& entry);
 

@@ -232,14 +232,12 @@ void Subs::famp(double *x, float *y, float *e,  int n, double fmax, int nfreq, S
     fftr(amps,ndim,1);
 
     double df = 1./(xdif*ofac);
-    double cwt, swt, hypo, hc2wt, hs2wt;
+    double hypo, hc2wt, hs2wt;
     for(int i=0,k=2; i<nfreq; i++,k+=2){
 
         hypo     = sqrt(sqr(amps[k])+sqr(amps[k+1]));
         hc2wt    = 0.5*amps[k]/hypo;
         hs2wt    = 0.5*amps[k+1]/hypo;
-        cwt      = sqrt(0.5+hc2wt);
-        swt      = sign(sqrt(0.5-hc2wt),hs2wt);
 
         double ac = (0.5*wsum-hc2wt)*freq[k] - hs2wt*freq[k+1];
         double as = -hs2wt*freq[k] + (0.5*wsum+hc2wt)*freq[k+1];

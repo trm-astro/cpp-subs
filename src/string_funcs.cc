@@ -43,7 +43,7 @@ std::string Subs::str(const long int& con, int ndig){
 char Subs::digit_to_char(int digit){
 
     if(digit < 0 || digit > 9)
-	throw Subs_Error("Subs::digit_to_char: integer input = " + Subs::str(digit) + " is out of range 0 - 9");
+        throw Subs_Error("Subs::digit_to_char: integer input = " + Subs::str(digit) + " is out of range 0 - 9");
 
     switch(digit){
 	case 0:
@@ -76,7 +76,7 @@ char Subs::digit_to_char(int digit){
 std::string Subs::toupper(const std::string& str){
     std::string temp;
     for(register std::string::const_iterator p=str.begin(); p != str.end(); p++)
-	temp += char(std::toupper(*p));
+        temp += char(std::toupper(*p));
     return temp;
 }
 
@@ -87,7 +87,7 @@ std::string Subs::toupper(const std::string& str){
 std::string Subs::tolower(const std::string& str){
     std::string temp;
     for(register std::string::const_iterator p=str.begin(); p != str.end(); p++)
-	temp += char(std::tolower(*p));
+        temp += char(std::tolower(*p));
     return temp;
 }
 
@@ -100,8 +100,8 @@ void Subs::write_string(std::ofstream& s, const std::string& str){
     s.write((char*)&n, sizeof(UINT4));
     if(!s) throw Subs_Error("Subs::write(std::ofstream&, const std::string&): error writing number of characters");
     if(n){
-	s.write(str.data(), sizeof(char[n]));
-	if(!s) throw Subs_Error("Subs::write(std::ofstream&, const std::string&): error writing characters");
+        s.write(str.data(), sizeof(char[n]));
+        if(!s) throw Subs_Error("Subs::write(std::ofstream&, const std::string&): error writing characters");
     }
 }
 
@@ -117,12 +117,12 @@ void Subs::read_string(std::ifstream& s, std::string& str, bool swap_bytes){
     if(!s) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error reading number of characters");
     if(swap_bytes) n = Subs::byte_swap(n);
     if(n > 0){
-	char *p = new char [n];
-	if(!p) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error allocating array for characters");
-	s.read(p, sizeof(char[n]));
-	if(!s) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error reading characters");
-	str.assign(p, n);
-	delete [] p;
+        char *p = new char [n];
+        if(!p) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error allocating array for characters");
+        s.read(p, sizeof(char[n]));
+        if(!s) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error reading characters");
+        str.assign(p, n);
+        delete [] p;
     }
 }
 
@@ -135,8 +135,8 @@ void Subs::skip_string(std::ifstream& s, bool swap_bytes){
     if(!s) throw Subs_Error("Subs::skip(std::ifstream&): error reading number of characters");
     if(swap_bytes) n = Subs::byte_swap(n);
     if(n > 0){
-	s.ignore(sizeof(char[n]));
-	if(!s) throw Subs_Error("Subs::skip(std::ifstream&): error skipping characters");
+        s.ignore(sizeof(char[n]));
+        if(!s) throw Subs_Error("Subs::skip(std::ifstream&): error skipping characters");
     }
 }
 
@@ -162,75 +162,75 @@ std::vector<std::vector<std::string> > Subs::read_multi_string_line(std::istream
     bool started = false, escaped = false, insideQuotes = false;
     char c;
     while(s){
-	s.get(c);
-	if(!s || c == '\n') break;
+        s.get(c);
+        if(!s || c == '\n') break;
 
-	if(!escaped && c == '\\'){
-	    //	cerr << "not escaped, c = " << c << endl;
+        if(!escaped && c == '\\'){
+            //	cerr << "not escaped, c = " << c << endl;
 	    
-	    escaped = true;
+            escaped = true;
 	    
-	}else{
+        }else{
 	    
-	    if(escaped){
-		//	std::cerr << "escaped, c = " << c << std::endl;
+            if(escaped){
+                //	std::cerr << "escaped, c = " << c << std::endl;
 
-		escaped = false;
+                escaped = false;
 		
-		if(started){
-		    tstr += c;
-		}else{
-		    tstr         = c;
-		    started      = true;
-		}
+                if(started){
+                    tstr += c;
+                }else{
+                    tstr         = c;
+                    started      = true;
+                }
 		
-	    }else if(!insideQuotes && c == '"'){
-		//	std::cerr << "not inside quotes, c = " << c << std::endl;
-		insideQuotes = true;
-		if(!started){
-		    tstr         = "";
-		    started      = true;
-		}
+            }else if(!insideQuotes && c == '"'){
+                //	std::cerr << "not inside quotes, c = " << c << std::endl;
+                insideQuotes = true;
+                if(!started){
+                    tstr         = "";
+                    started      = true;
+                }
 		
-	    }else if(insideQuotes){
-		//	std::cerr << "inside quotes, c = " << c << std::endl;
-		if(c == '"'){
-		    insideQuotes = false;
-		}else{
-		    tstr += c;
-		}
+            }else if(insideQuotes){
+                //	std::cerr << "inside quotes, c = " << c << std::endl;
+                if(c == '"'){
+                    insideQuotes = false;
+                }else{
+                    tstr += c;
+                }
 		
-	    }else if(c == ';'){
-		//	std::cerr << "semicolon" << std::endl;
-		if(started){
-		    temp.push_back(tstr);
-		    started = false;
-		}
-		if(temp.size() > 0)
-		    tvec.push_back(temp);
-		temp.clear();
+            }else if(c == ';'){
+                //	std::cerr << "semicolon" << std::endl;
+                if(started){
+                    temp.push_back(tstr);
+                    started = false;
+                }
+                if(temp.size() > 0)
+                    tvec.push_back(temp);
+                temp.clear();
 		
-	    }else if(started){
-		//	std::cerr << "started, c = " << c << std::endl;
-		if(c == ' ' || c == '\t'){
-		    temp.push_back(tstr);
-		    started = false;
-		}else{
-		    tstr += c;
-		}
+            }else if(started){
+                //	std::cerr << "started, c = " << c << std::endl;
+                if(c == ' ' || c == '\t'){
+                    temp.push_back(tstr);
+                    started = false;
+                }else{
+                    tstr += c;
+                }
 	
-	    }else if(!started && (c != ' ' && c != '\t') ){
-		// std::cerr << "not started, c = " << c << std::endl;
-		started = true;
-		tstr = c;
-	    }
-	}
+            }else if(!started && (c != ' ' && c != '\t') ){
+                // std::cerr << "not started, c = " << c << std::endl;
+                started = true;
+                tstr = c;
+            }
+        }
     }
     if(started) 
-	temp.push_back(tstr);
+        temp.push_back(tstr);
     
     if(temp.size() > 0)
-	tvec.push_back(temp);
+        tvec.push_back(temp);
     
     return tvec;
 }
@@ -252,67 +252,67 @@ std::vector<std::string> Subs::read_line(std::istream& s){
     char c;
     int nread = 0;
     while(s){
-	s.get(c);
-	if(!s){
-	    if(nread)
-		break;
-	    else
-		return std::vector<std::string>();
-	}
-	if(c == '\n') break;
-	nread++;
+        s.get(c);
+        if(!s){
+            if(nread)
+                break;
+            else
+                return std::vector<std::string>();
+        }
+        if(c == '\n') break;
+        nread++;
 
-	if(!escaped && c == '\\'){
+        if(!escaped && c == '\\'){
   
-	    escaped = true;
+            escaped = true;
 
-	}else{
+        }else{
 
-	    if(escaped){
+            if(escaped){
 
-		escaped = false;
+                escaped = false;
 
-		if(started){
-		    tstr += c;
-		}else{
-		    tstr         = c;
-		    started      = true;
-		}
+                if(started){
+                    tstr += c;
+                }else{
+                    tstr         = c;
+                    started      = true;
+                }
 
-	    }else if(!insideQuotes && c == '"'){
+            }else if(!insideQuotes && c == '"'){
 
-		insideQuotes = true;
-		if(!started){
-		    tstr         = "";
-		    started      = true;
-		}
+                insideQuotes = true;
+                if(!started){
+                    tstr         = "";
+                    started      = true;
+                }
 	
-	    }else if(insideQuotes){
+            }else if(insideQuotes){
 
-		if(c == '"'){
-		    insideQuotes = false;
-		}else{
-		    tstr += c;
-		}
+                if(c == '"'){
+                    insideQuotes = false;
+                }else{
+                    tstr += c;
+                }
       
-	    }else if(started){
+            }else if(started){
 
-		if(c == ' ' || c == '\t'){
-		    temp.push_back(tstr);
-		    started = false;
-		}else{
-		    tstr += c;
-		}
+                if(c == ' ' || c == '\t'){
+                    temp.push_back(tstr);
+                    started = false;
+                }else{
+                    tstr += c;
+                }
 	
-	    }else if(!started && (c != ' ' && c != '\t') ){
+            }else if(!started && (c != ' ' && c != '\t') ){
 
-		started = true;
-		tstr = c;
-	    }
-	}
+                started = true;
+                tstr = c;
+            }
+        }
     }
     if(started) 
-	temp.push_back(tstr);
+        temp.push_back(tstr);
 
     return temp;
 }
@@ -326,14 +326,14 @@ std::string Subs::strip_trailing_whitespace(const std::string& str){
 
     std::string::size_type j = n;
     while(j > 0 && (str[j-1] == ' ' || str[j-1] == '\t' || str[j-1] == '\n'))
-	j--;
+        j--;
 
     if(j == n){
-	return str;
+        return str;
     }else{
-	std::string temp = str;
-	temp.erase(j);
-	return temp;
+        std::string temp = str;
+        temp.erase(j);
+        return temp;
     }
 }
 
@@ -346,14 +346,14 @@ std::string Subs::strip_leading_whitespace(const std::string& str){
 
     std::string::size_type j = 0;
     while(j < n && (str[j] == ' ' || str[j] == '\t' || str[j] == '\n'))
-	j++;
+        j++;
 
     if(j == 0){
-	return str;
+        return str;
     }else{
-	std::string temp = str;
-	temp.erase(0,j);
-	return temp;
+        std::string temp = str;
+        temp.erase(0,j);
+        return temp;
     }
 }
 
@@ -368,7 +368,7 @@ double Subs::string_to_double(const std::string& entry){
     std::istringstream istr(entry);
     istr >> value;
     if(!istr)
-	throw Subs_Error("Subs::string_to_double: could not translate entry = " + entry + " to a double");
+        throw Subs_Error("Subs::string_to_double: could not translate entry = " + entry + " to a double");
     return value;
 }
 
@@ -382,7 +382,7 @@ int Subs::string_to_int(const std::string& entry){
     std::istringstream istr(entry);
     istr >> value;
     if(!istr)
-	throw Subs_Error("Subs::string_to_int: could not translate entry = " + entry + " to an int");
+        throw Subs_Error("Subs::string_to_int: could not translate entry = " + entry + " to an int");
     return value;
 }
 
@@ -396,7 +396,7 @@ char Subs::string_to_char(const std::string& entry){
     std::istringstream istr(entry);
     istr >> value;
     if(!istr)
-	throw Subs_Error("Subs::string_to_char: could not translate entry = " + entry + " to a char");
+        throw Subs_Error("Subs::string_to_char: could not translate entry = " + entry + " to a char");
     return value;
 }
 
@@ -409,13 +409,13 @@ char Subs::string_to_char(const std::string& entry){
 bool Subs::string_to_bool(const std::string& entry){
     std::string test = Subs::toupper(entry);
     if(test == "T" || test == "TRUE" || test == "Y" || test == "YES" || test == "1"){
-	return true;
+        return true;
     }else if(test == "F" || test == "FALSE" || test == "N" || test == "NO" || test == "0"){
-	return false;
+        return false;
     }else{
-	throw Subs_Error("Subs::string_to_bool: could not translate entry = " + entry + "to a bool");
+        throw Subs_Error("Subs::string_to_bool: could not translate entry = " + entry + "to a bool");
     }
-}    
+}
 
 
 
