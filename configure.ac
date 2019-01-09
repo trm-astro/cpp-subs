@@ -26,20 +26,16 @@ dnl Make C++ the default
 AC_LANG_CPLUSPLUS
 AC_REQUIRE_CPP
 
-dnl Checks for libraries.
+dnl libraries.
 AC_CHECK_LIB([csla], [main], [], AC_MSG_ERROR(cannot link to the sla C library))
 
-dnl Had problems locating PCRE on Warwick Centos system. Next line should handle
-dnl libraries and headers
-PKG_CHECK_MODULES([PCRECPP], [libpcrecpp], [], AC_MSG_ERROR(cannot locate the pcrecpp library and / or header files))
+AC_CHECK_LIB([pcrecpp], [main], [], AC_MSG_ERROR(cannot link to the pcrecpp library))
 
-dnl Previously I had these lines, with the third instead of the straight check for slalib.h
-dnl AC_CHECK_LIB([pcrecpp], [main], [], AC_MSG_ERROR(cannot link to the pcrecpp library))
-dnl AC_CHECK_LIB([pcre], [main], [], AC_MSG_ERROR(cannot link to the pcre library))
-dnl AC_CHECK_HEADERS([pcrecpp.h slalib.h], [], AC_MSG_ERROR(missing header; please fix))
+dnl headers
+AC_CHECK_HEADERS([pcrecpp.h slalib.h], [], AC_MSG_ERROR(missing header; please fix))
 
-dnl Checks for ANSI C header files.
 AC_CHECK_HEADERS([stdlib.h float.h math.h sstream string fstream iostream], [], AC_MSG_ERROR(missing header; please fix))
+
 AC_CHECK_HEADERS([slalib.h], [], AC_MSG_ERROR(missing header; please fix))
 
 dnl PGPLOT has its own macro 'cos its a pain
