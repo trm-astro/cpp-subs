@@ -13,9 +13,9 @@ tcorr_SOURCES   = tcorr.cc
 gap_SOURCES     = gap.cc
 test_SOURCES    = test.cc 
 
-INCLUDES = -I../include -I../.
+AM_CPPFLAGS = -I../include -I../. $(PCRECPP_CPPFLAGS)
 
-LDADD = libsubs.la
+LDADD = libsubs.la $(PCRECPP_LIBS)
 
 DATE = $(shell date)
 
