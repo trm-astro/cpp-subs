@@ -1,10 +1,13 @@
-cpp-subs: astronomically-focussed routines of general utility
-=============================================================
+cpp-subs: astronomically-focussed utility routines
+==================================================
 
-'subs' is a library of general utility software used by many of my other
-packages. After setting up a few third-party packages it will generally be
-the first of my packages that you want to install as it depends upon no
-others, but is used by many of them.
+'subs' is a library of general utility software used by many of my
+other packages. After setting up a few third-party packages it will
+generally be the first of my packages that you want to install as it
+depends upon no others, but is used by many of them. It is therefore
+likely to be the first where you run into installation problems, so
+this pages includes a section at the end on what you are likely to
+encounter and how to fix it.
 
 Installation
 ------------
