@@ -1,5 +1,5 @@
-cpp-subs -- astronomically-focussed routines of general utility
-===============================================================
+cpp-subs: astronomically-focussed routines of general utility
+=============================================================
 
 'subs' is a library of general utility software used by many of my other
 packages. After setting up a few third-party packages it will generally be
