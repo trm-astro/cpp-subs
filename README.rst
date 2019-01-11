@@ -21,7 +21,7 @@ it. Apologies for this. You will also need a suite of installation
 routines called 'autotools'. These will almost certainly be available
 on any managed system, but on your own laptop you may need to install
 them. Search in whatever package manager you have (yum, yast, zypper,
-etc) for keywords such as ``autoconf``, ``automake`` and ``libtool``; you
+etc) for keywords such as `autoconf`, `automake` and `libtool`; you
 will need all of them. Also if you run your own system, note that you
 will the "development" version of pcre which will typically be called
 pcre-dev or pcre-devel because you are compiling and linking with it,
@@ -38,7 +38,7 @@ Brief explanation of 'configure'
 --------------------------------
 
 If you look in the INSTALL doc you will see that at some point you
-will have to invoke the command ``configure`` which will run a script
+will have to invoke the command `configure` which will run a script
 built by the autotools according to your system. The idea is to try to
 cope with all the variations between platforms that makes software
 installation painful. The key aspect you need to be aware of is the
@@ -46,7 +46,7 @@ configure tries to track down where the header (XXXX.h) and library
 (XXXX.a, XXXX.so) files needed to compile and link the software are
 located and it performs simple tests to ensure that they work. As it
 does so you get lots of 'yes' and 'no' statements printed to the
-terminal. For something widely used like ``pcre``, it will probably
+terminal. For something widely used like `pcre`, it will probably
 locate it automatically because it is located in standard directories
 where header or library files are located. For something you might
 have installed yourself in a non-standard directory however, configure
@@ -56,7 +56,7 @@ have just installed pgplot, it says "PGPLOT header not found; please
 fix." or "could not find or work out libraries for PGPLOT".
 
 If you have encountered this problem, then please look up the meaning
-and use of the environment variables ``CPPFLAGS`` and ``LDFLAGS`` because
+and use of the environment variables `CPPFLAGS` and `LDFLAGS` because
 their precise purpose is to direct the compiler and linker to the
 right directories. I set these for myself in my .bashrc /
 .bash_profile scripts. They depend upon *your* installation and
@@ -65,7 +65,7 @@ able to side-step them if you install in a standard location as root,
 but even on my own laptop, I never do this because I like to separate
 such "user-software" from the proper stuff.
 
-A typical setting for CPPFLAGS is::
+A typical setting for `CPPFLAGS` is::
 
   export CPPFLAGS="-I/path/to/dir/with/headers1 -I/path/to/dir/with/headers2"
 
@@ -73,9 +73,9 @@ A typical setting for CPPFLAGS is::
 
   setenv CPPFLAGS "-I/path/to/dir/with/headers1 -I/path/to/dir/with/headers2"
 
-(csh). The paths often end with "include". CPPFLAGS therefore can be
+(csh). The paths often end with "include". `CPPFLAGS` therefore can be
 used to add non-standard locations for header files, e.g. "cpgplot.h"
-for compiling PGPLOT. LDFLAGS is similar but is invoked at linking time
+for compiling PGPLOT. `LDFLAGS` is similar but is invoked at linking time
 to find libraries. Typical invocations for this are::
 
   export LDFLAGS="-L/path/to/dir/with/libraries1 -I/path/to/dir/with/libraries2"
