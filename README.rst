@@ -1,7 +1,10 @@
+
+.. |subs| replace:: ``subs``
+
 cpp-subs: astronomically-focussed utility routines
 ==================================================
 
-'subs' is a library of general utility software used by many of my
+|subs| is a library of general utility software used by many of my
 other packages. After setting up a few third-party packages it will
 generally be the first of my packages that you want to install as it
 depends upon no others, but is used by many of them. It is therefore
@@ -31,7 +34,7 @@ If installing for first time, run './bootstrap' then follow the
 instructions in INSTALL. Since these are generic to the autotools,
 they are a bit forbidding, so below is some more trouble-shooting
 advice which you might want to refer back to as you install others of
-my packages, although generally once you have 'subs' installed, you
+my packages, although generally once you have |subs| installed, you
 will probably find the others relatively straightforward.
 
 Brief explanation of 'configure'
@@ -51,7 +54,7 @@ locate it automatically because it is located in standard directories
 where header or library files are located. For something you might
 have installed yourself in a non-standard directory however, configure
 has no way of knowing what to do. This is the source of perhaps the
-most common problem when installing 'subs' which is that although you
+most common problem when installing |subs| which is that although you
 have just installed pgplot, it says "PGPLOT header not found; please
 fix." or "could not find or work out libraries for PGPLOT".
 
@@ -80,7 +83,7 @@ to find libraries. Typical invocations for this are::
 
   export LDFLAGS="-L/path/to/dir/with/libraries1 -I/path/to/dir/with/libraries2"
 
-or
+or::
 
   export LDFLAGS=-L/path/to/dir/with/libraries
 
@@ -88,7 +91,7 @@ or
 
   setenv LDFLAGS "-L/path/to/dir/with/libraries1 -I/path/to/dir/with/libraries2"
 
-or
+or::
 
   setenv LDFLAGS -L/path/to/dir/with/libraries
 
