@@ -56,7 +56,7 @@ have just installed pgplot, it says "PGPLOT header not found; please
 fix." or "could not find or work out libraries for PGPLOT".
 
 If you have encountered this problem, then please look up the meaning
-and use of the environment variables `CPPFLAGS` and `LDFLAGS` because
+and use of the environment variables ``CPPFLAGS`` and ``LDFLAGS`` because
 their precise purpose is to direct the compiler and linker to the
 right directories. I set these for myself in my .bashrc /
 .bash_profile scripts. They depend upon *your* installation and
