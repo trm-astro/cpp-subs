@@ -15,13 +15,17 @@ Installation
 You should first make sure of the following third-party packages:
 'pcre' (Perl Compatible Regular Expressions), 'slalib' (C version) and
 'pgplot'. Make sure these are in place first. 'slalib' is
-unfortunately not open source, but Pat Wallace allows me to send an
-obfusticated version of slalib, but you will need to ask me for
+unfortunately not open source, but its author Pat Wallace allows me to
+distribute an obfusticated version, but you will need to ask me for
 it. Apologies for this. You will also need a suite of installation
 routines called 'autotools'. These will almost certainly be available
 on any managed system, but on your own laptop you may need to install
 them. Search in whatever package manager you have for keywords such as
-'autoconf', 'automake' and 'libtool'; you will need all of them.
+'autoconf', 'automake' and 'libtool'; you will need all of them. Also
+if you run your own system, note that you will the "development"
+version of pcre which will typically be called pcre-dev or pcre-devel
+because you are compiling and linking with it, not simply using a
+program already linked to it.
 
 If installing for first time, run './bootstrap' then follow the
 instructions in INSTALL. Since these are generic to the autotools,
