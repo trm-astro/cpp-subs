@@ -56,7 +56,7 @@ have just installed pgplot, it says "PGPLOT header not found; please
 fix." or "could not find or work out libraries for PGPLOT".
 
 If you have encountered this problem, then please look up the meaning
-and use of the environment variables CPPFLAGS and LDFLAGS because
+and use of the environment variables `CPPFLAGS` and `LDFLAGS` because
 their precise purpose is to direct the compiler and linker to the
 right directories. I set these for myself in my .bashrc /
 .bash_profile scripts. They depend upon *your* installation and
@@ -65,18 +65,18 @@ able to side-step them if you install in a standard location as root,
 but even on my own laptop, I never do because I like to separate
 such "user-software" from the proper stuff.
 
-A typical setting for CPPFLAGS is:
+A typical setting for CPPFLAGS is::
 
   export CPPFLAGS="-I/path/to/dir/with/headers1 -I/path/to/dir/with/headers2"
 
-(bash) or equivalently:
+(bash) or equivalently::
 
   setenv CPPFLAGS "-I/path/to/dir/with/headers1 -I/path/to/dir/with/headers2"
 
 (csh). The paths often end with "include". CPPFLAGS therefore can be
 used to add non-standard locations for header files, e.g. "cpgplot.h"
 for compiling PGPLOT. LDFLAGS is similar but is invoked at linking time
-to find libraries. Typical invocations fot this are:
+to find libraries. Typical invocations fot this are::
 
   export LDFLAGS="-L/path/to/dir/with/libraries1 -I/path/to/dir/with/libraries2"
 
@@ -84,7 +84,7 @@ or
 
   export LDFLAGS=-L/path/to/dir/with/libraries
 
-(bash) or equivalently:
+(bash) or equivalently::
 
   setenv LDFLAGS "-L/path/to/dir/with/libraries1 -I/path/to/dir/with/libraries2"
 
