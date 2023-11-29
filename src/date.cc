@@ -2,8 +2,8 @@
 
 #include <iomanip>
 #include <sstream>
-#include "slalib.h"
 #include "trm/subs.h"
+#include "sofa.h"
 
 int Subs::Date::print_method;
 
@@ -44,7 +44,7 @@ void Subs::Date::add_day(int nday){
 int Subs::Date::day() const{
     int d,m,y,status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&y,&m,&d,&fd,&status);
+	status = iauJd2cal(double(mjd_)+0.1, 50123.2, &y, &m, &d, &fd);
     return d;
 }
  
@@ -53,7 +53,7 @@ int Subs::Date::day() const{
 int Subs::Date::month() const{
     int d,m,y,status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&y,&m,&d,&fd,&status);
+    status = iauJd2cal(double(mjd_)+0.1, 50123.2, &y, &m, &d, &fd);
     return m;
 }
 
@@ -62,7 +62,7 @@ int Subs::Date::month() const{
 int Subs::Date::year() const{
     int d,m,y,status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&y,&m,&d,&fd,&status);
+    status = iauJd2cal(double(mjd_)+0.1, 50123.2, &y, &m, &d, &fd);
     return y;
 }
 
@@ -76,7 +76,7 @@ int Subs::Date::year() const{
 void Subs::Date::date(int& day_, int& month_, int& year_) const {
     int status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&year_,&month_,&day_,&fd,&status);
+	status = iauJd2cal(double(mjd_)+0.1, 50123.2, &year_, &month_, &day_, &fd);
 }
 
 /** Returns modified Julian day number,
