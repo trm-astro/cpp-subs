@@ -96,9 +96,10 @@ int Subs::Date::mjd() const {
 void Subs::Date::set(int day_, int month_, int year_){
     int status;
     double mj;
+	double mjd;
     valid_date(day_,month_,year_);
-    slaCldj(year_, month_, day_, &mj, &status);
-    mjd_ = int(mj+0.1);
+	status = iauCal2jd(year_, month_, day_, &mjd, &mj);
+	mjd_ = int(mjd+mj+0.1);
 }
 
 /** Set the date from a string
