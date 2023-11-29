@@ -107,9 +107,9 @@ double Subs::Time::mjd() const{
 
 double Subs::Time::jepoch() const{
     // Back to sla 25/11/07, TRM
-    float dj1, dj2;
-    dj1 = mjd();
-    dj2 = 50123.2;
+    double dj1, dj2;
+    dj1 = MJD0;
+    dj2 = mjd();
     return iauEpj(dj1, dj2);
 }
 
@@ -118,8 +118,18 @@ double Subs::Time::jepoch() const{
  * \return Returns TT-UTC in seconds
  */
 double Subs::Time::dtt() const {
-    // Changed to pure SLA 23/11/2007 TRM
-    return slaDtt(mjd());
+    int status;
+    double dj1, dj2;
+    dj1 = MJD0;
+    dj2 = mjd();
+    double at1, at2;
+    // go via atomic time
+    status = iauUtctai(dj1, dj2, at1, at2);
+    double tt1, tt2;
+    // go from atomic time to TT
+    status = iauTaitt(at1, at2, tt1, tt2);
+
+    return (dj1+dj2) - (tt1+tt2);
 }
 
 /** Returns Terestial Time (TT) in the form of MJD
@@ -128,7 +138,8 @@ double Subs::Time::dtt() const {
 double Subs::Time::tt() const {
     // Changed to pure SLA 23/11/2007 TRM
     double mj = this->mjd();
-    return mj + slaDtt(mj)/86400.;
+    double delta_t = dtt();
+    return mj + delta_t/86400.;
 }
 
 /** Returns Barycentric Dynamical Time (TDB) minus TT in seconds

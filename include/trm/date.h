@@ -5,6 +5,9 @@
 #include <string>
 #include "trm/subs.h"
 
+// Define MJD0 as the 0 for the MJD system, i.e. 1858 Nov 17.5
+#define MJD0 2400000.5
+
 namespace Subs {
 
   //! Class for representing dates.

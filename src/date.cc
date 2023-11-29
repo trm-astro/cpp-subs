@@ -44,7 +44,7 @@ void Subs::Date::add_day(int nday){
 int Subs::Date::day() const{
     int d,m,y,status;
     double fd;
-	status = iauJd2cal(double(mjd_)+0.1, 50123.2, &y, &m, &d, &fd);
+	status = iauJd2cal(DMJ0, double(mjd_)+0.1,&y, &m, &d, &fd);
     return d;
 }
  
@@ -53,7 +53,7 @@ int Subs::Date::day() const{
 int Subs::Date::month() const{
     int d,m,y,status;
     double fd;
-    status = iauJd2cal(double(mjd_)+0.1, 50123.2, &y, &m, &d, &fd);
+    status = iauJd2cal(DMJ0, double(mjd_)+0.1, &y, &m, &d, &fd);
     return m;
 }
 
@@ -62,7 +62,7 @@ int Subs::Date::month() const{
 int Subs::Date::year() const{
     int d,m,y,status;
     double fd;
-    status = iauJd2cal(double(mjd_)+0.1, 50123.2, &y, &m, &d, &fd);
+    status = iauJd2cal(DMJ0, double(mjd_)+0.1, &y, &m, &d, &fd);
     return y;
 }
 
@@ -76,7 +76,7 @@ int Subs::Date::year() const{
 void Subs::Date::date(int& day_, int& month_, int& year_) const {
     int status;
     double fd;
-	status = iauJd2cal(double(mjd_)+0.1, 50123.2, &year_, &month_, &day_, &fd);
+	status = iauJd2cal(DMJ0, double(mjd_)+0.1,&year_, &month_, &day_, &fd);
 }
 
 /** Returns modified Julian day number,
@@ -99,7 +99,8 @@ void Subs::Date::set(int day_, int month_, int year_){
 	double mjd;
     valid_date(day_,month_,year_);
 	status = iauCal2jd(year_, month_, day_, &mjd, &mj);
-	mjd_ = int(mjd+mj+0.1);
+	
+	mjd_ = int(mj+0.1);
 }
 
 /** Set the date from a string
