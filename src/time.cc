@@ -3,10 +3,10 @@
 #include <sstream>
 #include "trm/subs.h"
 #include "trm/constants.h"
-#include "slalib.h"
 #include "trm/time.h"
 #include "trm/vec3.h"
 #include "trm/telescope.h"
+#include "sofa.h"
 
 Subs::Time::Time(int day_, Date::Month month_, int year_, double hour) : Date(day_,month_,year_) {
 
@@ -107,7 +107,10 @@ double Subs::Time::mjd() const{
 
 double Subs::Time::jepoch() const{
     // Back to sla 25/11/07, TRM
-    return slaEpj(mjd());
+    float dj1, dj2;
+    dj1 = mjd();
+    dj2 = 50123.2;
+    return iauEpj(dj1, dj2);
 }
 
 
