@@ -177,7 +177,7 @@ double Subs::Time::dtdb(const Subs::Telescope& tel) const {
 
     double u = sqrt(xyz[0]*xyz[0] + xyz[1]*xyz[1])/1000.0;
     double v = xyz[2]/1000.0;
-    // to Barycentric Dynamical Time
+    // to Barycentric Dynamical Time offset from TT
     return iauDtdb(tt(), 0.0, hour()/24., elong, u, v);
 
 }
@@ -192,14 +192,37 @@ double Subs::Time::tdb(const Subs::Telescope& tel) const {
     // Switched back to pure SLA. Note that old
     // wl had reverse sign, I assume because of the SOFA
     // routine used in place of slaRCC. TRM, 23/11/2007
-    double wl, u, v;
-    slaGeoc( tel.latituder(), tel.height(), &u, &v);
-    wl  = -tel.longituder(); // Longitude, radians west
-    u  *= Constants::AU/1000.0; // km from spin axis
-    v  *= Constants::AU/1000.0; // km north of equator
-    double tti = tt();
-    return tti + slaRcc( tti, hour()/24., wl, u, v)/86400.0;
+    // double wl, u, v;
+    // slaGeoc( tel.latituder(), tel.height(), &u, &v);
+    // wl  = -tel.longituder(); // Longitude, radians west
+    // u  *= Constants::AU/1000.0; // km from spin axis
+    // v  *= Constants::AU/1000.0; // km north of equator
+    // double tti = tt();
+    // return tti + slaRcc( tti, hour()/24., wl, u, v)/86400.0;
 
+
+    // // SOFA version
+    double* xyz[3];
+    iauGd2gc(n, tel.longituder(), tel.latituder(), tel.height(), xyz);
+    xyz is a geocentric position vector in metres
+
+    // the following function iauDttdb takes the following arguments
+    // d1, d2 are the MJDs of the date
+    // elong is the longitude of the Telescope in radians
+    // u is the distance of the telescope from the Earth's spin axis in km
+    // v is the distance of the telescope from the Earth's equatorial
+    //   plane in km
+
+    // so we need to convert the geocentric position vector to km
+    // elong == tel.longituder() in radians (east positive)
+    // u = sqrt(xyz[0]*xyz[0] + xyz[1]*xyz[1])/1000.0
+    // v = xyz[2]/1000.0
+
+    double u = sqrt(xyz[0]*xyz[0] + xyz[1]*xyz[1])/1000.0;
+    double v = xyz[2]/1000.0;
+    // to Barycentric Dynamical Time
+    double tti = tt();
+    return tti + iauDtdb(tt(), 0.0, hour()/24., elong, u, v)/86400.0;
 }
 
 /** Computes the position of the observatory in barycentric
