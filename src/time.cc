@@ -274,6 +274,23 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
 
     return position;
 
+
+    //SOFA version
+    double td = tdb(tel);
+    double tt = tt()
+    double pvh[2][3];
+    double pvb[2][3];
+
+    int status;
+    status = iauEpv00(MJD0, td, pvh, pvb);
+
+    Vec3 position(pvb[0]);
+
+    double last = iauGmst06(MJD0, td, MJD0, tt) + tel.longituder() + iauEqeq94(MJD0, td);
+    double pv[6];
+
+    iauPvtob()
+
 }
 
 /** Computes the position and velocity of the Earth in heliocentric coordinates. 
