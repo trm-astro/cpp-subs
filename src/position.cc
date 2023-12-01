@@ -162,7 +162,8 @@ void Subs::Position::update(double epch){
 
 Subs::Vec3 Subs::Position::vect() const {
     double v[3];
-    slaDcs2c(rar(), decr(), v); 
+    //slaDcs2c(rar(), decr(), v);
+    iauS2c(rar(), decr(), v);
     Subs::Vec3 vec(v);
     return Subs::Vec3(v);
 }
