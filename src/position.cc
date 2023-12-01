@@ -252,7 +252,8 @@ void Subs::Position::set_to_sun(const Time& time, const Telescope& tel) {
     double ras, decs;
 
     // convert vector to spherical
-    slaDcc2s(d,&ras,&decs);
+    //slaDcc2s(d,&ras,&decs);
+    iauC2s(d,&ras,&decs);
 
     // Set the internal variables. 
     epoch() = time.jepoch();
@@ -284,12 +285,23 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     const double WAVE = 0.55;    // observing wavelength microns
     const double TLR  = 0.0065;  // lapse rate, K/metre
 
-    slaI2o(pos.rar(), pos.decr(), utc, 0., tel.longituder(), tel.latituder(), tel.height(), 
-	   0., 0., T, P, RH, WAVE, TLR, &aob, &zob, &hob, &dob, &rob);
+    //slaI2o(pos.rar(), pos.decr(), utc, 0., tel.longituder(), tel.latituder(), tel.height(), 
+	//   0., 0., T, P, RH, WAVE, TLR, &aob, &zob, &hob, &dob, &rob);
+    // Note on sofa refactor I cannot find this in SLA, however I use the SOFA routine that
+    // matches the inputs noting we lack TLR
+    iauAtio13(pos.rar(), pos.decr(), MJD0, utc, 0., tel.longituder(), tel.latituder(), tel.height(), 
+          0., 0., P, T, RH, WAVE, &aob, &zob, &hob, &dob, &rob);
+
 
     // compute refraction
     double ref;
-    slaRefro(zob,tel.height(),T,P,RH,WAVE,tel.latituder(),TLR,1.e-6,&ref);
+    //slaRefro(zob,tel.height(),T,P,RH,WAVE,tel.latituder(),TLR,1.e-6,&ref);
+    
+    // SOFA refactor
+    double refa, refb;
+    iauRefco(P, T, RH, WAVE, &refa, &refb);
+    ref = refa * tan(zob) - refb * pow(tan(zob), 3.) +zob;
+
     double zvac = zob + ref;
 
     Altaz temp;
@@ -300,7 +312,7 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     temp.airmass  = slaAirmas(zob);
 
     // Compute pa
-    temp.pa = 360.*slaPa(hob,pos.decr(),tel.latituder())/Constants::TWOPI;
+    temp.pa = 360.*iauHd2pa(hob,pos.decr(),tel.latituder())/Constants::TWOPI;
     temp.pa = temp.pa > 0. ? temp.pa : 360.+temp.pa;
     return temp;
 }
