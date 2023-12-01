@@ -397,49 +397,88 @@ Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
  */
 void Subs::Time::earth(const Telescope& tel, Vec3& ph, Vec3& vh, Vec3& pb, Vec3& vb) const {
 
+    // double td = tdb(tel);
+    
+    // // Compute position of observatory relative to centre of Earth. Note
+    // // that slaGmst should take UT1 not UT but the error is only
+    // // about 1 second at most and no part of the Earth travels 
+    // // far in 1 second. 
+    // double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
+    // double pv[6];
+    
+    // // this routine from slalib gives the telescope position and velocity relative 
+    // // to the centre of the Earth in a coordinate frame defined by the true equator
+    // // and equinox corresponding to 'last'.
+    // slaPvobs(tel.latituder(), tel.height(), last, pv);
+
+    // // Convert the position and velocity to the BCRS.
+    // // First compute the precession-nutation matrix to go from GCRS to true equator
+    // // equinox equivalent to 'td', then applies in iverse form with slaDimxv
+    // double rnpb[3][3];
+    // slaPneqx(td, rnpb);
+    // slaDimxv(rnpb, pv,   pv);
+    // slaDimxv(rnpb, pv+3, pv+3);
+
+    // Vec3 padd(pv), vadd(pv+3);
+    
+    // // Compute position and velocity of Earth's centre in the BCRS
+    // double tph[3], tpb[3], tvh[3], tvb[3];
+    // slaEpv(td, tph, tvh, tpb, tvb);
+
+    // ph.set(tph);
+    // vh.set(tvh);
+    // pb.set(tpb);
+    // vb.set(tvb);
+
+    // ph += padd;
+    // vh += vadd;
+    // pb += padd;
+    // vb += vadd;
+
+    // ph *= Constants::AU;
+    // vh *= Constants::AU;
+    // pb *= Constants::AU;
+    // vb *= Constants::AU;
+    // vh *= Constants::AU;
+
+    // SOFA Version
+
     double td = tdb(tel);
-    
-    // Compute position of observatory relative to centre of Earth. Note
-    // that slaGmst should take UT1 not UT but the error is only
-    // about 1 second at most and no part of the Earth travels 
-    // far in 1 second. 
-    double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
-    double pv[6];
-    
-    // this routine from slalib gives the telescope position and velocity relative 
-    // to the centre of the Earth in a coordinate frame defined by the true equator
-    // and equinox corresponding to 'last'.
-    slaPvobs(tel.latituder(), tel.height(), last, pv);
+    double tt_ = tt();
 
-    // Convert the position and velocity to the BCRS.
-    // First compute the precession-nutation matrix to go from GCRS to true equator
-    // equinox equivalent to 'td', then applies in iverse form with slaDimxv
+    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEqeq94(MJD0, td);
+    double pv [2][3];
+    iauPvtob(tel.longituder(), tel.latituder(), tel.height(), 0., 0., 0., last, pv);
     double rnpb[3][3];
-    slaPneqx(td, rnpb);
-    slaDimxv(rnpb, pv,   pv);
-    slaDimxv(rnpb, pv+3, pv+3);
+    iauPnm00a(MJD0, td, rnpb);
+    // iauPnm00b()
+    // iauPnm06a()
+    // iauPnm80()
+    iauTr(rnpb, rnpb);
+    iauRxpv(rnpb, pv, pv);
+    Vec3 padd(pv[0]), vadd(pv[1]);
+    //get earth position and velocity note returns in AU and Pvtob returns in m
+    double pvh[2][3];
+    double pvb[2][3];
+    iauEpv00(MJD0, td, pvh, pvb);
 
-    Vec3 padd(pv), vadd(pv+3);
+    ph.set(pvh[0]);
+    vh.set(pvh[1]);
+    pb.set(pvb[0]);
+    vb.set(pvb[1]);
     
-    // Compute position and velocity of Earth's centre in the BCRS
-    double tph[3], tpb[3], tvh[3], tvb[3];
-    slaEpv(td, tph, tvh, tpb, tvb);
-
-    ph.set(tph);
-    vh.set(tvh);
-    pb.set(tpb);
-    vb.set(tvb);
-
-    ph += padd;
-    vh += vadd;
-    pb += padd;
-    vb += vadd;
-
+    // convert to M
     ph *= Constants::AU;
     vh *= Constants::AU;
     pb *= Constants::AU;
     vb *= Constants::AU;
     vh *= Constants::AU;
+
+    // then adjust
+    ph += padd;
+    vh += vadd;
+    pb += padd;
+    vb += vadd;
 
 }
 
@@ -548,7 +587,13 @@ void Subs::Time::add_second(double second){
  */
 
 double Subs::Time::GMST() const {
-    return slaGmst(mjd());
+    double jd = mjd();
+    double tt_ = tt();
+    return iauGmst06(MJD0, jd, MJD0, tt_);
+    // iauGmst00()
+    // iauGmst86()
+    //old version
+    //return slaGmst(mjd());
 }
 
 /** Converts from GMT to GST */
