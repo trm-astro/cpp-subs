@@ -240,44 +240,43 @@ double Subs::Time::tdb(const Subs::Telescope& tel) const {
  */
 Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
 
-    double td = tdb(tel);
-    
-    // Compute position and velocity of Earth's centre in the BCRS
-    // Switched to this routine, 23/11/2007, TRM
-    double ph[3], pb[3], vh[3], vb[3];
-    slaEpv(td, ph, vh, pb, vb);
-
-    Vec3 position(pb);
-    
-    // Add on extra part from Earth's centre to observatory. Note
-    // that slaGmst should take UT1 not UT but the error is only
-    // about 1 second at most and no part of the Earth travels 
-    // far in 1 second. 
-    double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
-    double pv[6];
-    
-    // this routine from slalib gives the telescope position and velocity relative 
-    // to the centre of the Earth in a coordinate frame defined by the true equator
-    // and equinox corresponding to 'last'.
-    slaPvobs(tel.latituder(), tel.height(), last, pv);
-
-    // Convert this position to the BCRS.
-    // First compute the precession-nutation matrix to go from GCRS to true equator
-    // equinox equivalent to 'td', then applies in iverse form with slaDimxv
-    double rnpb[3][3];
-    slaPneqx(td, rnpb);
-    slaDimxv(rnpb, pv, pv);
-
-    Vec3 pextra(pv);
-    position += pextra;
-    position *= Constants::AU;
-
-    return position;
-
+    // double td = tdb(tel);
+    //
+    // // Compute position and velocity of Earth's centre in the BCRS
+    // // Switched to this routine, 23/11/2007, TRM
+    // double ph[3], pb[3], vh[3], vb[3];
+    // slaEpv(td, ph, vh, pb, vb);
+    //
+    // Vec3 position(pb);
+    //
+    // // Add on extra part from Earth's centre to observatory. Note
+    // // that slaGmst should take UT1 not UT but the error is only
+    // // about 1 second at most and no part of the Earth travels 
+    // // far in 1 second. 
+    // double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
+    // double pv[6];
+    //
+    // // this routine from slalib gives the telescope position and velocity relative 
+    // // to the centre of the Earth in a coordinate frame defined by the true equator
+    // // and equinox corresponding to 'last'.
+    // slaPvobs(tel.latituder(), tel.height(), last, pv);
+    //
+    // // Convert this position to the BCRS.
+    // // First compute the precession-nutation matrix to go from GCRS to true equator
+    // // equinox equivalent to 'td', then applies in iverse form with slaDimxv
+    // double rnpb[3][3];
+    // slaPneqx(td, rnpb);
+    // slaDimxv(rnpb, pv, pv);
+    //
+    // Vec3 pextra(pv);
+    // position += pextra;
+    // position *= Constants::AU;
+    //
+    // return position;
 
     //SOFA version
     double td = tdb(tel);
-    double tt = tt()
+    double tt_ = tt();
     double pvh[2][3];
     double pvb[2][3];
 
@@ -286,11 +285,27 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
 
     Vec3 position(pvb[0]);
 
-    double last = iauGmst06(MJD0, td, MJD0, tt) + tel.longituder() + iauEqeq94(MJD0, td);
-    double pv[6];
+    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEqeq94(MJD0, td);
+    double pv[2][3];
 
-    iauPvtob()
+    // note two args 3,4,5 are coordinates of the pole and set to 0
+    // note 3 of the docs, the penultimate is Greenwich apparent sidereal time
+    // and the result is respect to the true equator and equinox of date
+    iauPvtob(tel.longituder(), tel.latituder(), tel.height(), 0., 0., 0., last, pv);
+    // pv is in CIRS m, m/s
 
+    double rnpb[3][3];
+    iauPnm00a(MJD0, td, rnpb);
+    // iauPnm00b()
+    // iauPnm06a()
+    // iauPnm80()
+    iauTr(rnpb, rnpb);
+    iauRxp(rnpb, pv[0], pv[0]);
+
+    Vec3 pextra(pv[0]);
+    position += pextra;
+
+    return position;
 }
 
 /** Computes the position and velocity of the Earth in heliocentric coordinates. 
@@ -302,40 +317,72 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
  */
 Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
 
+    // double td = tdb(tel);
+    //
+    // // Compute position and velocity of Earth's centre in the BCRS
+    // // Switched to this routine, 23/11/2007, TRM
+    // double ph[3], pb[3], vh[3], vb[3];
+    // slaEpv(td, ph, vh, pb, vb);
+    //
+    // Vec3 position(ph);
+    //
+    // // Add on extra part from Earth's centre to observatory. Note
+    // // that slaGmst should take UT1 not UT but the error is only
+    // // about 1 second at most and no part of the Earth travels 
+    // // far in 1 second. 
+    // double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
+    // double pv[6];
+    //
+    // // this routine from slalib gives the telescope position and velocity relative 
+    // // to the centre of the Earth in a coordinate frame defined by the true equator
+    // // and equinox corresponding to 'last'.
+    // slaPvobs(tel.latituder(), tel.height(), last, pv);
+    //
+    // // Convert this position to the BCRS.
+    // // First compute the precession-nutation matrix to go from GCRS to true equator
+    // // equinox equivalent to 'td', then applies in iverse form with slaDimxv
+    // double rnpb[3][3];
+    // slaPneqx(td, rnpb);
+    // slaDimxv(rnpb, pv, pv);
+    //
+    // Vec3 pextra(pv);
+    // position += pextra;
+    // position *= Constants::AU;
+    //
+    // return position;
+
+    // SOFA VERSION
     double td = tdb(tel);
-    
-    // Compute position and velocity of Earth's centre in the BCRS
-    // Switched to this routine, 23/11/2007, TRM
-    double ph[3], pb[3], vh[3], vb[3];
-    slaEpv(td, ph, vh, pb, vb);
+    double tt_ = tt();
+    double pvh[2][3];
+    double pvb[2][3];
 
-    Vec3 position(ph);
-    
-    // Add on extra part from Earth's centre to observatory. Note
-    // that slaGmst should take UT1 not UT but the error is only
-    // about 1 second at most and no part of the Earth travels 
-    // far in 1 second. 
-    double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
-    double pv[6];
-    
-    // this routine from slalib gives the telescope position and velocity relative 
-    // to the centre of the Earth in a coordinate frame defined by the true equator
-    // and equinox corresponding to 'last'.
-    slaPvobs(tel.latituder(), tel.height(), last, pv);
+    int status;
+    status = iauEpv00(MJD0, td, pvh, pvb);
 
-    // Convert this position to the BCRS.
-    // First compute the precession-nutation matrix to go from GCRS to true equator
-    // equinox equivalent to 'td', then applies in iverse form with slaDimxv
+    Vec3 position(pvh[0]);
+
+    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEqeq94(MJD0, td);
+    double pv[2][3];
+
+    // note two args 3,4,5 are coordinates of the pole and set to 0
+    // note 3 of the docs, the penultimate is Greenwich apparent sidereal time
+    // and the result is respect to the true equator and equinox of date
+    iauPvtob(tel.longituder(), tel.latituder(), tel.height(), 0., 0., 0., last, pv);
+    // pv is in CIRS m, m/s
+
     double rnpb[3][3];
-    slaPneqx(td, rnpb);
-    slaDimxv(rnpb, pv, pv);
+    iauPnm00a(MJD0, td, rnpb);
+    // iauPnm00b()
+    // iauPnm06a()
+    // iauPnm80()
+    iauTr(rnpb, rnpb);
+    iauRxp(rnpb, pv[0], pv[0]);
 
-    Vec3 pextra(pv);
+    Vec3 pextra(pv[0]);
     position += pextra;
-    position *= Constants::AU;
 
     return position;
-
 }
 
 /** Computes the position and velocity of the observatory in barycentric and heliocentric
