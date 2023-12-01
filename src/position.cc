@@ -4,7 +4,7 @@
 #include "trm/subs.h"
 #include "trm/telescope.h"
 #include "trm/position.h"
-#include "slalib.h"
+#include "sofa.h"
 
 /** Constructs a Position of arbitrary RA and Dec (proper motion, parallax and radial velocity
  * all set = 0)
@@ -147,8 +147,9 @@ void Subs::Position::update(double epch){
     if(epch == epoch()) return;
 
     // Apply proper motion; space velocity to go from epoch() to epch
-    double ra, dec;
-    slaPm(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), epoch(), epch, &ra, &dec); 
+    double ra, dec, pmr, pmd, px, rv_;
+    //slaPm(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), epoch(), epch, &ra, &dec);
+    iauPmsafe(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), MJD0, epoch(), MJD0, epch, &ra, &dec, &pmr, &pmd, &px, &rv_);
     set_radec(ra, dec);
     epoch() = epch;
 
