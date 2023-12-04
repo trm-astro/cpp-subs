@@ -27,18 +27,15 @@ AC_LANG_CPLUSPLUS
 AC_REQUIRE_CPP
 
 dnl headers
-AC_CHECK_HEADERS([pcrecpp.h], [], [AC_MSG_ERROR(missing header; please fix)])
+AC_CHECK_HEADERS([pcrecpp.h, sofa.h], [], [AC_MSG_ERROR(missing header; please fix)])
 
 AC_CHECK_HEADERS([stdlib.h float.h math.h sstream string fstream iostream], [], [AC_MSG_ERROR(missing header; please fix)])
 
-AC_CHECK_HEADERS([pcrecpp.h], [], [AC_MSG_ERROR(missing header; please fix)])
-
-AC_CHECK_HEADERS([sofa.h], [], [AC_MSG_ERROR(missing header; please fix)])
-
+AC_CHECK_HEADERS([pcrecpp.h, sofa.h], [], [AC_MSG_ERROR(missing header; please fix)])
 
 
 dnl libraries.
-dnl AC_CHECK_LIB([csla], [main], [], [AC_MSG_ERROR(cannot link to the sla C library)])
+AC_CHECK_LIB([sofa_c], [main], [], [AC_MSG_ERROR(cannot link to the sofa C library)])
 
 AC_CHECK_LIB([pcrecpp], [main], [], [AC_MSG_ERROR(cannot link to the pcrecpp library)])
 
