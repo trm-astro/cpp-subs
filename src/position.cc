@@ -309,7 +309,12 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     temp.alt_true = 90.-360.*zvac/Constants::TWOPI;
     temp.alt_obs  = 90.-360.*zob/Constants::TWOPI;
     temp.az       = 360.*aob/Constants::TWOPI;
-    temp.airmass  = slaAirmas(zob);
+    // rewriting slaAirmas by hand as it is not in SOFA
+    #include <cmath>
+
+
+    double SECZM1 = 1.0 / (cos(std::min(1.52, std::abs(zob)))) - 1.0;
+    temp.airmass  = 1.0 + SECZM1 * (0.9981833 - SECZM1 * (0.002875 + 0.0008083 * SECZM1));
 
     // Compute pa
     temp.pa = 360.*iauHd2pa(hob,pos.decr(),tel.latituder())/Constants::TWOPI;
