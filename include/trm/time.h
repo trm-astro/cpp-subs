@@ -3,7 +3,7 @@
 
 #include <string> 
 #include <ctime> 
-#include "sofa.h"
+#include <sofa.h>
 #include "trm/date.h"
 #include "trm/subs.h"
 
