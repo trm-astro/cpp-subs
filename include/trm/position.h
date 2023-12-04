@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <string>
-#include "sofa.h"
+#include <sofa.h>
 #include "trm/subs.h"
 #include "trm/constants.h"
 #include "trm/date.h"
