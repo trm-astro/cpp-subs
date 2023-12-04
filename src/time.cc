@@ -6,7 +6,6 @@
 #include "trm/time.h"
 #include "trm/vec3.h"
 #include "trm/telescope.h"
-#include "sofa.h"
 
 Subs::Time::Time(int day_, Date::Month month_, int year_, double hour) : Date(day_,month_,year_) {
 

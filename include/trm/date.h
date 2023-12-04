@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include "sofa.h"
 #include "trm/subs.h"
 
 // Define MJD0 as the 0 for the MJD system, i.e. 1858 Nov 17.5

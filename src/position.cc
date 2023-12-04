@@ -4,7 +4,6 @@
 #include "trm/subs.h"
 #include "trm/telescope.h"
 #include "trm/position.h"
-#include "sofa.h"
 
 /** Constructs a Position of arbitrary RA and Dec (proper motion, parallax and radial velocity
  * all set = 0)
