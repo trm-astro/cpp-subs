@@ -52,8 +52,10 @@ export LDFLAGS="-L$HOME/lib/"
 
 ./bootstrap
 
-./configure
+./configure -prefix="$HOME"
 
 make
+
+make check
 
 make install
