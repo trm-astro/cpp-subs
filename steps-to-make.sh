@@ -21,7 +21,7 @@ make test
 # On mac, do this
 http://mingus.as.arizona.edu/~bjw/software/pgplot_fix.html
 # Otherwise follow the instructions in the README for PGPLOT
-
+cd 
 brew install pkg-config
 pkg-config --libs --cflags /opt/homebrew/Cellar/pcre/*/lib/pkgconfig/libpcrecpp.pc 
 
@@ -36,19 +36,19 @@ export LDFLAGS="-L/home/csc/pfstcb/lib/"
 
 
 
-# On SCRTC, do this
+# On SCRTP, do this
 
-module load GCCcore/11.3.0 Autotools/20220317 libtool/2.4.7 PCRE/8.45 PGPLOT/5.2.2
+module load GCCcore/11.3.0 GCC/11.3.0 Autotools/20220317 libtool/2.4.7 PCRE/8.45 PGPLOT/5.2.2 SOFA_C/19
 
-wget http://www.iausofa.org/2023_1011_C/sofa_c-20231011.tar.gz
-
-cd sofa/VERSION/c/src
-make
-make test
+# wget http://www.iausofa.org/2023_1011_C/sofa_c-20231011.tar.gz
+# tar -xvzf sofa_c-20231011.tar.gz
+# cd sofa/VERSION/c/src
+# make
+# make test
 
 # on scrtpc, do this
-export CPPFLAGS="-I$HOME/include/"
-export LDFLAGS="-L$HOME/lib/"
+export CPPFLAGS="-I$HOME/include/ -fPIC"
+export LDFLAGS="-L$HOME/lib/ -fPIC"
 
 ./bootstrap
 

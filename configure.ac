@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 dnl Initialise
-AC_INIT([subs], [2.1])
+AC_INIT([subs],[2.1])
 
 AC_CONFIG_SRCDIR([src/gauss.cc])
 
@@ -23,7 +23,7 @@ dnl Initialise libtool
 AC_PROG_LIBTOOL
 
 dnl Make C++ the default
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 AC_REQUIRE_CPP
 
 dnl headers
