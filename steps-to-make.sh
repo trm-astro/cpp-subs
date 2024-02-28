@@ -28,10 +28,8 @@ pkg-config --libs --cflags /opt/homebrew/Cellar/pcre/*/lib/pkgconfig/libpcrecpp.
 # on mac, do this
 export CPPFLAGS="-I/opt/homebrew/Cellar/pcre/8.45/include -I/usr/local/lib/pgplot -I/usr/local/lib/sofa"
 export LDFLAGS="-L/opt/homebrew/Cellar/pcre/8.45/lib -L/usr/local/lib/pgplot -L/usr/local/lib/sofa"
-# on scrtpc, do this
-export CPPFLAGS="-I/home/csc/pfstcb/include/"
-export LDFLAGS="-L/home/csc/pfstcb/lib/"
 
+./bootstrap
 ./configure
 
 
