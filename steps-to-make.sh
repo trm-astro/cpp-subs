@@ -32,7 +32,11 @@ export LDFLAGS="-L/opt/homebrew/Cellar/pcre/8.45/lib -L/usr/local/lib/pgplot -L/
 ./bootstrap
 ./configure
 
+make
 
+make check
+
+make install
 
 # On SCRTP, do this
 

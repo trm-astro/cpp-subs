@@ -302,6 +302,7 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
     iauRxp(rnpb, pv[0], pv[0]);
 
     Vec3 pextra(pv[0]);
+    position *= Constants::AU;
     position += pextra;
 
     return position;
@@ -379,7 +380,9 @@ Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
     iauRxp(rnpb, pv[0], pv[0]);
 
     Vec3 pextra(pv[0]);
+    position *= Constants::AU;
     position += pextra;
+   
 
     return position;
 }
@@ -455,6 +458,7 @@ void Subs::Time::earth(const Telescope& tel, Vec3& ph, Vec3& vh, Vec3& pb, Vec3&
     // iauPnm80()
     iauTr(rnpb, rnpb);
     iauRxpv(rnpb, pv, pv);
+
     Vec3 padd(pv[0]), vadd(pv[1]);
     //get earth position and velocity note returns in AU and Pvtob returns in m
     double pvh[2][3];

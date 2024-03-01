@@ -146,10 +146,12 @@ void Subs::Position::update(double epch){
     if(epch == epoch()) return;
 
     // Apply proper motion; space velocity to go from epoch() to epch
-    double ra, dec, pmr, pmd, px, rv_;
+    double ra, dec, _pmr, _pmd, _px, _rv_;
     //slaPm(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), epoch(), epch, &ra, &dec);
-    iauPmsafe(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), MJD0, epoch(), MJD0, epch, &ra, &dec, &pmr, &pmd, &px, &rv_);
+    iauPmsafe(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), MJD0, epoch(), MJD0, epch, &ra, &dec, &_pmr, &_pmd, &_px, &_rv_);
     set_radec(ra, dec);
+    // ra() = _ra;
+    // dec() = _dec;
     epoch() = epch;
 
 }
