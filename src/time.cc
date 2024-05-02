@@ -127,8 +127,9 @@ double Subs::Time::dtt() const {
     double tt1, tt2;
     // go from atomic time to TT
     status = iauTaitt(at1, at2, &tt1, &tt2);
-
-    return (dj1+dj2) - (tt1+tt2);
+    // convert to seconds
+    return tt2*86400.0 - dj2*86400.0;
+    //return tt2;
 }
 
 /** Returns Terestial Time (TT) in the form of MJD

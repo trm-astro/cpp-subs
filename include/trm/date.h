@@ -56,7 +56,7 @@ namespace Subs {
     void date(int& day_, int& month_, int& year_) const;
 
     //! Returns the modified julian day number
-    int mjd() const;
+    double mjd() const;
 
     //! Returns a date string
     std::string str() const;

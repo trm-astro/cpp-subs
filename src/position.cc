@@ -286,13 +286,29 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     const double WAVE = 0.55;    // observing wavelength microns
     const double TLR  = 0.0065;  // lapse rate, K/metre
 
-    //slaI2o(pos.rar(), pos.decr(), utc, 0., tel.longituder(), tel.latituder(), tel.height(), 
-	//   0., 0., T, P, RH, WAVE, TLR, &aob, &zob, &hob, &dob, &rob);
-    // Note on sofa refactor I cannot find this in SLA, however I use the SOFA routine that
-    // matches the inputs noting we lack TLR
-    iauAtio13(pos.rar(), pos.decr(), MJD0, utc, 0., tel.longituder(), tel.latituder(), tel.height(), 
-          0., 0., P, T, RH, WAVE, &aob, &zob, &hob, &dob, &rob);
 
+    // potentially need to add the equation of the origins
+    double eo;
+    eo = iauEo06a ( MJD0, utc );
+
+    // Ingrid and Pip think we are in ICRS
+
+    // slaI2o(pos.rar(), pos.decr(), 
+    //        utc, 0., 
+    //        tel.longituder(), tel.latituder(), tel.height(),
+    //        0., 0., T, P, RH, WAVE, TLR, 
+    //        &aob, &zob, &hob, &dob, &rob);
+    // Note on sofa refactor I cannot find this exactly closest is sla_AOP, however I use the SOFA routine that
+    // matches the inputs noting we lack TLR, PW has clarified that slaI2o is identical to slaAtio13 with the corrections
+    // to temperature, 
+
+
+    iauAtio13(pos.rar(), pos.decr(), 
+              MJD0, utc, 0., 
+              tel.longituder(), tel.latituder(), tel.height(), 
+              0., 0., P, T-273.15, RH, WAVE, 
+              &aob, &zob, &hob, &dob, &rob);
+    aob=iauAnp(aob);
 
     // compute refraction
     double ref;
@@ -300,9 +316,8 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     
     // SOFA refactor
     double refa, refb;
-    iauRefco(P, T, RH, WAVE, &refa, &refb);
-    ref = refa * tan(zob) - refb * pow(tan(zob), 3.) +zob;
-
+    iauRefco(P, T-273.15, RH, WAVE, &refa, &refb);
+    ref = refa * tan(zob) + refb * pow(tan(zob), 3.);
     double zvac = zob + ref;
 
     Altaz temp;
@@ -312,8 +327,6 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     temp.az       = 360.*aob/Constants::TWOPI;
     // rewriting slaAirmas by hand as it is not in SOFA
     #include <cmath>
-
-
     double SECZM1 = 1.0 / (cos(std::min(1.52, std::abs(zob)))) - 1.0;
     temp.airmass  = 1.0 + SECZM1 * (0.9981833 - SECZM1 * (0.002875 + 0.0008083 * SECZM1));
 
