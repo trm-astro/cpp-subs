@@ -97,7 +97,7 @@ Subs::Time::HMS Subs::Time::hms() const{
  * \return Modified Julian dates are Julian dates - 2400000.5
  */
 double Subs::Time::mjd() const{
-    return Date::mjd() + hour()/24.
+    return Date::mjd() + hour()/24.;
 }
 
 /** Returns the Julian epoch corresponding to the Time
