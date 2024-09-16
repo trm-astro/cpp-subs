@@ -100,6 +100,10 @@ double Subs::Time::mjd() const{
     return Date::mjd() + hour()/24.;
 }
 
+void hack_report() {
+    std::cout << "Time::hack_report: leap second hack not in effect" << std::endl;
+};
+
 /** Returns the Julian epoch corresponding to the Time
  */
 double Subs::Time::jepoch() const{
