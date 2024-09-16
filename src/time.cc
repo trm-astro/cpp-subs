@@ -96,14 +96,12 @@ Subs::Time::HMS Subs::Time::hms() const{
  * is considered.
  * \return Modified Julian dates are Julian dates - 2400000.5
  */
-
 double Subs::Time::mjd() const{
-    return Date::mjd() + hour()/24.;
+    return Date::mjd() + hour()/24.
 }
 
 /** Returns the Julian epoch corresponding to the Time
  */
-
 double Subs::Time::jepoch() const{
     // Back to sla 25/11/07, TRM
     double dj1, dj2;

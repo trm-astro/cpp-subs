@@ -84,7 +84,7 @@ void Subs::Date::date(int& day_, int& month_, int& year_) const {
  * in question.
  */
 double Subs::Date::mjd() const {
-    return mjd_;
+return mjd_;
 }
 
 /** Set the date
