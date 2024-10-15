@@ -145,15 +145,26 @@ void Subs::Position::update(double epch){
 
     if(epch == epoch()) return;
 
+    // go from julian epoch to MJD
+    double _MJD0, MJD_ep1, MJD_ep2;
+    // _MJD0 is the MJD zero point at 2400000.5
+    iauEpj2jd(epoch(), &_MJD0, MJD_ep1);
+    iauEpj2jd(epch, &_MJD0, MJD_ep2);
+
     // Apply proper motion; space velocity to go from epoch() to epch
     double ra, dec, _pmr, _pmd, _px, _rv_;
-    //slaPm(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), epoch(), epch, &ra, &dec);
-    iauPmsafe(rar(), decr(), pmrar(), pmdecr(), parallax(), rv(), MJD0, epoch(), MJD0, epch, &ra, &dec, &_pmr, &_pmd, &_px, &_rv_);
+    int code = 0;
+    code = iauStarpm(
+        rar(), decr(), pmrar(), pmdecr(), parallax(), rv(),
+        MJD0, MJD_ep1, MJD0, MJD_ep2,
+        &ra, &dec, &_pmr, &_pmd, &_px, &_rv_);
+    
+    // codes are non recoverable
+    if(code != 0) throw Position_Error("Subs::Position::update(double): error code = " + Subs::str(code));
+    // update the position
     set_radec(ra, dec);
-    // ra() = _ra;
-    // dec() = _dec;
+    // update the epoch
     epoch() = epch;
-
 }
 
 /** Returns a vector corresponding to Position. This is calculated
@@ -163,7 +174,6 @@ void Subs::Position::update(double epch){
 
 Subs::Vec3 Subs::Position::vect() const {
     double v[3];
-    //slaDcs2c(rar(), decr(), v);
     iauS2c(rar(), decr(), v);
     Subs::Vec3 vec(v);
     return Subs::Vec3(v);
@@ -253,7 +263,6 @@ void Subs::Position::set_to_sun(const Time& time, const Telescope& tel) {
     double ras, decs;
 
     // convert vector to spherical
-    //slaDcc2s(d,&ras,&decs);
     iauC2s(d,&ras,&decs);
 
     // Set the internal variables. 
@@ -286,34 +295,37 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     const double WAVE = 0.55;    // observing wavelength microns
     const double TLR  = 0.0065;  // lapse rate, K/metre
 
-
-    // potentially need to add the equation of the origins
-    double eo;
-    eo = iauEo06a ( MJD0, utc );
-
-    // Ingrid and Pip think we are in ICRS
-
-    // slaI2o(pos.rar(), pos.decr(), 
-    //        utc, 0., 
-    //        tel.longituder(), tel.latituder(), tel.height(),
-    //        0., 0., T, P, RH, WAVE, TLR, 
-    //        &aob, &zob, &hob, &dob, &rob);
-    // Note on sofa refactor I cannot find this exactly closest is sla_AOP, however I use the SOFA routine that
-    // matches the inputs noting we lack TLR, PW has clarified that slaI2o is identical to slaAtio13 with the corrections
-    // to temperature, 
-
-
     iauAtio13(pos.rar(), pos.decr(), 
               MJD0, utc, 0., 
               tel.longituder(), tel.latituder(), tel.height(), 
               0., 0., P, T-273.15, RH, WAVE, 
               &aob, &zob, &hob, &dob, &rob);
-    aob=iauAnp(aob);
+    // put in the expected ra and dec ranges
+    // aob -pi to pi
+    if (aob < -M_PI) aob += Constants::TWOPI;
+    if (aob > M_PI) aob -= Constants::TWOPI;
+    // zob 0 to 2pi
+    if (zob < 0.) zob += Constants::TWOPI;
+    if (zob > Constants::TWOPI) zob -= Constants::TWOPI;
+    // hob -pi to pi
+    if (hob < -M_PI) hob += Constants::TWOPI;
+    if (hob > M_PI) hob -= Constants::TWOPI;
+    // dob -pi/2 to pi/2
+    double correction = 0.;
+    if (dob < -Constants::PI/2.) {
+        corr = dob + Constants::PI/2;
+        dob = Constants::PI/2 + corr;
+    } else
+    if (dob > Constants::PI/2) {
+        corr = dob - Constants::PI/2;
+        dob = Constants::PI/2 - corr;
+    }
+    // rob 0 to 2pi
+    if (rob < 0.) rob += Constants::TWOPI;
+    if (rob > Constants::TWOPI) rob -= Constants::TWOPI;
 
     // compute refraction
     double ref;
-    //slaRefro(zob,tel.height(),T,P,RH,WAVE,tel.latituder(),TLR,1.e-6,&ref);
-    
     // SOFA refactor
     double refa, refb;
     iauRefco(P, T-273.15, RH, WAVE, &refa, &refb);
@@ -325,8 +337,7 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     temp.alt_true = 90.-360.*zvac/Constants::TWOPI;
     temp.alt_obs  = 90.-360.*zob/Constants::TWOPI;
     temp.az       = 360.*aob/Constants::TWOPI;
-    // rewriting slaAirmas by hand as it is not in SOFA
-    #include <cmath>
+    // calculate airmass
     double SECZM1 = 1.0 / (cos(std::min(1.52, std::abs(zob)))) - 1.0;
     temp.airmass  = 1.0 + SECZM1 * (0.9981833 - SECZM1 * (0.002875 + 0.0008083 * SECZM1));
 
