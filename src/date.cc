@@ -2,8 +2,8 @@
 
 #include <iomanip>
 #include <sstream>
-#include "slalib.h"
 #include "trm/subs.h"
+
 
 int Subs::Date::print_method;
 
@@ -44,7 +44,7 @@ void Subs::Date::add_day(int nday){
 int Subs::Date::day() const{
     int d,m,y,status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&y,&m,&d,&fd,&status);
+	status = iauJd2cal(MJD0, double(mjd_)+0.1,&y, &m, &d, &fd);
     return d;
 }
  
@@ -53,7 +53,7 @@ int Subs::Date::day() const{
 int Subs::Date::month() const{
     int d,m,y,status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&y,&m,&d,&fd,&status);
+    status = iauJd2cal(MJD0, double(mjd_)+0.1, &y, &m, &d, &fd);
     return m;
 }
 
@@ -62,7 +62,7 @@ int Subs::Date::month() const{
 int Subs::Date::year() const{
     int d,m,y,status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&y,&m,&d,&fd,&status);
+    status = iauJd2cal(MJD0, double(mjd_)+0.1, &y, &m, &d, &fd);
     return y;
 }
 
@@ -76,15 +76,15 @@ int Subs::Date::year() const{
 void Subs::Date::date(int& day_, int& month_, int& year_) const {
     int status;
     double fd;
-    slaDjcl(double(mjd_)+0.1,&year_,&month_,&day_,&fd,&status);
+	status = iauJd2cal(MJD0, double(mjd_)+0.1,&year_, &month_, &day_, &fd);
 }
 
 /** Returns modified Julian day number,
  * i.e. JD - 2400000.5 at the start of the day 
  * in question.
  */
-int Subs::Date::mjd() const {
-    return mjd_;
+double Subs::Date::mjd() const {
+return mjd_;
 }
 
 /** Set the date
@@ -96,9 +96,14 @@ int Subs::Date::mjd() const {
 void Subs::Date::set(int day_, int month_, int year_){
     int status;
     double mj;
+	double mjd;
     valid_date(day_,month_,year_);
-    slaCldj(year_, month_, day_, &mj, &status);
-    mjd_ = int(mj+0.1);
+	// mjd here is 2400000.5 and mj is the fractional part of the day
+	status = iauCal2jd(year_, month_, day_, &mjd, &mj);
+	
+	//mjd_ = int(mj+0.1);
+	// Set mjd_ internally to be the modified Julian day number (float)
+	mjd_ = mj;
 }
 
 /** Set the date from a string
@@ -227,7 +232,7 @@ std::string Subs::Date::day_of_week() const {
 
     std::string str;
 
-    switch((mjd() + 2) % 7){
+    switch((int(mjd()+0.1) + 2) % 7){
 	case 0:
 	    str = "Monday";
 	    break;
@@ -261,7 +266,7 @@ std::string Subs::Date::day_of_week() const {
  * \return Integer from 0 to 6, 0 = Sunday.
  */
 int Subs::Date::int_day_of_week() const {
-    return (mjd() + 3) % 7;
+    return (int(mjd()+0.1) + 3) % 7;
 }
 
 /** Reads a date stored in binary format

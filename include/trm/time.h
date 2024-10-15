@@ -3,6 +3,7 @@
 
 #include <string> 
 #include <ctime> 
+#include <sofa.h>
 #include "trm/date.h"
 #include "trm/subs.h"
 
@@ -65,6 +66,8 @@ namespace Subs {
 
 	//! returns the decimal modified Julian day
 	double mjd() const;  
+
+	void hack_report() const;
 
 	//! returns the Julian epoch
 	double jepoch() const;  

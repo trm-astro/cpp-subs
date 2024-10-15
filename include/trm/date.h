@@ -3,7 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include <sofa.h>
 #include "trm/subs.h"
+
+// Define MJD0 as the 0 for the MJD system, i.e. 1858 Nov 17.5
+#define MJD0 2400000.5
 
 namespace Subs {
 
@@ -52,7 +56,7 @@ namespace Subs {
     void date(int& day_, int& month_, int& year_) const;
 
     //! Returns the modified julian day number
-    int mjd() const;
+    double mjd() const;
 
     //! Returns a date string
     std::string str() const;
