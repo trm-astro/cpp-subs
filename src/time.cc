@@ -107,7 +107,6 @@ void Subs::Time::hack_report() const{
 /** Returns the Julian epoch corresponding to the Time
  */
 double Subs::Time::jepoch() const{
-    // Back to sla 25/11/07, TRM
     double dj1, dj2;
     dj1 = MJD0;
     dj2 = mjd();
@@ -131,7 +130,6 @@ double Subs::Time::dtt() const {
     status = iauTaitt(at1, at2, &tt1, &tt2);
     // convert to seconds
     return tt2*86400.0 - dj2*86400.0;
-    //return tt2;
 }
 
 /** Returns Terestial Time (TT) in the form of MJD
@@ -149,17 +147,6 @@ double Subs::Time::tt() const {
  * \return Returns TDB-TT in seconds
  */
 double Subs::Time::dtdb(const Subs::Telescope& tel) const {
-
-    // Switched back to pure SLA. Note that old
-    // wl had reverse sign, I assume because of the SOFA
-    // routine used in place of slaRCC. TRM, 23/11/2007
-    //double wl, u, v;
-    // slaGeoc(tel.latituder(),tel.height(),&u, &v);
-    // wl  = -tel.longituder(); // Longitude, radians west
-    //u  *= Constants::AU/1000.0; // km from spin axis
-    //v  *= Constants::AU/1000.0; // km north of equator
-    //return slaRcc(tt(),hour()/24.,wl,u,v);
-
     // define the reference ellipsoid
     int n = 1;
 
@@ -167,19 +154,6 @@ double Subs::Time::dtdb(const Subs::Telescope& tel) const {
     double xyz[3];
     iauGd2gc(n, tel.longituder(), tel.latituder(), tel.height(), xyz);
     // xyz is a geocentric position vector in metres
-
-    // the following function iauDttdb takes the following arguments
-    // d1, d2 are the MJDs of the date
-    // elong is the longitude of the Telescope in radians
-    // u is the distance of the telescope from the Earth's spin axis in km
-    // v is the distance of the telescope from the Earth's equatorial
-    //   plane in km
-
-    // so we need to convert the geocentric position vector to km
-    // elong == tel.longituder() in radians (east positive)
-    // u = sqrt(xyz[0]*xyz[0] + xyz[1]*xyz[1])/1000.0
-    // v = xyz[2]/1000.0
-
     double u = sqrt(xyz[0] * xyz[0] + xyz[1] * xyz[1])/1000.0;
     double v = xyz[2] / 1000.0;
     // to Barycentric Dynamical Time offset from TT
@@ -194,17 +168,6 @@ double Subs::Time::dtdb(const Subs::Telescope& tel) const {
  */
 double Subs::Time::tdb(const Subs::Telescope& tel) const {
 
-    // Switched back to pure SLA. Note that old
-    // wl had reverse sign, I assume because of the SOFA
-    // routine used in place of slaRCC. TRM, 23/11/2007
-    // double wl, u, v;
-    // slaGeoc( tel.latituder(), tel.height(), &u, &v);
-    // wl  = -tel.longituder(); // Longitude, radians west
-    // u  *= Constants::AU/1000.0; // km from spin axis
-    // v  *= Constants::AU/1000.0; // km north of equator
-    // double tti = tt();
-    // return tti + slaRcc( tti, hour()/24., wl, u, v)/86400.0;
-
     // define the reference ellipsoid
     int n = 1;
 
@@ -212,18 +175,6 @@ double Subs::Time::tdb(const Subs::Telescope& tel) const {
     double xyz[3];
     iauGd2gc(n, tel.longituder(), tel.latituder(), tel.height(), xyz);
     //xyz is a geocentric position vector in metres
-
-    // the following function iauDttdb takes the following arguments
-    // d1, d2 are the MJDs of the date
-    // elong is the longitude of the Telescope in radians
-    // u is the distance of the telescope from the Earth's spin axis in km
-    // v is the distance of the telescope from the Earth's equatorial
-    //   plane in km
-
-    // so we need to convert the geocentric position vector to km
-    // elong == tel.longituder() in radians (east positive)
-    // u = sqrt(xyz[0]*xyz[0] + xyz[1]*xyz[1])/1000.0
-    // v = xyz[2]/1000.0
 
     double u = sqrt(xyz[0] * xyz[0] + xyz[1] * xyz[1])/1000.0;
     double v = xyz[2] / 1000.0;
@@ -241,42 +192,6 @@ double Subs::Time::tdb(const Subs::Telescope& tel) const {
  * \return Barycentric position, units of metres, relative to the BCRS
  */
 Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
-
-    // double td = tdb(tel);
-    //
-    // // Compute position and velocity of Earth's centre in the BCRS
-    // // Switched to this routine, 23/11/2007, TRM
-    // double ph[3], pb[3], vh[3], vb[3];
-    // slaEpv(td, ph, vh, pb, vb);
-    //
-    // Vec3 position(pb);
-    //
-    // // Add on extra part from Earth's centre to observatory. Note
-    // // that slaGmst should take UT1 not UT but the error is only
-    // // about 1 second at most and no part of the Earth travels 
-    // // far in 1 second. 
-    // double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
-    // double pv[6];
-    //
-    // // this routine from slalib gives the telescope position and velocity relative 
-    // // to the centre of the Earth in a coordinate frame defined by the true equator
-    // // and equinox corresponding to 'last'.
-    // slaPvobs(tel.latituder(), tel.height(), last, pv);
-    //
-    // // Convert this position to the BCRS.
-    // // First compute the precession-nutation matrix to go from GCRS to true equator
-    // // equinox equivalent to 'td', then applies in iverse form with slaDimxv
-    // double rnpb[3][3];
-    // slaPneqx(td, rnpb);
-    // slaDimxv(rnpb, pv, pv);
-    //
-    // Vec3 pextra(pv);
-    // position += pextra;
-    // position *= Constants::AU;
-    //
-    // return position;
-
-    //SOFA version
     double td = tdb(tel);
     double tt_ = tt();
     double pvh[2][3];
@@ -287,7 +202,7 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
 
     Vec3 position(pvb[0]);
 
-    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEqeq94(MJD0, td);
+    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEe06a(MJD0, td);
     double pv[2][3];
 
     // note two args 3,4,5 are coordinates of the pole and set to 0
@@ -297,10 +212,7 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
     // pv is in CIRS m, m/s
 
     double rnpb[3][3];
-    iauPnm00a(MJD0, td, rnpb);
-    // iauPnm00b()
-    // iauPnm06a()
-    // iauPnm80()
+    iauPnm06a(MJD0, td, rnpb);
     iauTr(rnpb, rnpb);
     iauRxp(rnpb, pv[0], pv[0]);
 
@@ -319,42 +231,6 @@ Subs::Vec3 Subs::Time::earth_pos_bar(const Telescope& tel) const {
  * \return Heliocentric position, units of metres, relative to the BCRS
  */
 Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
-
-    // double td = tdb(tel);
-    //
-    // // Compute position and velocity of Earth's centre in the BCRS
-    // // Switched to this routine, 23/11/2007, TRM
-    // double ph[3], pb[3], vh[3], vb[3];
-    // slaEpv(td, ph, vh, pb, vb);
-    //
-    // Vec3 position(ph);
-    //
-    // // Add on extra part from Earth's centre to observatory. Note
-    // // that slaGmst should take UT1 not UT but the error is only
-    // // about 1 second at most and no part of the Earth travels 
-    // // far in 1 second. 
-    // double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
-    // double pv[6];
-    //
-    // // this routine from slalib gives the telescope position and velocity relative 
-    // // to the centre of the Earth in a coordinate frame defined by the true equator
-    // // and equinox corresponding to 'last'.
-    // slaPvobs(tel.latituder(), tel.height(), last, pv);
-    //
-    // // Convert this position to the BCRS.
-    // // First compute the precession-nutation matrix to go from GCRS to true equator
-    // // equinox equivalent to 'td', then applies in iverse form with slaDimxv
-    // double rnpb[3][3];
-    // slaPneqx(td, rnpb);
-    // slaDimxv(rnpb, pv, pv);
-    //
-    // Vec3 pextra(pv);
-    // position += pextra;
-    // position *= Constants::AU;
-    //
-    // return position;
-
-    // SOFA VERSION
     double td = tdb(tel);
     double tt_ = tt();
     double pvh[2][3];
@@ -365,7 +241,7 @@ Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
 
     Vec3 position(pvh[0]);
 
-    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEqeq94(MJD0, td);
+    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEe06a(MJD0, td);
     double pv[2][3];
 
     // note two args 3,4,5 are coordinates of the pole and set to 0
@@ -375,10 +251,7 @@ Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
     // pv is in CIRS m, m/s
 
     double rnpb[3][3];
-    iauPnm00a(MJD0, td, rnpb);
-    // iauPnm00b()
-    // iauPnm06a()
-    // iauPnm80()
+    iauPnm06a(MJD0, td, rnpb);
     iauTr(rnpb, rnpb);
     iauRxp(rnpb, pv[0], pv[0]);
 
@@ -401,64 +274,14 @@ Subs::Vec3 Subs::Time::earth_pos_hel(const Telescope& tel) const {
  * \param vb velocity of Earth wrt barycentre, units of metres/sec, returned.
  */
 void Subs::Time::earth(const Telescope& tel, Vec3& ph, Vec3& vh, Vec3& pb, Vec3& vb) const {
-
-    // double td = tdb(tel);
-    
-    // // Compute position of observatory relative to centre of Earth. Note
-    // // that slaGmst should take UT1 not UT but the error is only
-    // // about 1 second at most and no part of the Earth travels 
-    // // far in 1 second. 
-    // double last  = slaGmst(mjd()) + tel.longituder() + slaEqeqx(td);
-    // double pv[6];
-    
-    // // this routine from slalib gives the telescope position and velocity relative 
-    // // to the centre of the Earth in a coordinate frame defined by the true equator
-    // // and equinox corresponding to 'last'.
-    // slaPvobs(tel.latituder(), tel.height(), last, pv);
-
-    // // Convert the position and velocity to the BCRS.
-    // // First compute the precession-nutation matrix to go from GCRS to true equator
-    // // equinox equivalent to 'td', then applies in iverse form with slaDimxv
-    // double rnpb[3][3];
-    // slaPneqx(td, rnpb);
-    // slaDimxv(rnpb, pv,   pv);
-    // slaDimxv(rnpb, pv+3, pv+3);
-
-    // Vec3 padd(pv), vadd(pv+3);
-    
-    // // Compute position and velocity of Earth's centre in the BCRS
-    // double tph[3], tpb[3], tvh[3], tvb[3];
-    // slaEpv(td, tph, tvh, tpb, tvb);
-
-    // ph.set(tph);
-    // vh.set(tvh);
-    // pb.set(tpb);
-    // vb.set(tvb);
-
-    // ph += padd;
-    // vh += vadd;
-    // pb += padd;
-    // vb += vadd;
-
-    // ph *= Constants::AU;
-    // vh *= Constants::AU;
-    // pb *= Constants::AU;
-    // vb *= Constants::AU;
-    // vh *= Constants::AU;
-
-    // SOFA Version
-
     double td = tdb(tel);
     double tt_ = tt();
 
-    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEqeq94(MJD0, td);
+    double last = iauGmst06(MJD0, td, MJD0, tt_) + tel.longituder() + iauEe06a(MJD0, td);
     double pv [2][3];
     iauPvtob(tel.longituder(), tel.latituder(), tel.height(), 0., 0., 0., last, pv);
     double rnpb[3][3];
-    iauPnm00a(MJD0, td, rnpb);
-    // iauPnm00b()
-    // iauPnm06a()
-    // iauPnm80()
+    iauPnm06a(MJD0, td, rnpb);
     iauTr(rnpb, rnpb);
     iauRxpv(rnpb, pv, pv);
 
@@ -596,10 +419,6 @@ double Subs::Time::GMST() const {
     double jd = mjd();
     double tt_ = tt();
     return iauGmst06(MJD0, jd, MJD0, tt_);
-    // iauGmst00()
-    // iauGmst86()
-    //old version
-    //return slaGmst(mjd());
 }
 
 /** Converts from GMT to GST */
