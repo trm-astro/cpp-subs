@@ -148,8 +148,8 @@ void Subs::Position::update(double epch){
     // go from julian epoch to MJD
     double _MJD0, MJD_ep1, MJD_ep2;
     // _MJD0 is the MJD zero point at 2400000.5
-    iauEpj2jd(epoch(), &_MJD0, MJD_ep1);
-    iauEpj2jd(epch, &_MJD0, MJD_ep2);
+    iauEpj2jd(epoch(), &_MJD0, &MJD_ep1);
+    iauEpj2jd(epch, &_MJD0, &MJD_ep2);
 
     // Apply proper motion; space velocity to go from epoch() to epch
     double ra, dec, _pmr, _pmd, _px, _rv_;
@@ -285,6 +285,7 @@ Subs::Altaz Subs::Position::altaz(const Time& time, const Telescope& tel) const 
     // Apply space motions
     Position pos = *this;
     pos.update(time.jepoch());
+    int corr = 0;
 
     // compute data, using defaults for many values.
     double utc = time.mjd();
