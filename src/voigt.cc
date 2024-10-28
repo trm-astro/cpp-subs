@@ -110,3 +110,10 @@ double Subs::voigt(double a, double v, double eps) {
     return ans + FACTOR*sum;
 }
 
+
+// overload with a vectorized version
+void Subs::voigt(double a, const double* v, double* out, int n, double eps) {
+    for(int i=0; i<n; i++){
+        out[i] = voigt(a, v[i], eps);
+    }
+}
