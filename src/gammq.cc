@@ -13,6 +13,8 @@
  * gammp(float, float), gammln(float). 
  */
 
+
+// standard incomplete gamma function on two doubles
 double Subs::gammq(double a, double x){
   double gamser, gammcf, gln;
 
@@ -28,3 +30,9 @@ double Subs::gammq(double a, double x){
   }
 }
 
+// vectorized version of gammq on a as a double and x as a vector(double)
+double* Subs::gammq(double a, double* x, double* out, int n){
+  for(int i = 0; i < n; i++){
+    out[i] = gammq(a,x[i]);
+  }
+}
