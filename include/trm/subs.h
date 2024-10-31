@@ -706,6 +706,9 @@ namespace Subs {
     //! Voigt function
     double voigt(double a, double v, double eps);
 
+	//! Overloaded version of voigt function for vectorized operations
+	void voigt(double a, const double* v, double* out, int n, double eps);
+
     //! Converts an integer to a char*
     void strint(const unsigned int num, const unsigned int nd, char* intstr);
 

@@ -78,10 +78,8 @@ namespace Subs {
 	
 	//! Set the comment value
 	void set_comment(const std::string& com){
-	    if(this)
+		// Check on if(this) removed as it is removed at compile time
 		comment = com;
-	    else
-		throw std::string("Attempt to use Hitem::set_comment with this=NULL!");
 	};
 	
 	//! Name of type to use in output

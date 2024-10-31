@@ -75,7 +75,7 @@ char Subs::digit_to_char(int digit){
  */
 std::string Subs::toupper(const std::string& str){
     std::string temp;
-    for(register std::string::const_iterator p=str.begin(); p != str.end(); p++)
+    for(std::string::const_iterator p=str.begin(); p != str.end(); p++)
         temp += char(std::toupper(*p));
     return temp;
 }
@@ -86,7 +86,7 @@ std::string Subs::toupper(const std::string& str){
  */
 std::string Subs::tolower(const std::string& str){
     std::string temp;
-    for(register std::string::const_iterator p=str.begin(); p != str.end(); p++)
+    for(std::string::const_iterator p=str.begin(); p != str.end(); p++)
         temp += char(std::tolower(*p));
     return temp;
 }
