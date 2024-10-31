@@ -2,7 +2,8 @@
 #define TRM_HEADER
 
 #include "trm/hitem.h"
-#include <pcrecpp.h>
+#define PCRE2_CODE_UNIT_WIDTH 16
+#include <pcre2.h>
 
 namespace Subs {
 
@@ -240,8 +241,10 @@ namespace Subs {
     //! Finds a node
     Header::Hnode* find(const std::string& name, Header::Hnode* node);
 
+    Header::Hnode* find(const std::string& regexp, int& nmatch);
+
     //! Regular expression find
-    void find(const pcrecpp::RE& re, const std::string& dir, Header::Hnode *node, int& nmatch, Header::Hnode **fnode);
+    void find(pcre2_code* re, const std::string& dir, Header::Hnode *node, int& nmatch, Header::Hnode **fnode);
 
     //! Copy from node to cnode
     Header::Hnode* copy(const Header::Hnode *node, Header::Hnode *cnode);

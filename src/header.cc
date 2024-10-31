@@ -301,34 +301,78 @@ Subs::Header::Hnode* Subs::find(const std::string& name, Header::Hnode* node) {
  */    
 Subs::Header::Hnode* Subs::Header::find(const std::string& regexp, int& nmatch) const {
 
-    // Compile the regular expression
-    pcrecpp::RE re(regexp);
+	int errornumber;
+	PCRE2_SIZE erroroffset;
+	PCRE2_SPTR pattern = (PCRE2_SPTR)regexp.c_str();
+
+	pcre2_code* re = pcre2_compile(
+		pattern,
+		PCRE2_ZERO_TERMINATED,
+		0,
+		&errornumber,
+		&erroroffset,
+		NULL
+	);
+
+	if (re == NULL) {
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errornumber, buffer, sizeof(buffer));
+        std::cerr << "PCRE2 compilation failed at offset " << erroroffset
+                  << ": " << buffer << std::endl;
+        return NULL;
+    }
   
     nmatch = 0;
     Hnode *fnode = NULL;
     Subs::find(re, std::string(""), head, nmatch, &fnode);
+
+	pcre2_code_free(re);
+
     return fnode;
 }
 
 
 /** Recursive regular expression find
  */
-void Subs::find(const pcrecpp::RE& re, const std::string& dir, Header::Hnode *node, int& nmatch, Header::Hnode **fnode) {
+void Subs::find(pcre2_code* re, const std::string& dir, Header::Hnode *node, int& nmatch, Header::Hnode **fnode) {
     
     while(node->left != NULL){
+        // Prepare the subject string for matching
+	    std::string subject = dir + Header::dir_flag + node->name;
+        PCRE2_SPTR subject_str = (PCRE2_SPTR)subject.c_str();
+		// Create match data block
+        pcre2_match_data* match_data = pcre2_match_data_create_from_pattern(re, NULL);
+		
+		// Perform the match
+        int rc = pcre2_match(
+            re,
+            subject_str,
+            subject.size(),
+            0,
+            0,
+            match_data,
+            NULL
+        );
 
-	if(re.PartialMatch(dir + Header::dir_flag + node->name)){
-	    nmatch++;
-	    if(nmatch == 1) *fnode = node;
-	    if(nmatch > 1) break;
-	}
+        if (rc >= 0) {
+            nmatch++;
+            if (nmatch == 1) *fnode = node;
+            if (nmatch > 1) {
+                pcre2_match_data_free(match_data);
+                break;
+            }
+        }
+		
+		// Free match data block after each match attempt
+        pcre2_match_data_free(match_data);
+
+		// Recur to the right subtree if it exists
+        if (node->right) {
+            find(re, dir + Header::dir_flag + node->name, node->right, nmatch, fnode);
+            if (nmatch > 1) break;
+        }
 	
-	if(node->right){
-	    find(re, dir + Header::dir_flag + node->name, node->right, nmatch, fnode);
-	    if(nmatch > 1) break;
-	} 
-	
-	node = node->left;
+		node = node->left;
     }
 }
 

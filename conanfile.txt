@@ -1,6 +1,6 @@
 [requires]
 sofa/20231011
-pcre/8.45
+pcre2/10.44
 
 [generators]
 CMakeDeps

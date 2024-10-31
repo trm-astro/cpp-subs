@@ -585,7 +585,8 @@ namespace Subs {
     double gammp(double a, double x);
 
     //! Evaluates incomplete gamma function
-    double gammq(double a, double x);
+    double gammq(double a, double x); // standard incomplete gamma function on two doubles
+	void gammq(double a, double* x, double* out, int n); // vectorized version of gammq on a as a double and x as a vector(double)
   
     //! Evaluates ln of the gamma function
     double gammln(double xx);

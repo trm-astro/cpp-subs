@@ -79,17 +79,8 @@ LINK_DIRECTORIES(/opt/local/lib)
 
 include("${PROJECT_SOURCE_DIR}/build/build/Release/generators/conan_toolchain.cmake")
 
-# # PGPLOT
-# find_package(PGPLOT REQUIRED)
-# if (PGPLOT_FOUND)
-#     message("PGPLOT found")
-#     include_directories(${PGPLOT_INCLUDE_DIRS})
-#     target_link_libraries(cpp-subs ${PGPLOT_LIBRARIES})
-# else()
-#     message("PGPLOT not found")
-# endif()
-
-
+find_package(SOFA REQUIRED)
+find_package(PCRE2 REQUIRED)
 
 ############################################################
 # Create a library
@@ -102,6 +93,7 @@ target_include_directories(cpp-subs
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include
 )
+target_link_libraries(${PROJECT_NAME} PUBLIC sofa::sofa pcre2::pcre2)
 
 ############################################################
 # Create an executable
