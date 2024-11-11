@@ -2,7 +2,7 @@
 #define TRM_PLOT_H
 
 #include <string>
-#include "cpgplot.h"
+#include "plstream.h"
 #include "trm/subs.h"
 
 namespace Subs {
@@ -49,22 +49,28 @@ namespace Subs {
     //! Tests whether a plot is in focus or not
     bool is_in_focus() const;
 
+    //! Draws the axes for a plot versus UT 
+    void ut_plot(float t1, float t2, float y1, float y2, bool sides = true, bool top = true);
+
     //! Represents a plot panel. Inside namespace plot
     struct Panel{
       
       //! Default constructor
-      Panel() :  
-	x1(0.), x2(1.), y1(0.), y2(1.), just(false), stan(true) {}
+      Panel(Plot* plotPtr) : 
+        plot(plotPtr),
+	      x1(0.), x2(1.), y1(0.), y2(1.), just(false), stan(true) {}
       
       //! Constructor specifying the ranges
-      Panel(float x_1, float x_2, float y_1, float y_2, bool scale) : 
-	x1(x_1), x2(x_2), y1(y_1), y2(y_2), just(scale), stan(true) {}
+      Panel(Plot* plotPtr, float x_1, float x_2, float y_1, float y_2, bool scale) :
+        plot(plotPtr),
+	      x1(x_1), x2(x_2), y1(y_1), y2(y_2), just(scale), stan(true) {}
       
       //! Constructor specifying the ranges and the viewport
-      Panel(float x_1, float x_2, float y_1, float y_2, bool scale, float xv_1, float xv_2, 
+      Panel(Plot* plotPtr, float x_1, float x_2, float y_1, float y_2, bool scale, float xv_1, float xv_2, 
 	    float yv_1, float yv_2) : 
-	x1(x_1), x2(x_2), y1(y_1), y2(y_2), just(scale), stan(false), xv1(xv_1), xv2(xv_2), 
-	yv1(yv_1), yv2(yv_2) {}
+        plot(plotPtr),
+	      x1(x_1), x2(x_2), y1(y_1), y2(y_2), just(scale), stan(false), xv1(xv_1), xv2(xv_2), 
+	      yv1(yv_1), yv2(yv_2) {}
     
       //! Sets the ranges
       void set(float x_1, float x_2, float y_1, float y_2, bool scale);
@@ -80,6 +86,9 @@ namespace Subs {
       bool just, stan;
       float xv1, xv2, yv1,yv2;
       
+      private:
+        Plot* plot;
+      
     };
 
     //! Error class for Plot
@@ -93,6 +102,7 @@ namespace Subs {
     };
       
   private:
+    plstream* pls;
     int idev;
     std::string devname;
     Plot(const Plot& plot){}; // disable copying because it causes problems when objects go out of scope

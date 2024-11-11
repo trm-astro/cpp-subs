@@ -61,3 +61,17 @@ make
 make check
 
 make install
+
+
+# new CMakeLists.txt version
+
+# on mac
+ conan install . --build=missing
+ cd build
+ conan profile detect --force
+ cmake .. 
+ -DCMAKE_TOOLCHAIN_FILE=/Users/pipgrylls/Code/trm-py-bundle/trm-py/src/cpp-subs/build/Release/generators/conan_toolchain.cmake 
+ -DCMAKE_BUILD_TYPE=Release
+ -DPLPLOT_BUILD_TYPE=1
+ #-DPLPLOT_USE_PATH=/usr/local/lib/pgplot #if you want to use a non-standard path or specify the path
+ cmake --build .

@@ -11,7 +11,7 @@
 #include <sstream>
 #include <list>
 #include <vector>
-#include "cpgplot.h"
+#include "plstream.h"
 
 //! Namespace for workhorse functions
 

@@ -9,7 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include "trm/subs.h"
-#include "cpgplot.h"
+#include "plplot.h"
 
 namespace Subs {
 

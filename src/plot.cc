@@ -4,33 +4,28 @@
  * \param device name of plot device to open
  */
 Subs::Plot::Plot(const std::string& device) {
-	idev = cpgopen(device.c_str());
-	if(idev < 1){
-		idev = 0;
-		throw Plot_Error("Failed to open plot device = " + device + " in Plot::Plot(const std::string&)");
-	}else{
-		devname = device;
-	}
+	pls = new plstream();
+    pls->sdev(device.c_str()); // Set plot device, e.g., "xwin", "png"
+    pls->init();               // Initialize the PLplot stream
+    devname = device;
 }
 
 Subs::Plot::~Plot(){
-	if(idev){
-		cpgslct(idev);
-		cpgclos();
-	}
+	if (pls) {
+        //pls->end(); // Finalize PLplot stream
+        delete pls;
+    }
 }
-
 
 /** Closes a plot
  */
 void Subs::Plot::close(){
-	if(idev){
-		cpgslct(idev);
-		cpgclos();
-		idev = 0;
-	}
+	if (pls) {
+        //pls->end(); // Close PLplot
+        delete pls;
+        pls = nullptr;
+    }
 }
-
 
 /** Opens a plot, closing it first if it is already
  * open. The focus of next plotting commands switches to
@@ -39,31 +34,25 @@ void Subs::Plot::close(){
  */
 void Subs::Plot::open(const std::string& device) {
 	close();
-	idev    = cpgopen(device.c_str());
-	if(idev < 1){
-		idev = 0;
-		throw Plot_Error("Failed to open plot device = " + device + " in Plot::open(const std::string&)");
-	}
-	devname = device;
+    pls = new plstream();
+    pls->sdev(device.c_str());
+    pls->init();
+    devname = device;
 }
 
 /** Moves the focus of the next plotting commands to the
  * plot 
  */ 
 void Subs::Plot::focus() const {
-	if(idev) cpgslct(idev);
+	if (pls) {
+        pls->adv(0); // PLplot doesn’t require explicit focus but advance can update
+    }
 }
 
 /** Tests whether a plot is in focus or not
  */
 bool Subs::Plot::is_in_focus() const {
-	if(idev){
-		int current;
-		cpgqid(&current);
-		return (current == idev);
-	}else{
-		return false;
-	}
+	return pls != nullptr;
 }
 
 /** Sets the ranges of the plot panel
@@ -108,16 +97,14 @@ void Subs::Plot::Panel::set(float x_1, float x_2, float y_1, float y_2, bool sca
 }
 
 void Subs::Plot::Panel::focus() const {
-	if(stan){
-		cpgvstd();
-	}else{
-		cpgsvp(xv1, xv2, yv1, yv2);
-	}
-	if(just){
-		cpgwnad(x1, x2, y1, y2);
-	}else{
-		cpgswin(x1, x2, y1, y2);
-	}
+	if (plot->pls) {
+        if (stan) {
+            plot->pls->env(x1, x2, y1, y2, 0, just ? 1 : 0); // 1 for equal scaling
+        } else {
+            plot->pls->vpor(xv1, xv2, yv1, yv2);
+            plot->pls->wind(x1, x2, y1, y2);
+        }
+    }
 }
 
 /** Plots a graph with the UT axis running 21, 22, 23, 0, 1 etc if
@@ -129,55 +116,36 @@ void Subs::Plot::Panel::focus() const {
  * \param sides true to plot axes along the sides
  * \param top true to plot axis along the top
  */
+void Subs::Plot::ut_plot(float t1, float t2, float y1, float y2, bool sides, bool top){
+	
+    float delta = 2.0; // Replace 2.0 as necessary to match the desired tick interval
+
+    if (t2 > 24.0) {
+        double xv1, xv2, yv1, yv2;
+        pls->gspa(xv1, xv2, yv1, yv2);
+        float xvt1 = xv1 + (xv2 - xv1) * (24.0 - t1) / (t2 - t1);
+
+        // Left-hand box
+        pls->vpor(xv1, xvt1, yv1, yv2);
+        pls->wind(t1, 23.9999, y1, y2);
+        pls->box("bcnst", delta, 0, "bnst", delta, 0);
+
+        // Right-hand box
+        pls->vpor(xvt1, xv2, yv1, yv2);
+        pls->wind(0.0, t2 - 24.0, y1, y2);
+        pls->box("bcnst", delta, 0, "cst", delta, 0);
+
+        // Reset viewport and window
+        pls->vpor(xv1, xv2, yv1, yv2);
+        pls->wind(t1, t2, y1, y2);
+    } else {
+        pls->env(t1, t2, y1, y2, 0, 0);
+        pls->box("bcnst", delta, 0, "bnst", delta, 0);
+    }
+}
 
 void Subs::ut_plot(float t1, float t2, float y1, float y2, bool sides, bool top){
-	
-	if(t2 > 24.){
-		float xv1, xv2, yv1, yv2;
-		cpgqvp(0,&xv1, &xv2, &yv1, &yv2);
-		float xvt1, xvt2;
-
-		// left hand box
-		xvt2 = xv1 + (xv2-xv1)*(24.-t1)/(t2-t1);
-		cpgsvp(xv1,xvt2,yv1,yv2);
-		cpgswin(t1,23.9999,y1,y2);
-		if(sides && top){
-			cpgbox("BCNST",2.,2,"BNST",0.,0);
-		}else if(sides){
-			cpgbox("BNST",2.,2,"BNST",0.,0);
-		}else if(top){
-			cpgbox("BCNST",2.,2," ",0.,0);
-		}else{
-			cpgbox("BNST",2.,2," ",0.,0);
-		}
-
-		// right-hand box
-		xvt1 = xvt2;
-		cpgsvp(xvt1,xv2,yv1,yv2);
-		cpgswin(0.,t2-24.,y1,y2);
-		if(sides && top){
-			cpgbox("BCNST",2.,2,"CST",0.,0);
-		}else if(sides){
-			cpgbox("BNST",2.,2,"CST",0.,0);
-		}else if(top){
-			cpgbox("BCNST",2.,2," ",0.,0);
-		}else{
-			cpgbox("BNST",2.,2," ",0.,0);
-		}
-		cpgsvp(xv1,xv2,yv1,yv2);
-		cpgswin(t1,t2,y1,y2);
-	}else{
-		cpgswin(t1,t2,y1,y2);
-		if(sides && top){
-			cpgbox("BCNST",2.,2,"BNST",0.,0);
-		}else if(sides){
-			cpgbox("BNST",2.,2,"BNST",0.,0);
-		}else if(top){
-			cpgbox("BCNST",2.,2," ",0.,0);
-		}else{
-			cpgbox("BNST",2.,2," ",0.,0);
-		}
-	}
+	std::cout << "Subs::ut_plot deprecated. Please call from Subs::Plot::ut_plot i.e. plot->ut_plot" << std::endl;
 }
 
 Subs::Plots::Plots(int nplot) : nplot_(nplot), nfocus_(0) {
