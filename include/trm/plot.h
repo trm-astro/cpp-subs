@@ -22,7 +22,7 @@ namespace Subs {
 
   public:
 
-    //! Default constructor. Does not open anyhtin
+    //! Default constructor. Does not open anything
     Plot() : idev(0) , devname() {}
 
     //! Standard constructor to open device
@@ -36,6 +36,9 @@ namespace Subs {
 
     //! open a plot (first closing it if need be)
     void open(const std::string& device);
+
+    //! Get the pls pointer
+    plstream* get_plstream() {return pls;}
     
     //! move focus to a plot
     void focus() const;
@@ -48,6 +51,10 @@ namespace Subs {
 
     //! Tests whether a plot is in focus or not
     bool is_in_focus() const;
+
+    //! Sets the colors for a plot
+    void set_colors(PLINT* r, PLINT* g, PLINT* b, int n);
+    void add_colors(PLINT* r, PLINT* g, PLINT* b, int n);
 
     //! Draws the axes for a plot versus UT 
     void ut_plot(float t1, float t2, float y1, float y2, bool sides = true, bool top = true);
@@ -88,7 +95,6 @@ namespace Subs {
       
       private:
         Plot* plot;
-      
     };
 
     //! Error class for Plot
@@ -108,8 +114,13 @@ namespace Subs {
     Plot(const Plot& plot){}; // disable copying because it causes problems when objects go out of scope
     //    Plot& operator=(const Plot& obj){return Plot();} // no assignment
     Plot& operator=(const Plot& obj);
+    // Pointer to the start of the RGB colour arrays
+    PLINT* rgb[3];
+    // Number of colours (array above is 3 x ncol)
+    int ncol = 0;
   };    
   
+
   //! Draws the axes for a plot versus UT 
   void ut_plot(float t1, float t2, float y1, float y2, bool sides = true, bool top = true);
   

@@ -107,6 +107,66 @@ void Subs::Plot::Panel::focus() const {
     }
 }
 
+/** Set the colourmap from input rgb arrays */
+void Subs::Plot::set_colors(PLINT* r, PLINT* g, PLINT* b, int n){
+
+	// delete the old colour map (if it exists)
+	if(ncol > 0){
+		delete[] rgb[0];
+	}
+
+	// Update the internal colour map
+	PLINT _rgb[n*3]; // Use pointers to access the rgb components
+	rgb[0] = _rgb;
+	rgb[1] = _rgb + n;
+	rgb[2] = _rgb + n*2;
+	ncol = n;
+	for(int i=0; i<n; i++){
+		rgb[0][i] = r[i];
+		rgb[1][i] = g[i];
+		rgb[2][i] = b[i];
+	}
+	
+	pls->scmap0n(n);
+	pls->scmap0(rgb[0], rgb[1], rgb[2], ncol);
+	
+}
+
+void Subs::Plot::add_colors(PLINT* r, PLINT* g, PLINT* b, int n){
+	// Get the current colour map and store
+	PLINT new_rgb[ncol*3]; // new array for colours
+	// get the old array pointers
+	PLINT* _rgb[3]; 
+	_rgb[0] = rgb[0];
+	_rgb[1] = rgb[1];
+	_rgb[2] = rgb[2];
+	int nold = ncol; // old number of colours
+	// Update the internal colour map number of colours
+	ncol = nold + n;
+	// Update the internal colour map pointers
+	rgb[0] = new_rgb;
+	rgb[1] = new_rgb + ncol;
+	rgb[2] = new_rgb + ncol*2;
+
+	
+	for (int i=0; i<nold; i++){
+		new_rgb[i] = _rgb[0][i];
+		new_rgb[ncol + i] = _rgb[1][i];
+		new_rgb[ncol*2 + i] = _rgb[2][i];
+	}
+	for (int i=0; i<n; i++){
+		new_rgb[nold + i] = r[i];
+		new_rgb[ncol + nold + i] = g[i];
+		new_rgb[ncol*2 + nold + i] = b[i];
+	}
+	// Update the colour map
+	pls->scmap0n(ncol);
+	pls->scmap0(rgb[0], rgb[1], rgb[2], ncol);
+
+	// Free the old array
+	delete[] _rgb[0];
+}
+
 /** Plots a graph with the UT axis running 21, 22, 23, 0, 1 etc if
  * it has to cross 24. Plot must be open, viewport, colours set etc beforehand.
  * \param t1 start time
