@@ -72,3 +72,6 @@ stamp-h1
 
 src/.libs
 *~
+
+CMakeUserPresets.json
+build/
