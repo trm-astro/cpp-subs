@@ -150,7 +150,12 @@ set_target_properties(${PACKAGE_NAME} PROPERTIES
 ############################################################
 # Install
 ############################################################
-
+set_target_properties(${EXEC} PROPERTIES
+INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
+BUILD_WITH_INSTALL_RPATH TRUE
+INSTALL_RPATH_USE_LINK_PATH TRUE
+BUILD_RPATH_USE_ORIGIN TRUE
+)
 # Library
 # Note: may not work on windows
 # Specify where the library binary will go

@@ -6,7 +6,8 @@
 Subs::Plot::Plot(const std::string& device) {
 	pls = new plstream();
     pls->sdev(device.c_str()); // Set plot device, e.g., "xwin", "png"
-    pls->init();               // Initialize the PLplot stream
+	//delay this until colours are set
+	//pls->init();               // Initialize the PLplot stream
     devname = device;
 }
 
@@ -97,6 +98,7 @@ void Subs::Plot::Panel::set(float x_1, float x_2, float y_1, float y_2, bool sca
 }
 
 void Subs::Plot::Panel::focus() const {
+	// do we need to set line colour to black here?
 	if (plot->pls) {
         if (stan) {
             plot->pls->env(x1, x2, y1, y2, 0, just ? 1 : 0); // 1 for equal scaling
@@ -126,10 +128,16 @@ void Subs::Plot::set_colors(PLINT* r, PLINT* g, PLINT* b, int n){
 		rgb[1][i] = g[i];
 		rgb[2][i] = b[i];
 	}
+
+	std::cout << "ncol = " << ncol << std::endl;
+	for (int i=0; i<ncol; i++){
+		std::cout << "rgb[" << i << "] = " << rgb[0][i] << " " << rgb[1][i] << " " << rgb[2][i] << std::endl;
+	}
 	
 	pls->scmap0n(n);
 	pls->scmap0(rgb[0], rgb[1], rgb[2], ncol);
-	
+	pls->init();
+
 }
 
 void Subs::Plot::add_colors(PLINT* r, PLINT* g, PLINT* b, int n){
@@ -179,7 +187,6 @@ void Subs::Plot::add_colors(PLINT* r, PLINT* g, PLINT* b, int n){
 void Subs::Plot::ut_plot(float t1, float t2, float y1, float y2, bool sides, bool top){
 	
     float delta = 2.0; // Replace 2.0 as necessary to match the desired tick interval
-
     if (t2 > 24.0) {
         double xv1, xv2, yv1, yv2;
         pls->gspa(xv1, xv2, yv1, yv2);

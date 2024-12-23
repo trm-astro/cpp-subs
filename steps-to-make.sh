@@ -69,9 +69,12 @@ make install
  conan install . --build=missing
  cd build
  conan profile detect --force
- cmake .. 
- -DCMAKE_TOOLCHAIN_FILE=/Users/pipgrylls/Code/trm-py-bundle/trm-py/src/cpp-subs/build/Release/generators/conan_toolchain.cmake 
- -DCMAKE_BUILD_TYPE=Release
- -DPLPLOT_BUILD_TYPE=1
- #-DPLPLOT_USE_PATH=/usr/local/lib/pgplot #if you want to use a non-standard path or specify the path
+ # Note: PLPLOT_BUILD_TYPE= 0 or 4 are strongly preferred when plplot is installed to the system (specify path) or brew default. 2 fot non-default location. 
+ cmake .. \
+ -DCMAKE_TOOLCHAIN_FILE=/Users/pipgrylls/Code/trm-py-bundle/trm-py/src/cpp-subs/build/Release/generators/conan_toolchain.cmake \
+ -DCMAKE_BUILD_TYPE=Release \
+ -DPLPLOT_BUILD_TYPE=4
+ #-DPLPLOT_USE_PATH=/usr/local/lib/pgplot #if you want to use a system install, non-standard path, or specify the path
  cmake --build .
+ cd ..
+ sudo cmake --install build
