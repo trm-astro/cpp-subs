@@ -118,7 +118,7 @@ target_link_libraries(${PACKAGE_NAME}
     PUBLIC 
         sofa::sofa 
         pcre2::pcre2
-        ${PLPLOT_LIB_DIR}/libplplotcxx.dylib
+        ${PLPLOT_LIB_DIR}/${PLPLOT_LIB_NAME}
 )
 
 # Set RPATH properties
