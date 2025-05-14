@@ -100,7 +100,7 @@ void Subs::write_string(std::ofstream& s, const std::string& str){
     s.write((char*)&n, sizeof(UINT4));
     if(!s) throw Subs_Error("Subs::write(std::ofstream&, const std::string&): error writing number of characters");
     if(n){
-        s.write(str.data(), sizeof(char[n]));
+        s.write(str.data(), n*sizeof(char));
         if(!s) throw Subs_Error("Subs::write(std::ofstream&, const std::string&): error writing characters");
     }
 }
@@ -119,7 +119,7 @@ void Subs::read_string(std::ifstream& s, std::string& str, bool swap_bytes){
     if(n > 0){
         char *p = new char [n];
         if(!p) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error allocating array for characters");
-        s.read(p, sizeof(char[n]));
+        s.read(p, n*sizeof(char));
         if(!s) throw Subs_Error("Subs::read(std::ifstream&, std::string&): error reading characters");
         str.assign(p, n);
         delete [] p;
@@ -135,7 +135,7 @@ void Subs::skip_string(std::ifstream& s, bool swap_bytes){
     if(!s) throw Subs_Error("Subs::skip(std::ifstream&): error reading number of characters");
     if(swap_bytes) n = Subs::byte_swap(n);
     if(n > 0){
-        s.ignore(sizeof(char[n]));
+        s.ignore(n*sizeof(char));
         if(!s) throw Subs_Error("Subs::skip(std::ifstream&): error skipping characters");
     }
 }

@@ -12,9 +12,9 @@
  */
 std::string Subs::Genetic::model_to_string(const Subs::Array1D<double>& vals) {
   std::string temp = "";
-  char store[15];
+  char store[16];
   for(int i=0; i<vals.size(); i++){
-    sprintf(store, "%#+14.7e", vals[i]);
+    snprintf(store, sizeof(store), "%#+14.7e", vals[i]);
     temp += store;
   }
   return temp;

@@ -17,7 +17,8 @@ extern double **d, *x; // Defined in bsstep
 
 void Subs::pzextr(int iest, double xest, double yest[], double yz[], double dy[], int nv){
   int k1, j;
-  double q, f2, f1, delta, c[nv];
+  double q, f2, f1, delta;
+  std::vector<double> c(nv);
   
   x[iest] = xest;
   for(j=0;j<nv;j++) dy[j] = yz[j] = yest[j];

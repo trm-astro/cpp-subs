@@ -115,7 +115,7 @@ namespace Subs {
     //    Plot& operator=(const Plot& obj){return Plot();} // no assignment
     Plot& operator=(const Plot& obj);
     // Pointer to the start of the RGB colour arrays
-    PLINT* rgb[3];
+    std::vector<PLINT*> rgb = {nullptr, nullptr, nullptr};
     // Number of colours (array above is 3 x ncol)
     int ncol = 0;
   };    

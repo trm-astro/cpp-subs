@@ -43,7 +43,7 @@ bool Subs::bsstep(double y[], double dydx[], int nv, double &xx,
     static int first=1, kmax, kopt;
     static double epsold = -1.0, xnew;
     double eps1, errmax, fact, h, red = 0, scale = 0, work, wrkmin, xest;
-    double yerr[nv], ysav[nv], yseq[nv];
+	std::vector<double> yerr(nv), ysav(nv), yseq(nv);
 
     const int KMAXX = 8;
     const int IMAXX = KMAXX+1;
@@ -92,9 +92,9 @@ bool Subs::bsstep(double y[], double dydx[], int nv, double &xx,
 		return true;
 	    }
       
-	    mmid(ysav,dydx,nv,xx,h,nseq[k],yseq,derivs);
+	    mmid(ysav.data(),dydx,nv,xx,h,nseq[k],yseq.data(),derivs);
 	    xest = Subs::sqr(h/nseq[k]);
-	    pzextr(k,xest,yseq,y,yerr,nv);
+	    pzextr(k,xest,yseq.data(),y,yerr.data(),nv);
 	    if(k != 0){
 		errmax = TINY;
 		for(i=0;i<nv;i++) errmax = std::max(errmax, fabs(yerr[i]/yscal[i]));
@@ -183,7 +183,8 @@ bool Subs::bsstep(double y[], double dydx[], int nv, double &xx,
     static int first=1, kmax, kopt;
     static double epsold = -1.0, xnew;
     double eps1, errmax, fact, h, red = 0, scale = 0, work, wrkmin, xest;
-    double yerr[nv], ysav[nv], yseq[nv];
+    std::vector<double> yerr(nv), ysav(nv), yseq(nv);
+
 
     const int KMAXX = 8;
     const int IMAXX = KMAXX+1;
@@ -232,9 +233,9 @@ bool Subs::bsstep(double y[], double dydx[], int nv, double &xx,
 		return true;
 	    }
       
-	    mmid(ysav,dydx,nv,xx,h,nseq[k],yseq,derivs);
+	    mmid(ysav.data(),dydx,nv,xx,h,nseq[k],yseq.data(),derivs);
 	    xest = Subs::sqr(h/nseq[k]);
-	    pzextr(k,xest,yseq,y,yerr,nv);
+	    pzextr(k,xest,yseq.data(),y,yerr.data(),nv);
 	    if(k != 0){
 		errmax = TINY;
 		for(i=0;i<nv;i++) errmax = std::max(errmax, fabs(yerr[i]/yscal[i]));
@@ -320,7 +321,7 @@ bool Subs::bsstepst(double y[], double dydx[], int nv, double &xx,
     static int first=1, kmax, kopt;
     static double epsold = -1.0, xnew;
     double eps1, errmax, fact, h, red = 0, scale = 0, work, wrkmin, xest;
-    double yerr[nv], ysav[nv], yseq[nv];
+    std::vector<double> yerr(nv), ysav(nv), yseq(nv);
 
     const int KMAXX = 12;
     const int IMAXX = KMAXX+1;
@@ -369,9 +370,9 @@ bool Subs::bsstepst(double y[], double dydx[], int nv, double &xx,
 		return true;
 	    }
       
-	    stoerm(ysav,dydx,nv,xx,h,nseq[k],yseq,derivs);
+	    stoerm(ysav.data(),dydx,nv,xx,h,nseq[k],yseq.data(),derivs);
 	    xest = Subs::sqr(h/nseq[k]);
-	    pzextr(k,xest,yseq,y,yerr,nv);
+	    pzextr(k,xest,yseq.data(),y,yerr.data(),nv);
 	    if(k != 0){
 		errmax = TINY;
 		for(i=0;i<nv;i++) errmax = std::max(errmax, fabs(yerr[i]/yscal[i]));

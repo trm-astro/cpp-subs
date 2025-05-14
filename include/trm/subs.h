@@ -2159,7 +2159,7 @@ namespace Subs {
     template <class X>
     void Buffer1D<X>::write(std::ostream& s) const {
 	s.write((char*)&npix, sizeof(int));
-	s.write((char*)buff,  sizeof(X[npix]));
+	s.write((char*)buff,  npix*sizeof(X));
     }
 
     //! Binary input
@@ -2169,7 +2169,7 @@ namespace Subs {
 	if(!s) return;
 	if(swap_bytes) npix = Subs::byte_swap(npix);
 	this->resize(npix);
-	s.read((char*)buff,  sizeof(X[npix]));
+	s.read((char*)buff,  npix*sizeof(X));
 	if(swap_bytes) Subs::byte_swap(buff, npix);
     }
 
@@ -2180,7 +2180,7 @@ namespace Subs {
 	s.read((char*)&npixel, sizeof(int));
 	if(!s) return;
 	if(swap_bytes) npixel = Subs::byte_swap(npixel);
-	s.ignore(sizeof(X[npixel]));
+	s.ignore(npixel * sizeof(X));
     }
 
     /* Loads data into a Buffer1D from an ASCII file with one

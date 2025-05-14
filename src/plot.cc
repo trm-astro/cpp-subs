@@ -118,10 +118,10 @@ void Subs::Plot::set_colors(PLINT* r, PLINT* g, PLINT* b, int n){
 	}
 
 	// Update the internal colour map
-	PLINT _rgb[n*3]; // Use pointers to access the rgb components
-	rgb[0] = _rgb;
-	rgb[1] = _rgb + n;
-	rgb[2] = _rgb + n*2;
+	std::vector<PLINT> _rgb(n*3); // Use pointers to access the rgb components
+	rgb[0] = &_rgb[0];
+	rgb[1] = &_rgb[n];
+	rgb[2] = &_rgb[n*2];
 	ncol = n;
 	for(int i=0; i<n; i++){
 		rgb[0][i] = r[i];
@@ -142,19 +142,19 @@ void Subs::Plot::set_colors(PLINT* r, PLINT* g, PLINT* b, int n){
 
 void Subs::Plot::add_colors(PLINT* r, PLINT* g, PLINT* b, int n){
 	// Get the current colour map and store
-	PLINT new_rgb[ncol*3]; // new array for colours
+	std::vector<PLINT> new_rgb(ncol*3); // new array for colours
 	// get the old array pointers
 	PLINT* _rgb[3]; 
-	_rgb[0] = rgb[0];
-	_rgb[1] = rgb[1];
-	_rgb[2] = rgb[2];
+	_rgb[0] = r;
+	_rgb[1] = g;
+	_rgb[2] = b;
 	int nold = ncol; // old number of colours
 	// Update the internal colour map number of colours
 	ncol = nold + n;
 	// Update the internal colour map pointers
-	rgb[0] = new_rgb;
-	rgb[1] = new_rgb + ncol;
-	rgb[2] = new_rgb + ncol*2;
+	rgb[0] = &new_rgb[0];
+	rgb[1] = &new_rgb[ncol];
+	rgb[2] = &new_rgb[ncol*2];
 
 	
 	for (int i=0; i<nold; i++){

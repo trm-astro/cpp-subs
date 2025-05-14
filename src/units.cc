@@ -76,7 +76,7 @@ bool Subs::Units::check_string(const std::string& check, UNITS& units){
   const int NSPRINTF=1024;
   char sprint_out[NSPRINTF];
   for(size_t i=0; i<inform.size(); i++){
-      sprintf(sprint_out, "%2i) %-20s %s", int(i+1), inform[i].name.c_str(), inform[i].definition.c_str());
+      snprintf(sprint_out, sizeof(sprint_out), "%2i) %-20s %s", int(i+1), inform[i].name.c_str(), inform[i].definition.c_str());
       std::cerr << sprint_out << std::endl;
   }
   return false;
