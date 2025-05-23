@@ -122,12 +122,12 @@ target_link_libraries(${PACKAGE_NAME}
 )
 
 # Set RPATH properties
-set_target_properties(${PACKAGE_NAME} PROPERTIES
-    INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
-    BUILD_WITH_INSTALL_RPATH TRUE
-    INSTALL_RPATH_USE_LINK_PATH TRUE
-    BUILD_RPATH_USE_ORIGIN TRUE
-)
+# set_target_properties(${PACKAGE_NAME} PROPERTIES
+#     INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib"
+#     BUILD_WITH_INSTALL_RPATH TRUE
+#     INSTALL_RPATH_USE_LINK_PATH TRUE
+#     BUILD_RPATH_USE_ORIGIN TRUE
+# )
 
 
 ############################################################
