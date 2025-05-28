@@ -420,22 +420,21 @@ void Subs::print(std::ostream& s, const Header::Hnode* node, int nlev, const std
  * back to its head.
  */
 void Subs::deleter(Header::Hnode* node) {
-
     // Wind down to the end of a directory
     while(node->left != NULL){
-	if(node->right != NULL){
-	    deleter(node->right);
-	    node->right = NULL;
-	}
-	node = node->left;
+		if(node->right != NULL){
+			deleter(node->right);
+			node->right = NULL;
+		}
+		node = node->left;
     }
 
     // Now wind back up from the bottom
     while(node->up != NULL && node->up->right == NULL){
-	delete node->up->value;
-	Header::Hnode *old = node;
-	node = node->up;
-	delete old;
+		delete node->up->value;
+		Header::Hnode *old = node;
+		node = node->up;
+		delete old;
     }
 
     delete node;
@@ -457,26 +456,55 @@ Subs::Header& Subs::Header::operator=(const Header& hd){
     return *this;
 }
 
-Subs::Header::Hnode* Subs::copy(const Header::Hnode *node, Header::Hnode *cnode) {
+// Subs::Header::Hnode* Subs::copy(const Header::Hnode* node, Header::Hnode* cnode) {
 
-    while(node->left != NULL){
-	cnode->name     = node->name;
-	cnode->value    = node->value->copy();
-	cnode->left     = new Header::Hnode();
-	cnode->left->up = cnode;
-	if(node->right != NULL){
-	    cnode->right     = new Header::Hnode();
-	    cnode->right->up = cnode;
-	    copy(node->right, cnode->right);
-	}
-	node  = node->left;
-	cnode = cnode->left;
+//     while(node->left != NULL){
+// 	cnode->name     = node->name;
+// 	cnode->value    = node->value->copy();
+// 	cnode->left     = new Header::Hnode();
+// 	cnode->left->up = cnode;
+// 	if(node->right != NULL){
+// 	    cnode->right     = new Header::Hnode();
+// 	    cnode->right->up = cnode;
+// 	    copy(node->right, cnode->right);
+// 	}
+// 	node  = node->left;
+// 	cnode = cnode->left;
+//     }
+//     return cnode;
+// }
+Subs::Header::Hnode* Subs::copy(const Header::Hnode* node, Header::Hnode* cnode) {
+    while (node->left != NULL) {
+        cnode->name = node->name;
+
+        // Deep copy the value
+        if (node->value) {
+            cnode->value = node->value->copy();  // Ensure this creates a deep copy
+        } else {
+            cnode->value = nullptr;
+        }
+
+        // Create the left child
+        cnode->left = new Header::Hnode();
+        cnode->left->up = cnode;
+
+        // If the node has a right child, copy it recursively
+        if (node->right != NULL) {
+            cnode->right = new Header::Hnode();
+            cnode->right->up = cnode;
+            copy(node->right, cnode->right);
+        }
+
+        // Move to the next left node
+        node = node->left;
+        cnode = cnode->left;
     }
     return cnode;
 }
 
 //! Clear a header
 void Subs::Header::clear() {
+	std::cout << "Clearing header" << std::endl;
     Subs::deleter(head);
     tail = head = new Hnode();
 }
@@ -492,28 +520,62 @@ void Subs::Header::erase(const std::string& name) {
     }
 }
 
-void Subs::Header::erase(Hnode* node){
+// void Subs::Header::erase(Hnode* node){
 
-    if(node->has_data()){
-	// Delete any sub-directory first
-	if(node->right) Subs::deleter(node->right);
-	delete node->value;
-	if(node->up != NULL){
-	    if(node->up->left == node)
-		node->up->left  = node->left;
-	    else
-		node->up->right = node->left;
-	}else if(node->left != NULL){
-	    head = node->left;
-	    head->up = NULL;
-	}
-	delete node;
-    }else{
-	throw Header_Error("Subs::Header::erase(Hnode*): node contains no data");
+//     if(node->has_data()){
+// 		// Delete any sub-directory first
+// 		if(node->right) Subs::deleter(node->right);
+// 		delete node->value;
+// 		if(node->up != NULL){
+// 			if(node->up->left == node)
+// 				node->up->left  = node->left;
+// 			else
+// 				node->up->right = node->left;
+// 		}else if(node->left != NULL){
+// 			head = node->left;
+// 			head->up = NULL;
+// 		}
+// 		delete node;
+//     }else{
+// 		throw Header_Error("Subs::Header::erase(Hnode*): node contains no data");
+//     }
+
+// }
+void Subs::Header::erase(Hnode* node) {
+    if (node->has_data()) {
+        // Delete any sub-directory first
+        if (node->right) {
+            Subs::deleter(node->right);
+            node->right = nullptr;  // Detach the right subtree
+        }
+
+        // Delete the value
+        delete node->value;
+        node->value = nullptr;
+
+        // Detach the node from its parent
+        if (node->up != nullptr) {
+            if (node->up->left == node) {
+                node->up->left = node->left;
+            } else {
+                node->up->right = node->left;
+            }
+        } else if (node->left != nullptr) {
+            head = node->left;
+            head->up = nullptr;
+        }
+
+        // Detach the left pointer
+        if (node->left) {
+            node->left->up = node->up;
+        }
+
+        // Delete the node itself
+        delete node;
+    } else {
+        throw Header_Error("Subs::Header::erase(Hnode*): node contains no data");
     }
-
 }
-
 
 void Subs::Header::iterator::operator++(int){
 
